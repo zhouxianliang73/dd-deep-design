@@ -475,9 +475,11 @@ function updatePreview() {
     const badge = document.getElementById('doorBadge');
     if (doorImg && badge) {
         const isXt = state.doorType === 'xt';
-        doorImg.src = isXt 
+        // Force refresh by adding timestamp
+        const ts = new Date().getTime();
+        doorImg.src = (isXt 
             ? 'assets/images/products/suoer/door-topflip.png'
-            : 'assets/images/products/suoer/door-rollshutter.png';
+            : 'assets/images/products/suoer/door-rollshutter.png') + '?t=' + ts;
         const label = isXt 
             ? (currentLang === 'en' ? '\u25B2 Top-Flip' : '\u25B2 \u4E0A\u7FFB\u95E8')
             : (currentLang === 'en' ? '\u2630 Rolling Shutter' : '\u2630 \u5377\u5E18\u95E8');
@@ -490,7 +492,8 @@ function updatePreview() {
     const elevWidth = document.getElementById('elevWidth');
     if (elevImg) {
         // Use size-specific elevation images from the product catalog
-        elevImg.src = 'assets/images/products/suoer/' + state.width + '.png';
+        const ts = new Date().getTime();
+        elevImg.src = 'assets/images/products/suoer/' + state.width + '.png' + '?t=' + ts;
     }
     if (elevWidth) elevWidth.textContent = state.width;
     

@@ -476,8 +476,8 @@ function updatePreview() {
     if (doorImg && badge) {
         const isXt = state.doorType === 'xt';
         doorImg.src = isXt 
-            ? 'assets/images/products/suoer/\u4E0A\u7FFB\u95E8.png'
-            : 'assets/images/products/suoer/\u5377\u5E18\u95E8.png';
+            ? 'assets/images/products/suoer/door-topflip.png'
+            : 'assets/images/products/suoer/door-rollshutter.png';
         const label = isXt 
             ? (currentLang === 'en' ? '\u25B2 Top-Flip' : '\u25B2 \u4E0A\u7FFB\u95E8')
             : (currentLang === 'en' ? '\u2630 Rolling Shutter' : '\u2630 \u5377\u5E18\u95E8');

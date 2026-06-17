@@ -1,12 +1,11 @@
-﻿# OS files
-Thumbs.db
-.DS_Store
-
-# Python
-__pycache__/
-*.pyc
+# Python scripts (dev tools)
 scripts/
-backup_*/
+*.py
 
-# Large images original
-*.psd
+# Temp files
+~$*
+户外厨房/
+
+# OS files
+.DS_Store
+Thumbs.db

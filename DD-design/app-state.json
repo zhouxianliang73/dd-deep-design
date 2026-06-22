@@ -1,43 +1,22 @@
 {
-  "version": "2026-06-22",
+  "version": "2026-06-22-b",
   "brand": "deep design",
   "mainFiles": {
     "html": "D:\\DD-cursor\\DD-design\\1.html",
     "md": "D:\\DD-cursor\\DD-design\\1.md",
     "preview": "file:///D:/DD-cursor/DD-design/1.html"
   },
-  "snapshots": {
-    "latest": "2026-06-22",
-    "desktop": "C:\\Users\\LocalAccount\\Desktop\\deep-design-snapshots\\2026-06-22",
-    "repo": "D:\\DD-cursor\\deep-design-snapshots\\2026-06-22"
-  },
   "features": [
-    "选品中心：折叠筛选、项目多选、产品卡片、版块选品模式（+ 行直达，前 20 推荐图）",
-    "项目中心：统一 project-shell 容器、THOR 八类报价、合并/拆分子容器",
-    "项目中心：子容器独立折叠（CSS 子选择器 >）、清单底部 + 行",
-    "THOR 虚拟项目：陈先生 · 不锈钢厨柜（p-thor，八类报价齐全）",
-    "沟通记录：长条 5 图 + 磨砂时间条、客户意见总结版块",
-    "设计师超市：仅此处显示擅长 tag，其余页面只显示姓名",
-    "首页：设计师/爆款/收藏/在线沟通"
+    "媒体版块底部 + 添加图片（客户上传/意见/方案、生产、货运）",
+    "产品清单可编辑数量与尺寸，尺寸偏离选品基准为浅橙色",
+    "尺寸变更自动重算非标系数，系数变红",
+    "项目容器底部 PDF 导出（宽屏整行/窄屏下拉）",
+    "THOR 八类版块表头：进度、更新时间、小计、收起按钮",
+    "选品加入清单保留基准尺寸与贴图",
+    "清单底部 + 选品联动、子容器独立折叠"
   ],
   "localStorageKeys": {
     "commStructure": "deepdesign_comm_structure"
   },
-  "designers": [
-    { "name": "张俊", "tag": "现代简约 · 8年" },
-    { "name": "顾欣", "tag": "北欧自然 · 6年" },
-    { "name": "盛菲", "tag": "新中式 · 10年" },
-    { "name": "ALEX", "tag": "极简主义 · 7年" },
-    { "name": "HILL", "tag": "复古轻奢 · 5年" },
-    { "name": "周宏", "tag": "侘寂风 · 4年" },
-    { "name": "周楚轩", "tag": "法式 · 6年" }
-  ],
-  "defaultProjects": [
-    "p1 张先生·客厅",
-    "p2 张先生·餐厅",
-    "p-thor 陈先生·THOR不锈钢厨柜",
-    "p3 Lisa·主卧",
-    "p4 王先生·书房"
-  ],
   "commStructureFile": "comm-structure.json"
 }

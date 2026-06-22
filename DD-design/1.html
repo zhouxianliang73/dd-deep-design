@@ -1908,7 +1908,32 @@
         .project-tw .col-u { width: 48px; }
         .project-tw .col-pr { width: 72px; }
         .project-tw .col-t { width: 82px; }
-        .project-tw th {
+        .project-tw .col-x { width: 36px; }
+        .project-tw .quote-del-cell {
+            width: 36px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .quote-del-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            padding: 0;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .quote-del-btn:hover {
+            background: var(--danger-bg);
+            border-color: #FECACA;
+            color: var(--danger);
+        }
             background: var(--gray-50);
             padding: 10px 6px;
             text-align: center;
@@ -2021,13 +2046,23 @@
             background: var(--primary-10);
             color: var(--primary);
         }
+        .quote-cat-section.is-fixed .proj-section-bd {
+            display: block;
+        }
+        .quote-cat-section.is-fixed .quote-cat-hd {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-100);
+            cursor: default;
+        }
         .quote-cat-hd {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: nowrap;
             gap: 10px 12px;
-            cursor: default;
         }
         .quote-cat-hd .proj-section-label {
             flex: 1 1 auto;
@@ -2049,17 +2084,6 @@
         }
         .quote-cat-meta .project-shell-total {
             box-shadow: none;
-        }
-        .quote-cat-meta .section-collapse-btn {
-            padding: 4px 10px;
-            font-size: 12px;
-        }
-        .quote-cat-meta .section-collapse-btn i {
-            font-size: 10px;
-            transition: transform 0.2s;
-        }
-        .quote-cat-section.is-open .section-collapse-btn i {
-            transform: rotate(180deg);
         }
         .project-shell-body > .comm-pdf-bar {
             margin: 0 18px 16px;
@@ -5528,23 +5552,6 @@
             </div>`;
         }
 
-        function renderQuoteSummaryHtml(categories) {
-            const rows = categories.map(cat => {
-                const sub = calcProductsTotal(cat.products);
-                return `<div class="quote-sum-row"><span>${cat.name}</span><span class="quote-sum-val">¥${sub.toLocaleString()}</span></div>`;
-            }).join('');
-            const grand = categories.reduce((s, cat) => s + calcProductsTotal(cat.products), 0);
-            return `<div class="quote-sum-wrap">
-                ${rows}
-                <div class="quote-sum-row is-grand"><span>合计金额</span><span class="quote-sum-val">¥${grand.toLocaleString()}</span></div>
-            </div>
-            <div class="quote-terms">
-                <p>注：1) 如设计图有变更，以新设计图的报价为准。2) 下单生产前，请支付全部货款；交货期从货款到账次日起计。</p>
-                <p>3) 本报价表为初步报价，具体价格依据细化方案后为准，且此次价格有效期为 30 天。</p>
-                <p>总公司：索而智能家居有限公司 · 地址：东莞市洪梅镇海新路 2 号</p>
-            </div>`;
-        }
-
         function renderQuoteCategoriesHtml(categories, projectId, projectMeta = {}) {
             return categories.map(cat => {
                 const sub = calcProductsTotal(cat.products);
@@ -5552,22 +5559,18 @@
                 const progress = cat.progress || projectMeta.status || '设计中';
                 const progressClass = cat.progressClass || projectMeta.statusClass || 'badge-info';
                 const updated = cat.updatedAt || projectMeta.updatedFull || '—';
-                return `<section class="proj-section proj-collapsible quote-cat-section" data-section="${cat.id}">
+                return `<section class="proj-section quote-cat-section is-fixed" data-section="${cat.id}">
                     <div class="proj-section-hd quote-cat-hd">
                         <span class="proj-section-label">${cat.icon || '📦'} ${cat.name}</span>
                         <div class="quote-cat-meta">
                             <span class="status-badge ${progressClass}">${progress}</span>
                             <span class="project-shell-updated"><i class="far fa-clock"></i> 更新于 ${updated}</span>
                             <span class="project-shell-total is-plain quote-cat-total">¥${sub.toLocaleString()}</span>
-                            <button type="button" class="shell-expand-btn section-collapse-btn" data-toggle-section-btn aria-label="展开或收起版块">
-                                <span class="shell-expand-text">详情</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="proj-section-bd">${renderQuoteTableHtml(cat.products, tableCtx)}</div>
                 </section>`;
-            }).join('') + renderQuoteSummaryHtml(categories);
+            }).join('');
         }
 
         function mergeProductLists(lists) {
@@ -5607,6 +5610,25 @@
             return `<div class="ic"><span class="ic-emoji">${p.emoji || '📦'}</span></div>`;
         }
 
+        function deleteProductLine(projectId, categoryId, rowIdx) {
+            const p = findProjectById(projectId);
+            if (!p) return false;
+            const idx = Number(rowIdx);
+            if (p.quoteCategories?.length) {
+                const cat = p.quoteCategories.find(c => c.id === categoryId);
+                if (!cat?.products?.[idx]) return false;
+                const name = cat.products[idx].name;
+                cat.products.splice(idx, 1);
+                p.price = calcProjectTotal(p);
+                return name;
+            }
+            if (!p.products?.[idx]) return false;
+            const name = p.products[idx].name;
+            p.products.splice(idx, 1);
+            p.price = calcProjectTotal(p);
+            return name;
+        }
+
         function renderQuoteProductRowsHtml(products, ctx = null) {
             return products.map((p, idx) => {
                 ensureProductBaseline(p);
@@ -5633,6 +5655,18 @@
                 const coefHtml = p.nonStandard
                     ? `<span class="coef-val is-ns">${coef.toFixed(1)}</span>`
                     : `<span class="coef-val">${coef.toFixed(1)}</span>`;
+                const delCell = editable
+                    ? `<td class="quote-del-cell">
+                        <button type="button" class="quote-del-btn" data-delete-quote-row
+                            data-project-id="${ctx.projectId}"
+                            data-category-id="${catId}"
+                            data-row-idx="${idx}"
+                            aria-label="删除 ${p.name}"
+                            title="删除此行">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>`
+                    : '';
                 return `<tr${rowAttrs}>
                     <td>${renderProductThumb(p)}</td>
                     <td style="font-weight:600;">${p.name}</td>
@@ -5645,6 +5679,7 @@
                     <td>${p.unit || '—'}</td>
                     <td class="al-r">¥${p.unitPrice.toLocaleString()}</td>
                     <td class="al-r" data-subtotal-cell${isZero ? ' style="color:var(--text-tertiary);"' : ''}>¥${subtotal.toLocaleString()}</td>
+                    ${delCell}
                 </tr>`;
             }).join('');
         }
@@ -5663,7 +5698,7 @@
                         <i class="fas fa-plus"></i>
                     </button>
                 </td>
-                <td class="quote-add-spacer" colspan="10"></td>
+                <td class="quote-add-spacer" colspan="11"></td>
             </tr>`;
         }
 
@@ -5672,11 +5707,11 @@
             return `<div class="project-tw"><table>
                 <colgroup>
                     <col class="col-p"><col class="col-s"><col class="col-w"><col class="col-h"><col class="col-d">
-                    <col class="col-m"><col class="col-r"><col class="col-q"><col class="col-u"><col class="col-pr"><col class="col-t">
+                    <col class="col-m"><col class="col-r"><col class="col-q"><col class="col-u"><col class="col-pr"><col class="col-t"><col class="col-x">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>图</th><th>名称</th><th colspan="3">尺寸(宽×高×深)</th><th>材料</th><th>非标系数</th><th>数量</th><th>单位</th><th>单价</th><th>小计</th>
+                        <th>图</th><th>名称</th><th colspan="3">尺寸(宽×高×深)</th><th>材料</th><th>非标系数</th><th>数量</th><th>单位</th><th>单价</th><th>小计</th><th></th>
                     </tr>
                 </thead>
                 <tbody>${renderQuoteProductRowsHtml(products, ctx)}${addRow}</tbody>
@@ -6219,6 +6254,22 @@
                         categoryId: gotoShopBtn.dataset.categoryId || gotoShopBtn.dataset.sectionKey || 'products',
                         sectionLabel: gotoShopBtn.dataset.sectionLabel,
                     });
+                    return;
+                }
+
+                const delQuoteBtn = e.target.closest('[data-delete-quote-row]');
+                if (delQuoteBtn) {
+                    e.stopPropagation();
+                    const projectId = delQuoteBtn.dataset.projectId;
+                    const categoryId = delQuoteBtn.dataset.categoryId || 'products';
+                    const rowIdx = delQuoteBtn.dataset.rowIdx;
+                    const removedName = deleteProductLine(projectId, categoryId, rowIdx);
+                    if (!removedName) {
+                        showToast('⚠️ 删除失败', '未找到该产品行');
+                        return;
+                    }
+                    refreshProjectShell(projectId);
+                    showToast('🗑️ 已删除', `「${removedName}」已从清单移除`);
                     return;
                 }
 

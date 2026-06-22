@@ -1549,7 +1549,8 @@
         .project-shell-body {
             display: none;
         }
-        .project-shell.is-open .project-shell-body {
+        /* 仅控制当前层 body，避免合并项目展开时连带展开子容器 */
+        .project-shell.is-open > .project-shell-body {
             display: block;
         }
         .shell-expand-btn {
@@ -1577,12 +1578,12 @@
             font-size: 11px;
             transition: transform 0.25s ease;
         }
-        .project-shell.is-open .shell-expand-btn {
+        .project-shell.is-open > .project-shell-hd .shell-expand-btn {
             background: var(--primary-10);
             border-color: var(--primary-40);
             color: var(--primary);
         }
-        .project-shell.is-open .shell-expand-btn i {
+        .project-shell.is-open > .project-shell-hd .shell-expand-btn i {
             transform: rotate(180deg);
         }
         .project-sub-list {
@@ -4772,6 +4773,7 @@
             const restored = merged.children.map(c => {
                 const copy = JSON.parse(JSON.stringify(c));
                 delete copy.parentId;
+                delete copy.children;
                 copy.checked = false;
                 return copy;
             });
@@ -4813,6 +4815,7 @@
                 const copy = JSON.parse(JSON.stringify(p));
                 copy.parentId = mergedId;
                 copy.checked = false;
+                delete copy.children;
                 return copy;
             });
 
@@ -4904,7 +4907,8 @@
                     if (!shell) return;
                     const willOpen = !shell.classList.contains('is-open');
                     if (shell.dataset.level === 'main' && willOpen) {
-                        document.querySelectorAll('.project-shell[data-level="main"]').forEach(s => {
+                        const listRoot = shell.closest('#projectListRoot, #meProjectListRoot');
+                        (listRoot || document).querySelectorAll('.project-shell[data-level="main"]').forEach(s => {
                             if (s !== shell) s.classList.remove('is-open');
                         });
                     }

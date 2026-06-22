@@ -1,0 +1,22 @@
+{
+  "savedAt": "2026-06-22",
+  "session": "a7fa",
+  "domain": "deep-design",
+  "note": "本地 recall 备份（MCP 连接失败时的离线副本）；MCP 恢复后可手动 remember/checkpoint 或 reindex",
+  "remember": {
+    "content": "deep design 项目 2026-06-22 快照已存：主工作区 D:\\DD-cursor\\DD-design\\，预览 file:///D:/DD-cursor/DD-design/1.html。快照双份：C:\\Users\\LocalAccount\\Desktop\\deep-design-snapshots\\2026-06-22\\ 与 D:\\DD-cursor\\deep-design-snapshots\\2026-06-22\\。本版含：子容器折叠 CSS 修复（> 子选择器）、THOR 虚拟项目 p-thor 八类报价、清单底部 + 行联动选品 Tab（shopPickerContext/openShopForQuoteSection）、统一 project-shell。改 1.md 后须 Copy-Item 同步 1.html 并 Ctrl+F5。",
+    "source": "deep-design-milestone",
+    "tags": "deep-design,snapshot,2026-06-22,DD-design,THOR,选品"
+  },
+  "checkpoint": {
+    "intent": "维护 deep design 单文件原型（DD-design），项目中心 + 选品 + THOR 报价已完成本阶段功能。",
+    "established": "主文件 1.md/1.html 在 D:\\DD-cursor\\DD-design\\；快照 2026-06-22 已双份备份；app-state.json 版本 2026-06-22；子容器折叠用 .project-shell.is-open > .project-shell-body；p-thor 八类 quoteCategories；选品 + 行经 openShopForQuoteSection 回写版块。",
+    "pursuing": "会话收尾，快照与 recall 已备份；下次可继续迭代项目中心或选品交互。",
+    "open_questions": "是否将 DD-design 纳入 git 远程；合并/拆分边界场景是否需更多测试。"
+  },
+  "index_files": [
+    "D:/DD-cursor/DD-design/1.md",
+    "D:/DD-cursor/DD-design/app-state.json"
+  ],
+  "mcp_status": "Connection closed — remember/checkpoint/index_file/snapshot_index 未写入 recall brain"
+}

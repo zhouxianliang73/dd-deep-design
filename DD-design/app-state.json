@@ -1,0 +1,30 @@
+{
+  "version": "2026-06-21",
+  "brand": "deep design",
+  "mainFiles": {
+    "html": "D:\\DD-cursor\\DD-design\\1.html",
+    "md": "D:\\DD-cursor\\DD-design\\1.md",
+    "preview": "file:///D:/DD-cursor/DD-design/1.html"
+  },
+  "features": [
+    "选品中心：折叠筛选、项目多选、产品卡片",
+    "项目中心：列表+图例双视图、合并项目（名称可编辑、家具数量合并）",
+    "沟通记录：数据驱动 commStructure + localStorage + comm-structure.json",
+    "设计师超市：仅此处显示擅长 tag，其余页面只显示姓名",
+    "首页：设计师/爆款/收藏/在线沟通"
+  ],
+  "localStorageKeys": {
+    "commStructure": "deepdesign_comm_structure"
+  },
+  "designers": [
+    { "name": "张俊", "tag": "现代简约 · 8年" },
+    { "name": "顾欣", "tag": "北欧自然 · 6年" },
+    { "name": "盛菲", "tag": "新中式 · 10年" },
+    { "name": "ALEX", "tag": "极简主义 · 7年" },
+    { "name": "HILL", "tag": "复古轻奢 · 5年" },
+    { "name": "周宏", "tag": "侘寂风 · 4年" },
+    { "name": "周楚轩", "tag": "法式 · 6年" }
+  ],
+  "defaultProjects": ["p1 张先生·客厅", "p2 张先生·餐厅", "p3 Lisa·主卧", "p4 王先生·书房"],
+  "commStructureFile": "comm-structure.json"
+}

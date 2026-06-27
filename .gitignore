@@ -1,11 +1,60 @@
 # Python scripts (dev tools)
+
 scripts/
+
 *.py
 
+
+
 # Temp files
+
 ~$*
+
 户外厨房/
 
+
+
 # OS files
+
 .DS_Store
+
 Thumbs.db
+
+
+
+# ── 工作区元数据（不属于营销站） ──
+
+_workspace/
+
+WORKSPACE.md
+
+
+
+# ── 其他版块（独立 Git 仓库，禁止提交进营销站） ──
+
+scheme-center/
+
+thor-quote/
+
+delivery-system/
+
+supplier-selector/
+
+outdoor-solutions*/
+
+outdoor-kitchen/
+
+matrix/
+
+_archive/
+
+repos/
+
+DD-design/
+
+
+
+# 历史遗留
+
+delivery-system交付标准/
+

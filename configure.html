@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DD Deep Design outdoor kitchen quote — pick a standard package, then refine like Apple." />
+  <title>Configure Quote | DD Deep Design</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/quote.css?t=20260722apple" />
+</head>
+<body class="quote-body">
+  <header class="q-nav">
+    <a class="q-brand" href="index.html">
+      <span class="q-brand-mark">DD</span>
+      <span>Deep Design</span>
+    </a>
+    <div class="q-nav-actions">
+      <button class="q-chip" id="marketExport" type="button">Export USD</button>
+      <button class="q-chip" id="marketDomestic" type="button">Domestic CNY</button>
+      <button class="q-chip" id="langToggle" type="button">中文 / EN</button>
+    </div>
+  </header>
+
+  <main class="q-shell">
+    <section class="q-hero">
+      <div class="q-kicker" id="heroKicker">开始配置</div>
+      <h1 id="heroTitle">选择你的户外厨房</h1>
+      <p id="heroDesc">先选标准套装，再细化门型、厨具与饰面。每选一项，自动进入下一步。</p>
+      <div class="q-steps" id="stepPills"></div>
+    </section>
+
+    <section class="q-layout" id="shedFlow">
+      <div class="q-stage">
+        <div class="q-stage-visual">
+          <span class="q-stage-view" id="stageView">立面图</span>
+          <img id="stageImg" src="assets/images/products/suoer/2900.png" alt="Elevation" />
+        </div>
+        <div class="q-stage-meta">
+          <div>
+            <strong id="stageTitle">选择外框尺寸</strong>
+            <div id="stageDim" style="color:var(--muted)">悬停尺寸可预览立面</div>
+          </div>
+          <span class="q-badge hidden" id="stageBadge"></span>
+        </div>
+      </div>
+
+      <div class="q-panel" id="configPanel"></div>
+    </section>
+  </main>
+
+  <footer class="q-bar">
+    <div class="q-bar-inner">
+      <div>
+        <div class="label" id="barLabel">预估总价</div>
+        <div class="total" id="barTotal">$7,029</div>
+        <div class="model" id="barModel">选择标准套装</div>
+      </div>
+      <div class="q-bar-cta">
+        <button class="q-btn q-btn-ghost" id="btnCopy" type="button">复制配置</button>
+        <button class="q-btn q-btn-primary" id="btnRequest" type="button">提交询价</button>
+      </div>
+    </div>
+  </footer>
+
+  <div class="q-drawer" id="drawer">
+    <div class="q-drawer-mask" id="drawerMask"></div>
+    <div class="q-drawer-panel" id="drawerBody"></div>
+  </div>
+
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/hot-images.js"></script>
+  <script src="assets/js/pricing.js"></script>
+  <script src="assets/js/quote-app.js"></script>
+</body>
+</html>

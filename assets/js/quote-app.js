@@ -1,6 +1,6 @@
-/* DD Deep Design — Apple-style quote flow
- * Step: bundle → door → upgrades → finish → review
- * Selecting an option auto-advances (no manual path switching).
+/* DD Deep Design — Custom Design quote flow
+ * Step: empty frame (door + width) → finish → review
+ * Interior module checklist will be organized separately later.
  */
 (() => {
   const C = window.DDCatalog;
@@ -8,9 +8,7 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-  /** shed: 0 bundle, 1 door, 2 upgrades, 3 finish, 4 review
-   *  modular: 0 bundle, 4 review
-   */
+  /** shed custom: 0 frame, 1 finish, 2 review */
   const state = {
     lang: localStorage.getItem('dd-lang') || 'cn',
     market: localStorage.getItem('dd-market') || 'export',
@@ -18,7 +16,7 @@
     step: 0,
     frameId: 'F2800',
     doorType: 'xt',
-    packageId: 'recommended',
+    packageId: 'empty',
     selected: new Set(),
     finishId: 'CK01G-Y',
     hotSetId: 'SET-MK-US-8',
@@ -28,32 +26,27 @@
   };
 
   const txt = {
-    heroTitle: { en: 'Choose your outdoor kitchen', cn: '选择你的户外厨房' },
+    heroTitle: { en: 'Custom Design', cn: '个性定制' },
     heroDesc: {
-      en: 'Start with a standard package — then refine door, appliances, and finish. Each choice moves you forward.',
-      cn: '先选标准套装，再细化门型、厨具与饰面。每选一项，自动进入下一步。',
+      en: 'Start with an empty frame — same sizes as the classic site. Interior checklist comes next (organized separately).',
+      cn: '先选空框架（门型与尺寸同经典官网）。内部配置清单稍后另整理。',
     },
-    kicker: { en: 'Configure', cn: '开始配置' },
-    stepBundle: { en: '1 Model', cn: '1 套装' },
-    stepDoor: { en: '2 Door', cn: '2 门型' },
-    stepUp: { en: '3 Options', cn: '3 加配' },
-    stepFinish: { en: '4 Finish', cn: '4 饰面' },
-    stepReview: { en: '5 Review', cn: '5 确认' },
-    pickBundle: { en: 'Which model?', cn: '选择标准套装' },
-    pickBundleHint: {
-      en: 'Factory standards — Lift-up export, Expo show floor, or quick-ship modules.',
-      cn: '厂方标准：Lift-up 外销、展会同款，或热卖速发模块。',
+    kicker: { en: 'Custom Design', cn: '个性定制' },
+    stepFrame: { en: '1 Frame', cn: '1 框架' },
+    stepFinish: { en: '2 Finish', cn: '2 饰面' },
+    stepReview: { en: '3 Review', cn: '3 确认' },
+    pickFrame: { en: 'Choose empty frame', cn: '选择空框架' },
+    pickFrameHint: {
+      en: 'Empty shell only — depth 900 × height 2250 mm. Pick door type and width (same as classic).',
+      cn: '仅空框架 — 深 900 × 高 2250 mm。门型与宽度选择方式与经典官网一致。',
     },
-    shedGroup: { en: 'Shed kitchens', cn: '含棚整装' },
-    modGroup: { en: 'Open modules (no shed)', cn: '开放模块（无棚）' },
+    emptyNote: {
+      en: 'Interior modules checklist will be added later — quote is shell + finish for now.',
+      cn: '内部模块清单稍后整理 — 当前报价按空框架 + 饰面估算。',
+    },
     pickDoor: { en: 'Door style', cn: '选择门型' },
-    pickDoorHint: { en: 'Tap to select — continues automatically.', cn: '点选即可，自动进入下一步。' },
-    pickUp: { en: 'Customize options', cn: '微调加配' },
-    pickUpHint: {
-      en: 'Standard package is ready. Add extras if you want, then continue.',
-      cn: '标准配置已就绪。需要再加选，然后继续。',
-    },
-    keepStd: { en: 'Keep standard — Continue', cn: '保持标配，继续' },
+    pickWidth: { en: 'Frame width', cn: '框架宽度' },
+    continueNext: { en: 'Continue', cn: '继续' },
     pickFinish: { en: 'Finish', cn: '选择饰面' },
     pickFinishHint: { en: 'Tap a color to select and continue.', cn: '点选色号即选中并进入下一步。' },
     review: { en: 'Your configuration', cn: '确认你的配置' },
@@ -66,13 +59,9 @@
     export: { en: 'Export USD', cn: '外销 USD' },
     domestic: { en: 'Domestic CNY', cn: '内销 CNY' },
     copied: { en: 'Copied', cn: '已复制' },
-    recommended: { en: 'Recommended', cn: '推荐' },
     elevView: { en: 'Elevation', cn: '立面图' },
     productView: { en: 'Product view', cn: '效果图' },
     hoverElev: { en: 'Hover a size to preview elevation', cn: '悬停尺寸可预览立面' },
-    cabinets: { en: 'Cabinets', cn: '柜体' },
-    appliancesG: { en: 'Appliances', cn: '电器' },
-    hardware: { en: 'Hardware', cn: '五金' },
   };
 
   function t(key) {
@@ -93,8 +82,12 @@
     return map;
   }
   function applyPackage(pkgId) {
-    state.packageId = pkgId;
-    state.selected = P.resolvePackageModules(frame(), pkgId, C);
+    state.packageId = pkgId || 'empty';
+    state.selected = P.resolvePackageModules(frame(), state.packageId, C);
+  }
+
+  function useEmptyFrame() {
+    applyPackage('empty');
   }
   function calc() {
     return P.quote({
@@ -125,47 +118,17 @@
     $('#configPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function applyBundle(preset) {
-    state.presetId = preset.id;
-    if (preset.marketHint) {
-      state.market = preset.marketHint;
-      localStorage.setItem('dd-market', state.market);
-    }
-    if (preset.path === 'modular') {
-      state.path = 'modular';
-      state.hotSetId = preset.hotSetId;
-      go(4);
-      return;
-    }
-    state.path = 'shed';
-    state.frameId = preset.frameId;
-    state.doorType = preset.doorType || 'xt';
-    applyPackage(preset.packageId || frame().recommend);
-    // show matching elevation briefly, then advance to door
-    previewFrame(state.frameId);
-    setTimeout(() => go(1), 180);
-  }
-
   /* ---------- render ---------- */
 
   function renderSteps() {
     const el = $('#stepPills');
     if (!el) return;
-    const shedSteps = [
-      { n: 0, key: 'stepBundle' },
-      { n: 1, key: 'stepDoor' },
-      { n: 2, key: 'stepUp' },
-      { n: 3, key: 'stepFinish' },
-      { n: 4, key: 'stepReview' },
+    const steps = [
+      { n: 0, key: 'stepFrame' },
+      { n: 1, key: 'stepFinish' },
+      { n: 2, key: 'stepReview' },
     ];
-    const modSteps = [
-      { n: 0, key: 'stepBundle' },
-      { n: 4, key: 'stepReview' },
-    ];
-    const steps = state.path === 'modular' && state.step === 4 ? modSteps : shedSteps;
-    // While on bundle pick, always show shed flow labels
-    const list = state.step === 0 ? shedSteps : steps;
-    el.innerHTML = list
+    el.innerHTML = steps
       .map((s) => {
         const active = state.step === s.n;
         const done = state.step > s.n;
@@ -211,130 +174,32 @@
 
   function renderStage() {
     const f = frame();
+    const doorName = L(C.doorTypes.find((d) => d.id === state.doorType)?.name);
 
     if (state.step === 0) {
-      // Default: recommended 2.8 elev until hover
-      const rec = C.frames.find((x) => x.id === 'F2800') || f;
       setStage(
-        rec.image.elev,
-        state.lang === 'cn' ? '选择外框尺寸' : 'Choose frame width',
-        t('hoverElev'),
-        '',
+        f.image.elev,
+        `${t('pickFrame')} · ${L(f.label)}`,
+        `${f.width} × ${f.depth} × ${f.height} mm · ${doorName}`,
+        state.lang === 'cn' ? '空框架' : 'Empty',
         t('elevView')
       );
       return;
     }
 
-    if (state.path === 'modular') {
-      const set = C.hotSets.find((s) => s.id === state.hotSetId);
-      const coverSku = set?.items?.[0];
-      const img = (coverSku && window.DDHotImages && window.DDHotImages[coverSku]) || f.image.xt;
-      setStage(img, L(set?.name), L(set?.note) || '304 SS', '', t('productView'));
-      return;
-    }
-
-    // Door step & later: product view for selected door+width; elev available on step 0/1 preview
-    if (state.step === 1) {
-      // Door choosing — show product render for current door, elev as baseline until hover door
-      setStage(
-        f.image[state.doorType],
-        `${L(f.label)} · ${L(C.doorTypes.find((d) => d.id === state.doorType)?.name)}`,
-        `${f.width} × ${f.depth} × ${f.height} mm`,
-        f.badge ? L(f.badge) : '',
-        t('productView')
-      );
-      return;
-    }
-
-    // After door locked: keep product view for that frame+door
     setStage(
       f.image[state.doorType],
-      `${L(f.label)} · ${L(C.doorTypes.find((d) => d.id === state.doorType)?.name)}`,
+      `${L(f.label)} · ${doorName}`,
       `${f.width} × ${f.depth} × ${f.height} mm`,
-      f.badge ? L(f.badge) : '',
+      state.lang === 'cn' ? '空框架' : 'Empty',
       t('productView')
     );
   }
 
-  function renderBundleStep() {
-    const shedPresets = P.presets().filter((p) => p.path === 'shed');
-    const hotPresets = P.presets().filter((p) => p.path === 'modular');
-
-    const shedCards = shedPresets
-      .map((p) => {
-        const q = P.quote({
-          path: 'shed',
-          market: p.marketHint || 'export',
-          frameId: p.frameId,
-          doorType: p.doorType || 'xt',
-          packageId: p.packageId,
-          lang: state.lang,
-        });
-        const fr = C.frames.find((f) => f.id === p.frameId);
-        const src =
-          p.source === 'expo'
-            ? state.lang === 'cn'
-              ? '展会同款'
-              : 'Expo'
-            : p.source === 'lift-up'
-              ? 'Lift-up'
-              : state.lang === 'cn'
-                ? '含棚'
-                : 'Shed';
-        const elev = fr?.image?.elev || '';
-        const meters = fr ? (fr.width / 1000).toFixed(1).replace(/\.0$/, '') + 'm' : '';
-        return `
-          <button type="button" class="q-bundle ${p.highlight ? 'highlight' : ''}" data-bundle="${p.id}" data-frame="${p.frameId}">
-            ${p.highlight ? `<span class="q-bundle-rec">${t('recommended')}</span>` : ''}
-            ${elev ? `<img class="q-bundle-elev" src="${elev}" alt="${L(fr.label)} elevation" />` : ''}
-            <div class="q-bundle-src">${src} · ${meters}</div>
-            <div class="q-bundle-name">${L(p.name)}</div>
-            <div class="q-bundle-sub">${fr ? `${fr.width} × ${fr.depth} × ${fr.height} mm · ${t('elevView')}` : ''}</div>
-            <div class="q-bundle-price">${money(q.total, q.currency)}</div>
-          </button>`;
-      })
-      .join('');
-
-    const hotCards = hotPresets
-      .map((p) => {
-        const set = C.hotSets.find((s) => s.id === p.hotSetId);
-        const cover = set?.cover || (set?.items?.[0] && window.DDHotImages?.[set.items[0]]) || '';
-        return `
-          <button type="button" class="q-bundle" data-bundle="${p.id}">
-            ${cover ? `<img class="q-bundle-img" src="${cover}" alt="" />` : ''}
-            <div class="q-bundle-src">Hot PI</div>
-            <div class="q-bundle-name">${L(p.name)}</div>
-            <div class="q-bundle-sub">${set ? `${set.structure} · ${set.items.length} SKUs` : ''}</div>
-            <div class="q-bundle-price">${money(set?.priceUsd || 0, 'USD')}</div>
-          </button>`;
-      })
-      .join('');
-
-    return `
-      <div class="q-block">
-        <h2>${t('pickBundle')}</h2>
-        <p class="hint">${t('pickBundleHint')}</p>
-        <div class="q-bundle-label">${t('shedGroup')}</div>
-        <div class="q-bundle-grid">${shedCards}</div>
-        <div class="q-bundle-label" style="margin-top:18px">${t('modGroup')}</div>
-        <div class="q-bundle-grid">${hotCards}</div>
-      </div>`;
-  }
-
-  function renderDoorStep() {
+  function renderFrameStep() {
     const f = frame();
     const doors = C.doorTypes
       .map((d) => {
-        const q = P.quote({
-          path: 'shed',
-          market: state.market,
-          frameId: state.frameId,
-          doorType: d.id,
-          packageId: state.packageId,
-          selected: state.selected,
-          finishId: state.finishId,
-          lang: state.lang,
-        });
         const thumb = f.image[d.id];
         return `
           <button type="button" class="q-option q-option-door ${state.doorType === d.id ? 'active' : ''}" data-door="${d.id}">
@@ -343,58 +208,44 @@
               <div class="title">${L(d.name)}</div>
               <div class="sub">${L(d.desc)}</div>
             </span>
-            <span class="price">${money(q.total, q.currency)}</span>
+          </button>`;
+      })
+      .join('');
+
+    const sizes = C.frames
+      .map((fr) => {
+        const q = P.quote({
+          path: 'shed',
+          market: state.market,
+          frameId: fr.id,
+          doorType: state.doorType,
+          packageId: 'empty',
+          selected: new Set(),
+          finishId: state.finishId,
+          lang: state.lang,
+        });
+        const active = state.frameId === fr.id;
+        return `
+          <button type="button" class="q-bundle ${active ? 'highlight' : ''}" data-frame="${fr.id}">
+            ${fr.image.elev ? `<img class="q-bundle-elev" src="${fr.image.elev}" alt="${L(fr.label)}" />` : ''}
+            <div class="q-bundle-src">${L(fr.label)}${fr.badge ? ' · ' + L(fr.badge) : ''}</div>
+            <div class="q-bundle-name">${fr.width} mm</div>
+            <div class="q-bundle-sub">${fr.width} × ${fr.depth} × ${fr.height} mm</div>
+            <div class="q-bundle-price">${money(q.total, q.currency)}</div>
           </button>`;
       })
       .join('');
 
     return `
       <div class="q-block">
-        <h2>${t('pickDoor')}</h2>
-        <p class="hint">${t('pickDoorHint')}</p>
-        <div class="q-elev-mini">
-          <div class="q-elev-mini-label">${t('elevView')} · ${L(f.label)}</div>
-          <img src="${f.image.elev}" alt="elevation ${f.width}" />
-        </div>
-        <div class="q-options" style="margin-top:12px">${doors}</div>
-        <button type="button" class="q-btn q-btn-ghost" data-nav="back" style="margin-top:12px;width:100%">${t('back')}</button>
-      </div>`;
-  }
-
-  function renderUpgradeStep() {
-    const f = frame();
-    const optional = C.modules.filter(
-      (m) => !m.required && (!m.minWidth || f.width >= m.minWidth) && (m.group === 'appliances' || m.group === 'hardware')
-    );
-
-    const items = optional
-      .map((m) => {
-        const on = state.selected.has(m.id);
-        const price = state.market === 'domestic' ? m.priceCny : m.priceUsd;
-        return `
-          <label class="q-mod ${on ? '' : 'off'}">
-            <div>
-              <div class="name">${L(m.name)}</div>
-              <div class="spec">${m.spec}</div>
-              ${m.why ? `<div class="why">${L(m.why)}</div>` : ''}
-            </div>
-            <div style="text-align:right">
-              <div style="font-weight:700;margin-bottom:6px">${on ? '' : '+'}${money(price)}</div>
-              <input type="checkbox" data-toggle="${m.id}" ${on ? 'checked' : ''} />
-            </div>
-          </label>`;
-      })
-      .join('');
-
-    return `
-      <div class="q-block">
-        <h2>${t('pickUp')}</h2>
-        <p class="hint">${t('pickUpHint')}</p>
-        <div class="q-mod-list">${items}</div>
-        <div class="q-nav-btns" style="margin-top:14px">
-          <button type="button" class="q-btn q-btn-ghost" data-nav="back">${t('back')}</button>
-          <button type="button" class="q-btn q-btn-primary" data-nav="next">${t('keepStd')}</button>
-        </div>
+        <h2>${t('pickFrame')}</h2>
+        <p class="hint">${t('pickFrameHint')}</p>
+        <p class="hint" style="margin-top:6px">${t('emptyNote')}</p>
+        <div class="q-bundle-label">${t('pickDoor')}</div>
+        <div class="q-options">${doors}</div>
+        <div class="q-bundle-label" style="margin-top:18px">${t('pickWidth')}</div>
+        <div class="q-bundle-grid" id="frameSizeGrid">${sizes}</div>
+        <button type="button" class="q-btn q-btn-primary" data-nav="next" style="margin-top:16px;width:100%">${t('continueNext')}</button>
       </div>`;
   }
 
@@ -417,7 +268,10 @@
           <strong>${fin.id}</strong> — ${L(fin.name)}
           ${prem ? ` · +${money(prem)}` : ''}
         </div>
-        <button type="button" class="q-btn q-btn-ghost" data-nav="back" style="margin-top:12px;width:100%">${t('back')}</button>
+        <div class="q-nav-btns" style="margin-top:12px">
+          <button type="button" class="q-btn q-btn-ghost" data-nav="back">${t('back')}</button>
+          <button type="button" class="q-btn q-btn-primary" data-nav="next">${t('continueNext')}</button>
+        </div>
       </div>`;
   }
 
@@ -461,32 +315,30 @@
 
   function renderPanel() {
     const panel = $('#configPanel');
-    if (state.step === 0) panel.innerHTML = renderBundleStep();
-    else if (state.path === 'modular') panel.innerHTML = renderReviewStep();
-    else if (state.step === 1) panel.innerHTML = renderDoorStep();
-    else if (state.step === 2) panel.innerHTML = renderUpgradeStep();
-    else if (state.step === 3) panel.innerHTML = renderFinishStep();
+    if (state.step === 0) panel.innerHTML = renderFrameStep();
+    else if (state.step === 1) panel.innerHTML = renderFinishStep();
     else panel.innerHTML = renderReviewStep();
     bindPanel();
   }
 
   function bindPanel() {
-    $$('[data-bundle]').forEach((btn) => {
+    $$('[data-frame]').forEach((btn) => {
       btn.addEventListener('mouseenter', () => {
-        if (btn.dataset.frame) previewFrame(btn.dataset.frame);
+        if (btn.dataset.frame) previewFrame(btn.dataset.frame, state.doorType);
       });
       btn.addEventListener('focus', () => {
-        if (btn.dataset.frame) previewFrame(btn.dataset.frame);
+        if (btn.dataset.frame) previewFrame(btn.dataset.frame, state.doorType);
       });
       btn.addEventListener('click', () => {
-        const preset = P.presets().find((p) => p.id === btn.dataset.bundle);
-        if (preset) applyBundle(preset);
+        state.frameId = btn.dataset.frame;
+        useEmptyFrame();
+        renderBar();
+        renderPanel();
+        renderStage();
       });
     });
 
-    // restore default elev when leaving shed grid
-    const shedGrid = $('#configPanel')?.querySelector('.q-bundle-grid');
-    shedGrid?.addEventListener('mouseleave', () => {
+    $('#frameSizeGrid')?.addEventListener('mouseleave', () => {
       if (state.step === 0) renderStage();
     });
 
@@ -498,53 +350,34 @@
           f.image[doorId],
           `${L(f.label)} · ${L(C.doorTypes.find((d) => d.id === doorId)?.name)}`,
           `${f.width} × ${f.depth} × ${f.height} mm`,
-          f.badge ? L(f.badge) : '',
+          state.lang === 'cn' ? '空框架' : 'Empty',
           t('productView')
         );
       });
       btn.addEventListener('click', () => {
         state.doorType = btn.dataset.door;
-        go(2);
-      });
-    });
-
-    $$('[data-toggle]').forEach((input) =>
-      input.addEventListener('change', () => {
-        const id = input.dataset.toggle;
-        const m = moduleMap()[id];
-        if (input.checked) {
-          state.selected.add(id);
-          if (m?.replaces) state.selected.delete(m.replaces);
-          if (m?.pairsWith) state.selected.add(m.pairsWith);
-          if (id === 'elecPlus') state.selected.delete('elecBasic');
-          if (id === 'shelf2') state.selected.delete('shelf1');
-        } else {
-          state.selected.delete(id);
-          if (id === 'kamado') state.selected.delete('kamadoCab');
-        }
+        useEmptyFrame();
         renderBar();
         renderPanel();
         renderStage();
-      })
-    );
+      });
+    });
 
     $$('[data-finish]').forEach((btn) =>
       btn.addEventListener('click', () => {
         state.finishId = btn.dataset.finish;
-        go(4);
+        renderBar();
+        renderPanel();
       })
     );
 
     $$('[data-nav]').forEach((btn) =>
       btn.addEventListener('click', () => {
         const a = btn.dataset.nav;
-        if (a === 'back') {
-          if (state.step === 4 && state.path === 'modular') go(0);
-          else go(Math.max(0, state.step - 1));
-        }
-        if (a === 'next') go(Math.min(4, state.step + 1));
+        if (a === 'back') go(Math.max(0, state.step - 1));
+        if (a === 'next') go(Math.min(2, state.step + 1));
         if (a === 'restart') {
-          state.path = 'shed';
+          useEmptyFrame();
           go(0);
         }
         if (a === 'summary') openDrawer();
@@ -556,7 +389,11 @@
     const c = calc();
     $('#barTotal').textContent = money(c.total, c.currency);
     $('#barLabel').textContent = t('est');
-    $('#barModel').textContent = state.step === 0 ? t('pickBundle') : `${modelCode()} · ${t('fob')}`;
+    const f = frame();
+    $('#barModel').textContent =
+      state.step === 0
+        ? `${t('pickFrame')} · ${f.width}mm`
+        : `${modelCode()} · ${t('fob')}`;
     $('#btnCopy').textContent = t('copy');
     $('#btnRequest').textContent = t('request');
   }
@@ -619,7 +456,7 @@
   }
 
   function init() {
-    applyPackage(frame().recommend);
+    useEmptyFrame();
 
     $('#langToggle').addEventListener('click', () => {
       state.lang = state.lang === 'cn' ? 'en' : 'cn';

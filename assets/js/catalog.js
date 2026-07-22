@@ -150,6 +150,17 @@ window.DDCatalog = (() => {
   /** Packages = suggested standards (Apple-style) */
   const packages = [
     {
+      id: 'empty',
+      name: { en: 'Empty Frame', cn: '空框架' },
+      tag: { en: 'Shell only', cn: '仅外框' },
+      desc: {
+        en: 'Empty shell — pick interior modules later',
+        cn: '空框架 — 内部配置清单另选',
+      },
+      include: [],
+      exclude: [],
+    },
+    {
       id: 'essential',
       name: { en: 'Essential', cn: '基础版' },
       tag: { en: 'Good', cn: '入门' },

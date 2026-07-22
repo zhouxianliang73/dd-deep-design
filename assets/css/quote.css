@@ -1,16 +1,17 @@
 /* DD Deep Design — Quote System (Apple-style configurator) */
 :root {
-  --ink: #12141a;
-  --ink-soft: #3a3f4b;
-  --muted: #6b7280;
-  --line: #e5e2db;
-  --paper: #f7f5f1;
+  /* Align with classic: white + cool gold sitewide */
+  --ink: #111111;
+  --ink-soft: #333333;
+  --muted: #777777;
+  --line: #e6e6e6;
+  --paper: #ffffff;
   --card: #ffffff;
-  --accent: #1f5c4d;
-  --accent-2: #c45c26;
-  --accent-soft: #e8f2ef;
+  --accent: #c9a227;
+  --accent-2: #a3841a;
+  --accent-soft: #f7f1dc;
   --warn: #9a3412;
-  --shadow: 0 1px 0 rgba(18, 20, 26, 0.04);
+  --shadow: 0 1px 0 rgba(17, 17, 17, 0.04);
   --radius: 16px;
   --nav-h: 64px;
   --bar-h: 72px;
@@ -33,8 +34,8 @@ body.quote-body {
   font-family: var(--font-body);
   color: var(--ink);
   background:
-    radial-gradient(1200px 600px at 10% -10%, #e8f2ef 0%, transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, #f3ebe3 0%, transparent 50%),
+    radial-gradient(1200px 600px at 10% -10%, #f7f1dc 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #f5f5f5 0%, transparent 50%),
     var(--paper);
   line-height: 1.5;
   padding-bottom: calc(var(--bar-h) + 24px);
@@ -66,7 +67,7 @@ button {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  background: rgba(247, 245, 241, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }

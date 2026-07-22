@@ -49,10 +49,6 @@ const i18n = {
     'lib.fitWarn': { en: 'This item may not fit in the current cabinet cavity ({w} × 900 × 2250 mm). Add anyway?', cn: '该产品尺寸可能超出当前柜体内空（{w} × 900 × 2250 mm）。仍要添加吗？' },
     'lib.cabHint': { en: 'Cabinet cavity ref: {w} × 900 × 2250 mm — check before adding', cn: '柜体内空参考：{w} × 900 × 2250 mm — 添加前请确认能否放下' },
     'config.modeStandard': { en: 'Standard Package', cn: '标准套餐' },
-    'config.modeCustomSize': { en: 'Custom Size', cn: '定制尺寸' },
-    'config.customSizeLabel': { en: 'Custom frame width', cn: '自定义外框宽度' },
-    'config.customSizeHint': { en: 'Depth 900mm × Height 2250mm fixed. Width is project-custom (quote on request).', cn: '深度 900mm × 高度 2250mm 固定；宽度可按项目定制（参考报价）。' },
-    'config.applySize': { en: 'Apply', cn: '应用' },
     'config.step1.title': { en: 'Choose Size & Door Style', cn: '选择尺寸与门型' },
     'config.step1.desc':  { en: 'All cabinets: 900mm deep × 2250mm high. Select width & door — standard components are listed in this model.', cn: '标准柜体：深900mm × 高2250mm。选择尺寸与门型，本型号标准配置见右侧清单。' },
     'config.doorType': { en: 'Door Type', cn: '门型' },
@@ -67,8 +63,24 @@ const i18n = {
     'config.step2.desc':  { en: 'Standard configuration for this size is pre-selected. Adjust as needed.', cn: '该尺寸标准配置已预选，可按需调整。' },
     'config.step3.title': { en: 'Add Accessories', cn: '添加配件' },
     'config.step3.desc':  { en: 'Enhance your outdoor kitchen with optional extras.', cn: '用可选配件升级您的户外厨房。' },
-    'config.step4.title': { en: 'Select Door Panel Color', cn: '选择门板颜色' },
-    'config.step4.desc':  { en: 'Cabinet body finish is fixed. Choose a door panel color — the code appears in your quote.', cn: '柜体饰面固定。选择门板颜色——色号将出现在报价中。' },
+    'config.step4.title': { en: 'Select Door Colors', cn: '选择门板颜色' },
+    'config.step4.desc':  { en: 'Choose door panel colors — codes appear in your quote.', cn: '选择门板颜色——色号将出现在报价中。' },
+    'config.bodyColor':   { en: 'Shell Color', cn: '柜体颜色' },
+    'config.shellPreview':{ en: 'Shell Preview', cn: '柜体预览' },
+    'config.doorPreview': { en: 'Door Panel Preview', cn: '门板预览' },
+    'config.doorColor':   { en: 'Door Panel Color', cn: '门板颜色' },
+    'config.bodySelected':{ en: 'Shell: ', cn: '柜体：' },
+    'config.doorSelected':{ en: 'Door: ', cn: '门板：' },
+    'config.doorMatte':    { en: 'Solid Color', cn: '纯色' },
+    'config.doorTexture':  { en: 'Texture Finish', cn: '纹理饰面' },
+    'config.door.black':   { en: 'Matte Black', cn: '哑光黑' },
+    'config.door.white':   { en: 'Matte White', cn: '哑光白' },
+    'config.door.blue':    { en: 'Dusty Blue', cn: '雾蓝' },
+    'config.door.green':   { en: 'Forest Green', cn: '森绿' },
+    'config.door.walnut':  { en: 'Dark Walnut', cn: '深胡桃木纹' },
+    'config.door.charcoal':{ en: 'Charcoal Ash', cn: '炭黑木纹' },
+    'config.door.oak':     { en: 'Natural Oak', cn: '原橡木纹' },
+    'config.door.ash':     { en: 'Light Ash', cn: '浅白蜡木纹' },
     'config.xuanli':       { en: 'Xuanli Series', cn: '玄丽系列' },
     'config.xuanliSub':    { en: 'Cabinet body + door • Standard', cn: '柜体+门板 • 标准' },
     'config.yunwen':       { en: 'Yunwen Series', cn: '云纹系列' },
@@ -632,9 +644,15 @@ let state = {
 };
 
 let colorState = {
-    series: 'xuanli',
-    code: 'CK01G-Y',
-    name: 'Arctic White, Matte',
+    series: 'texture',
+    code: 'DP-W3',
+    name: 'Natural Oak',
+    premium: 0
+};
+
+let bodyColorState = {
+    code: 'CK02F',
+    name: 'CK02F',
     premium: 0
 };
 
@@ -780,13 +798,15 @@ function initStdLayoutSwitch() {
 }
 
 function parseSwatchColor(swatch) {
-    const preview = swatch && swatch.querySelector('.sw-preview');
+    if (!swatch) return '';
+    if (swatch.dataset.bar) return swatch.dataset.bar;
+    const preview = swatch.querySelector('.sw-preview');
     if (!preview) return '';
     const inline = preview.style.background || preview.style.backgroundColor || '';
     if (inline) {
         const hex = inline.match(/#([0-9a-fA-F]{3,8})/);
         if (hex) return '#' + hex[1];
-        return inline;
+        if (!/url\(/i.test(inline)) return inline;
     }
     return getComputedStyle(preview).backgroundColor || '';
 }
@@ -812,15 +832,26 @@ function colorLuminance(cssColor) {
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 }
 
-function syncColorSelectedBar(swatch) {
-    const bar = document.getElementById('colorSelectedInfo');
+function syncColorSelectedBar(swatch, barId) {
+    const bar = document.getElementById(barId || 'colorSelectedInfo');
     if (!bar || !swatch) return;
+    const texture = swatch.dataset.texture;
     const color = parseSwatchColor(swatch);
-    if (!color) return;
-    bar.style.backgroundColor = color;
-    const light = colorLuminance(color) > 0.62;
+    if (texture) {
+        bar.style.backgroundImage = `url('${texture}')`;
+        bar.style.backgroundSize = 'cover';
+        bar.style.backgroundPosition = 'center';
+        bar.style.backgroundColor = color || '#333';
+    } else {
+        bar.style.backgroundImage = '';
+        bar.style.backgroundSize = '';
+        bar.style.backgroundPosition = '';
+        if (color) bar.style.backgroundColor = color;
+    }
+    const light = color ? colorLuminance(color) > 0.62 : false;
     bar.classList.toggle('is-light', light);
     bar.classList.toggle('is-dark', !light);
+    bar.classList.toggle('has-texture', !!texture);
 }
 
 function renderComponents() {
@@ -1135,7 +1166,7 @@ function initProductLibrary() {
 function updateTotal() {
     const base = getBasePrice();
     const accessories = getAccessoriesTotal();
-    const finish = colorState.premium;
+    const finish = (colorState.premium || 0) + (bodyColorState.premium || 0);
     const total = base + accessories + finish;
 
     totalModel.textContent = getModelName();
@@ -1180,43 +1211,298 @@ sizeBtns.forEach(btn => {
     });
 });
 
-// Config mode tabs: 标准套餐 / 定制尺寸（个性定制 → configure.html）
+// Config mode tabs: 标准套餐（当前页）/ 个性定制 → index.html 空框架
 (function initConfigModeTabs() {
     const tabs = document.querySelectorAll('#configModeTabs [data-mode]');
-    const customPanel = document.getElementById('customSizePanel');
-    const sizeGrid = document.getElementById('standardSizeGrid');
-    const applyBtn = document.getElementById('applyCustomWidth');
-    const widthInput = document.getElementById('customWidthInput');
-
-    function setMode(mode) {
-        tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
-        const isCustom = mode === 'customSize';
-        if (customPanel) customPanel.classList.toggle('hidden', !isCustom);
-        if (sizeGrid) {
-            // keep door/images/details; only hide preset size chips in custom mode
-            const sizesCol = sizeGrid.querySelector('.step1-sizes');
-            if (sizesCol) sizesCol.classList.toggle('hidden', isCustom);
-        }
-    }
-
     tabs.forEach(tab => {
-        tab.addEventListener('click', () => setMode(tab.dataset.mode));
-    });
-
-    if (applyBtn && widthInput) {
-        applyBtn.addEventListener('click', () => {
-            let w = parseInt(widthInput.value, 10);
-            if (!Number.isFinite(w)) w = 3000;
-            w = Math.min(4500, Math.max(1800, w));
-            widthInput.value = String(w);
-            state.width = w;
-            sizeBtns.forEach(b => b.classList.remove('active'));
-            updateAll();
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.toggle('active', t === tab));
         });
-    }
-
-    setMode('standard');
+    });
 })();
+
+// Shell preview: recolor black cabinet photo to selected shell swatch
+const shellPreview = {
+    source: null,
+    canvas: null,
+    ctx: null,
+    baseData: null,
+    ready: false
+};
+
+function parseHexColor(hex) {
+    if (!hex) return { r: 40, g: 40, b: 40 };
+    let h = String(hex).trim().replace('#', '');
+    if (h.length === 3) h = h.split('').map(c => c + c).join('');
+    return {
+        r: parseInt(h.slice(0, 2), 16) || 0,
+        g: parseInt(h.slice(2, 4), 16) || 0,
+        b: parseInt(h.slice(4, 6), 16) || 0
+    };
+}
+
+/** Keep source lighting/matte look; only shift to selected shell color */
+function tintShellRgb(tr, tg, tb, lum) {
+    // Photo already has the desired matte shading — remap luminance onto target color
+    const L = Math.min(1, Math.max(0, lum));
+    // Black shell midtones sit low; lift so light colors still read, while keeping form light
+    const s = 0.18 + Math.pow(L / 0.42, 0.92) * 0.82;
+    const shade = Math.min(1.05, Math.max(0.12, s));
+    return {
+        r: Math.min(255, Math.round(tr * shade)),
+        g: Math.min(255, Math.round(tg * shade)),
+        b: Math.min(255, Math.round(tb * shade))
+    };
+}
+
+function cacheShellPreviewBase() {
+    if (!shellPreview.source || !shellPreview.ctx) return false;
+    const img = shellPreview.source;
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (!w || !h) return false;
+    shellPreview.canvas.width = w;
+    shellPreview.canvas.height = h;
+    shellPreview.ctx.drawImage(img, 0, 0, w, h);
+    shellPreview.baseData = shellPreview.ctx.getImageData(0, 0, w, h);
+    shellPreview.ready = true;
+    return true;
+}
+
+function renderShellPreview(hex) {
+    if (!shellPreview.ready && !cacheShellPreviewBase()) return;
+    const base = shellPreview.baseData;
+    if (!base) return;
+    const { r: tr, g: tg, b: tb } = parseHexColor(hex || '#111111');
+    const out = new ImageData(new Uint8ClampedArray(base.data), base.width, base.height);
+    const d = out.data;
+    const src = base.data;
+    for (let i = 0; i < d.length; i += 4) {
+        const pr = src[i], pg = src[i + 1], pb = src[i + 2], pa = src[i + 3];
+        if (pa < 8) continue;
+        const maxc = Math.max(pr, pg, pb);
+        const minc = Math.min(pr, pg, pb);
+        // Keep near-white studio background
+        if (minc > 235 && maxc - minc < 18) {
+            d[i] = pr; d[i + 1] = pg; d[i + 2] = pb;
+            continue;
+        }
+        // Keep warm LED strip (bright yellowish)
+        if (maxc > 190 && pr > pg && pg > pb + 8 && (pr - pb) > 25) {
+            d[i] = pr; d[i + 1] = pg; d[i + 2] = pb;
+            continue;
+        }
+        // Keep metallic gas struts (bright cool gray)
+        if (maxc > 165 && maxc - minc < 28 && minc > 120) {
+            d[i] = pr; d[i + 1] = pg; d[i + 2] = pb;
+            continue;
+        }
+        // Also remap bright edge glare on shell (was looking like metal reflection)
+        const lum = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
+        const tint = tintShellRgb(tr, tg, tb, lum);
+        d[i] = tint.r;
+        d[i + 1] = tint.g;
+        d[i + 2] = tint.b;
+    }
+    shellPreview.ctx.putImageData(out, 0, 0);
+}
+
+function initShellPreview() {
+    shellPreview.source = document.getElementById('shellPreviewSource');
+    shellPreview.canvas = document.getElementById('shellPreviewCanvas');
+    if (!shellPreview.source || !shellPreview.canvas) return;
+    shellPreview.ctx = shellPreview.canvas.getContext('2d', { willReadFrequently: true });
+
+    const paintActive = () => {
+        const active = document.querySelector('#bodyColorGrid .body-swatch.color-active');
+        const hex = active?.dataset.bar || parseSwatchColor(active) || '#8f8b84';
+        renderShellPreview(hex);
+    };
+
+    const onReady = () => {
+        cacheShellPreviewBase();
+        paintActive();
+    };
+
+    if (shellPreview.source.complete && shellPreview.source.naturalWidth) onReady();
+    else shellPreview.source.addEventListener('load', onReady, { once: true });
+}
+
+// Cabinet body color selection
+document.addEventListener('click', function(e) {
+    const swatch = e.target.closest('#bodyColorGrid .body-swatch');
+    if (!swatch) return;
+    document.querySelectorAll('#bodyColorGrid .body-swatch').forEach(s => s.classList.remove('color-active'));
+    swatch.classList.add('color-active');
+    bodyColorState.code = swatch.dataset.code;
+    bodyColorState.premium = parseInt(swatch.dataset.premium) || 0;
+    bodyColorState.name = swatch.title || swatch.querySelector('small')?.textContent || swatch.dataset.code;
+    const codeEl = document.getElementById('selectedBodyColorCode');
+    const nameEl = document.getElementById('selectedBodyColorName');
+    if (codeEl) codeEl.textContent = bodyColorState.code;
+    if (nameEl) nameEl.textContent = '— ' + bodyColorState.name;
+    syncColorSelectedBar(swatch, 'bodyColorSelectedInfo');
+    renderShellPreview(swatch.dataset.bar || parseSwatchColor(swatch));
+    // Keep door preview shell in sync with this selection
+    paintDoorPreviewFromSwatch();
+    updateTotal();
+});
+
+// Door preview: recolor masked door panels to selected solid/texture
+const doorPreview = {
+    source: null,
+    maskImg: null,
+    canvas: null,
+    ctx: null,
+    baseData: null,
+    maskData: null,
+    ready: false,
+    textureCache: Object.create(null)
+};
+
+function cacheDoorPreviewBase() {
+    if (!doorPreview.source || !doorPreview.maskImg || !doorPreview.ctx) return false;
+    const img = doorPreview.source;
+    const mask = doorPreview.maskImg;
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (!w || !h || !mask.naturalWidth) return false;
+    doorPreview.canvas.width = w;
+    doorPreview.canvas.height = h;
+    doorPreview.ctx.drawImage(img, 0, 0, w, h);
+    doorPreview.baseData = doorPreview.ctx.getImageData(0, 0, w, h);
+    doorPreview.ctx.drawImage(mask, 0, 0, w, h);
+    doorPreview.maskData = doorPreview.ctx.getImageData(0, 0, w, h);
+    doorPreview.ctx.putImageData(doorPreview.baseData, 0, 0);
+    doorPreview.ready = true;
+    return true;
+}
+
+function loadDoorTexture(url) {
+    if (!url) return Promise.resolve(null);
+    if (doorPreview.textureCache[url]) return Promise.resolve(doorPreview.textureCache[url]);
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = () => {
+            const c = document.createElement('canvas');
+            c.width = img.naturalWidth || img.width;
+            c.height = img.naturalHeight || img.height;
+            const cx = c.getContext('2d', { willReadFrequently: true });
+            cx.drawImage(img, 0, 0);
+            const data = {
+                w: c.width,
+                h: c.height,
+                data: cx.getImageData(0, 0, c.width, c.height).data
+            };
+            doorPreview.textureCache[url] = data;
+            resolve(data);
+        };
+        img.onerror = () => resolve(null);
+        img.src = url;
+    });
+}
+
+function getActiveShellHex() {
+    const active = document.querySelector('#bodyColorGrid .body-swatch.color-active');
+    return active?.dataset.bar || parseSwatchColor(active) || '#8f8b84';
+}
+
+function renderDoorPreview(opts) {
+    const hex = opts?.hex || '#2c2e31';
+    const shellHex = opts?.shellHex || getActiveShellHex();
+    const texture = opts?.texture || null;
+    if (!doorPreview.ready && !cacheDoorPreviewBase()) return;
+    const base = doorPreview.baseData;
+    const mask = doorPreview.maskData;
+    if (!base || !mask) return;
+    const { r: tr, g: tg, b: tb } = parseHexColor(hex);
+    const { r: sr, g: sg, b: sb } = parseHexColor(shellHex);
+    const out = new ImageData(new Uint8ClampedArray(base.data), base.width, base.height);
+    const d = out.data;
+    const src = base.data;
+    const m = mask.data;
+    const tw = texture?.w || 0;
+    const th = texture?.h || 0;
+    const td = texture?.data || null;
+    const refLum = 0.48; // ~avg teal luminance
+
+    for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+        const pr = src[i], pg = src[i + 1], pb = src[i + 2], pa = src[i + 3];
+        if (pa < 8) continue;
+
+        // Door panels (masked)
+        if (m[i] >= 128) {
+            const lum = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
+            const shade = Math.min(1.35, Math.max(0.25, lum / refLum));
+            let rr = tr, gg = tg, bb = tb;
+            if (td && tw && th) {
+                const x = p % base.width;
+                const y = (p / base.width) | 0;
+                const tx = ((x * 1.15) | 0) % tw;
+                const ty = ((y * 1.15) | 0) % th;
+                const ti = (ty * tw + tx) * 4;
+                rr = td[ti];
+                gg = td[ti + 1];
+                bb = td[ti + 2];
+            }
+            d[i] = Math.min(255, Math.round(rr * shade));
+            d[i + 1] = Math.min(255, Math.round(gg * shade));
+            d[i + 2] = Math.min(255, Math.round(bb * shade));
+            continue;
+        }
+
+        // Shell / frame: match selected Shell Color (same logic as shell preview card)
+        const maxc = Math.max(pr, pg, pb);
+        const minc = Math.min(pr, pg, pb);
+        if (minc > 235 && maxc - minc < 18) continue; // studio bg
+        if (maxc > 190 && pr > pg && pg > pb + 8 && (pr - pb) > 25) continue; // LED
+        if (maxc > 175 && maxc - minc < 22 && minc > 140) continue; // gas struts only
+        // stainless countertop / silver accents (keep brighter metals)
+        if (maxc > 155 && maxc - minc < 30 && minc > 110) continue;
+        // Remap dark + mid shell (incl. edge glare) to matte shell color
+        if (maxc > 170 || (maxc - minc > 55 && minc > 40)) continue;
+        const lum = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
+        const tint = tintShellRgb(sr, sg, sb, lum);
+        d[i] = tint.r;
+        d[i + 1] = tint.g;
+        d[i + 2] = tint.b;
+    }
+    doorPreview.ctx.putImageData(out, 0, 0);
+}
+
+async function paintDoorPreviewFromSwatch(swatch) {
+    if (!swatch) {
+        swatch = document.querySelector('#doorSeriesList .color-swatch.color-active');
+    }
+    if (!swatch) return;
+    const hex = swatch.dataset.bar || parseSwatchColor(swatch) || '#2c2e31';
+    const textureUrl = swatch.dataset.texture || '';
+    const texture = textureUrl ? await loadDoorTexture(textureUrl) : null;
+    renderDoorPreview({ hex, texture, shellHex: getActiveShellHex() });
+}
+
+function initDoorPreview() {
+    doorPreview.source = document.getElementById('doorPreviewSource');
+    doorPreview.maskImg = document.getElementById('doorPreviewMask');
+    doorPreview.canvas = document.getElementById('doorPreviewCanvas');
+    if (!doorPreview.source || !doorPreview.maskImg || !doorPreview.canvas) return;
+    doorPreview.ctx = doorPreview.canvas.getContext('2d', { willReadFrequently: true });
+
+    let pending = 2;
+    const tryReady = () => {
+        pending -= 1;
+        if (pending > 0) return;
+        cacheDoorPreviewBase();
+        paintDoorPreviewFromSwatch();
+    };
+
+    if (doorPreview.source.complete && doorPreview.source.naturalWidth) tryReady();
+    else doorPreview.source.addEventListener('load', tryReady, { once: true });
+
+    if (doorPreview.maskImg.complete && doorPreview.maskImg.naturalWidth) tryReady();
+    else doorPreview.maskImg.addEventListener('load', tryReady, { once: true });
+}
 
 // Door panel color selection (delegated across 4 series)
 document.addEventListener('click', function(e) {
@@ -1231,7 +1517,8 @@ document.addEventListener('click', function(e) {
     colorState.name = swatch.title || swatch.querySelector('small')?.textContent || swatch.dataset.code;
     if (selectedColorCode) selectedColorCode.textContent = colorState.code;
     if (selectedColorName) selectedColorName.textContent = '— ' + colorState.name;
-    syncColorSelectedBar(swatch);
+    syncColorSelectedBar(swatch, 'colorSelectedInfo');
+    paintDoorPreviewFromSwatch(swatch);
     updateTotal();
 });
 
@@ -1240,8 +1527,12 @@ document.addEventListener('click', function(e) {
 // =============================================
 updateAll();
 applyTranslation();
+initShellPreview();
+initDoorPreview();
+const initialBodySwatch = document.querySelector('#bodyColorGrid .body-swatch.color-active');
+if (initialBodySwatch) syncColorSelectedBar(initialBodySwatch, 'bodyColorSelectedInfo');
 const initialSwatch = document.querySelector('#doorSeriesList .color-swatch.color-active');
-if (initialSwatch) syncColorSelectedBar(initialSwatch);
+if (initialSwatch) syncColorSelectedBar(initialSwatch, 'colorSelectedInfo');
 
 // =============================================
 // NAVBAR & SCROLL
@@ -1350,6 +1641,8 @@ function buildSummaryString() {
         const doorType = document.querySelector('#doorTypeGroup .config-btn.active')?.dataset.value || 'xt';
         const width = document.querySelector('#sizeGroup .size-btn.active')?.dataset.width || '2200';
         const doorLabel = doorType === 'xt' ? (currentLang === 'en' ? 'Top-Flip' : '上翻门') : (currentLang === 'en' ? 'Rolling Shutter' : '卷帘门');
+        const bodyCode = document.getElementById('selectedBodyColorCode')?.textContent || '';
+        const bodyName = document.getElementById('selectedBodyColorName')?.textContent?.replace('— ', '') || '';
         const colorCode = document.getElementById('selectedColorCode')?.textContent || '';
         const colorName = document.getElementById('selectedColorName')?.textContent?.replace('— ', '') || '';
         const totalPrice = document.getElementById('totalFinalPrice')?.textContent || '';
@@ -1362,10 +1655,9 @@ function buildSummaryString() {
             }
         });
 
-        const lang = currentLang === 'en' ? 'EN' : 'CN';
         const lines = currentLang === 'en'
-            ? [`Model: ${model}`, `Door Type: ${doorLabel}`, `Size: ${width} × 900 × 2250 mm`, `Color: ${colorCode} — ${colorName}`, `Accessories: ${accItems.length ? accItems.join(', ') : 'Standard only'}`, `Estimated Total: ${totalPrice} (FOB China)`]
-            : [`型号：${model}`, `门型：${doorLabel}`, `尺寸：${width} × 900 × 2250 mm`, `颜色：${colorCode} — ${colorName}`, `配件：${accItems.length ? accItems.join(', ') : '标准配置'}`, `预估总价：${totalPrice}（FOB中国）`];
+            ? [`Model: ${model}`, `Door Type: ${doorLabel}`, `Size: ${width} × 900 × 2250 mm`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, `Accessories: ${accItems.length ? accItems.join(', ') : 'Standard only'}`, `Estimated Total: ${totalPrice} (FOB China)`]
+            : [`型号：${model}`, `门型：${doorLabel}`, `尺寸：${width} × 900 × 2250 mm`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, `配件：${accItems.length ? accItems.join(', ') : '标准配置'}`, `预估总价：${totalPrice}（FOB中国）`];
         return lines.join('\n');
     } catch(e) {
         return currentLang === 'en' ? 'Configuration: see selections above' : '配置：请参考上方选择';

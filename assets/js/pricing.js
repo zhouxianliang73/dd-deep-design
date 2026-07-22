@@ -17,6 +17,8 @@ window.DDPricing = (() => {
   }
 
   function resolvePackageModules(frame, packageId, C = getCatalog()) {
+    // Empty frame: shell only — interior checklist comes later
+    if (packageId === 'empty') return new Set();
     const pkg = C.packages.find((p) => p.id === packageId);
     const next = new Set(frame.stdModules || []);
     if (pkg) {

@@ -1,0 +1,497 @@
+/* Cost console + owner quote — classic.html extension skin */
+:root {
+  --ink: var(--clr-dark, #111111);
+  --ink-soft: var(--clr-text, #333333);
+  --muted: var(--clr-text-light, #777777);
+  --line: var(--clr-border, #e6e6e6);
+  --paper: var(--clr-bg, #ffffff);
+  --accent: var(--clr-accent, #c9a227);
+  --accent-2: var(--clr-accent-dark, #a3841a);
+  --accent-soft: #f7f1dc;
+  --ok: #166534;
+  --ok-bg: #dcfce7;
+  --warn: #9a3412;
+  --warn-bg: #ffedd5;
+  --danger: #991b1b;
+  --danger-bg: #fee2e2;
+  --input: #f5f5f5;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: var(--font-main, "Inter", -apple-system, sans-serif);
+}
+
+body.cost-body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-top: var(--nav-height, 72px);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* Active nav hint on extension pages */
+.navbar .nav-link.is-active {
+  color: var(--accent);
+}
+
+.c-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 36px 20px 80px;
+}
+
+.c-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  margin: 0 0 10px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.c-hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.c-hero p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+.c-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.c-grid-2 {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+@media (max-width: 900px) {
+  .c-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.c-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 1px 0 rgba(17, 17, 17, 0.03);
+}
+
+.c-card h2 {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.c-card .hint {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: -4px 0 14px;
+}
+
+.c-fields {
+  display: grid;
+  gap: 12px;
+}
+
+.c-field {
+  display: grid;
+  gap: 6px;
+}
+
+.c-field label {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.c-field input,
+.c-field select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--input);
+}
+
+.c-tiers {
+  display: grid;
+  gap: 8px;
+}
+
+.c-tier {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.c-tier:hover {
+  border-color: var(--accent);
+}
+
+.c-tier.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.c-tier strong {
+  font-weight: 700;
+}
+
+.c-tier span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.c-table-wrap {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+table.c-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 720px;
+}
+
+table.c-table th,
+table.c-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+table.c-table th {
+  background: #fafafa;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+table.c-table input[type="number"] {
+  width: 96px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: #fff;
+}
+
+table.c-table .num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+}
+
+.badge-ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.badge-warn {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.badge-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.c-summary {
+  display: grid;
+  gap: 10px;
+}
+
+.c-kpi {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.c-kpi:last-child {
+  border-bottom: 0;
+}
+
+.c-kpi .v {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.c-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.c-btn {
+  border-radius: 8px;
+  padding: 11px 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.c-btn-primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.c-btn-accent {
+  background: var(--accent);
+  color: #111;
+  border-color: var(--accent);
+}
+
+/* Owner quote sheet */
+body.owner-body {
+  background: var(--clr-bg-alt, #f5f5f5);
+}
+
+.owner-sheet {
+  max-width: 860px;
+  margin: 24px auto 64px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px 28px 36px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+}
+
+.owner-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+
+.owner-head h1 {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.owner-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.owner-total {
+  text-align: right;
+}
+
+.owner-total .label {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.owner-total .sum {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.owner-note {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #fafafa;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.quote-mode-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.quote-mode-tabs .c-chip.is-on {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+/* With-images quote rows */
+table.c-table.quote-with-img td.quote-item {
+  min-width: 220px;
+}
+
+.quote-item-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quote-thumb {
+  width: 72px;
+  height: 56px;
+  object-fit: contain;
+  background: #f5f5f5;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  flex: 0 0 auto;
+}
+
+.quote-thumb-ph {
+  width: 72px;
+  height: 56px;
+  border-radius: 8px;
+  border: 1px dashed var(--line);
+  background: #fafafa;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.7rem;
+  flex: 0 0 auto;
+}
+
+.quote-cards {
+  display: grid;
+  gap: 12px;
+}
+
+.quote-card {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.quote-card img {
+  width: 110px;
+  height: 80px;
+  object-fit: contain;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+.quote-card .q-name {
+  font-weight: 600;
+}
+
+.quote-card .q-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.quote-card .q-price {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.quote-card .q-price strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+@media (max-width: 700px) {
+  .quote-card {
+    grid-template-columns: 80px 1fr;
+  }
+  .quote-card .q-price {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+@media print {
+  .quote-mode-tabs {
+    display: none !important;
+  }
+}
+
+.ext-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ext-toolbar .c-chip {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.ext-toolbar .c-chip-primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+@media print {
+  body.owner-body {
+    background: #fff;
+    padding-top: 0;
+  }
+  .navbar,
+  .ext-toolbar,
+  .no-print {
+    display: none !important;
+  }
+  .owner-sheet {
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: none;
+  }
+}

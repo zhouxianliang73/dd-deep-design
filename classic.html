@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260722shelltint">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260725v19">
 </head>
 <body>
     <!-- Navigation -->
@@ -23,7 +23,9 @@
                 <span></span><span></span><span></span>
             </div>
             <ul class="nav-links" id="navLinks">
-                <li><a href="index.html" class="nav-link" data-i18n="nav.configure">Configure</a></li>
+                <li><a href="#products" class="nav-link" data-i18n="nav.configure">Configure</a></li>
+                <li><a href="owner-quote.html" class="nav-link" data-i18n="nav.quote">Quote</a></li>
+                <li><a href="margin-console.html" class="nav-link" data-i18n="nav.margin">Margin</a></li>
                 <li><a href="#hot-products" class="nav-link" data-i18n="nav.hot">Hot Sellers</a></li>
                 <li><a href="#cases" class="nav-link" data-i18n="nav.projects">Projects</a></li>
                 <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
@@ -43,92 +45,88 @@
 
             <div class="config-mode-tabs" id="configModeTabs" role="tablist">
                 <button type="button" class="config-mode-tab active" data-mode="standard" data-i18n="config.modeStandard">标准套餐</button>
+                <a class="config-mode-tab config-mode-link" href="margin-console.html" data-i18n="config.openMargin">利润阶梯</a>
+                <a class="config-mode-tab config-mode-link" href="owner-quote.html" data-i18n="config.openOwnerQuote">业主报价</a>
                 <a class="config-mode-tab config-mode-link" href="index.html" data-i18n="config.openCustom">个性定制</a>
             </div>
 
             <div class="configurator">
 
+                <!-- Sticky total card -->
+                <aside class="quote-sticky" id="quoteSticky" aria-live="polite">
+                    <div class="quote-sticky-inner">
+                        <div class="quote-sticky-row quote-sticky-row-tier">
+                            <strong class="quote-sticky-exw" data-i18n="config.exw">EXW Price</strong>
+                            <div class="quote-qty-tiers" id="qtyTierGroup" role="radiogroup" aria-label="Order quantity">
+                                <button type="button" class="quote-qty-btn" data-tier="1-5" data-i18n="config.tier15">1-5 units</button>
+                                <button type="button" class="quote-qty-btn active" data-tier="6-20" data-i18n="config.tier620">6-20 units</button>
+                                <button type="button" class="quote-qty-btn" data-tier="20+" data-i18n="config.tier20p">20+ units</button>
+                            </div>
+                        </div>
+                        <a href="#configTotal" class="quote-sticky-body" title="Details">
+                            <div class="quote-sticky-row quote-sticky-row-meta">
+                                <strong id="stickyModel">TH-XT-001-X</strong>
+                                <span id="stickyDims">3200*900*2250</span>
+                                <span id="stickyFob" data-i18n="config.fob">EXW China（base）</span>
+                            </div>
+                            <div class="quote-sticky-row quote-sticky-row-price">
+                                <strong id="stickyTotalCny">¥36,132</strong>
+                                <span class="quote-sticky-sep" aria-hidden="true">；</span>
+                                <strong id="stickyFx">6.7</strong>
+                                <span class="quote-sticky-sep" aria-hidden="true">；</span>
+                                <strong id="stickyTotalUsd">$5,393</strong>
+                            </div>
+                            <div class="quote-sticky-row quote-sticky-row-mat">
+                                <span id="stickyMaterial" data-i18n="config.matVal">Zinc-Aluminum-Magnesium Alloy + Galvanized Steel</span>
+                            </div>
+                        </a>
+                    </div>
+                </aside>
+
                 <!-- Size + Door (no step chrome — under 标准套餐) -->
                 <div class="config-step" id="standardSizeStep">
-                    <!-- Step 1: Three-column layout -->
+                    <!-- Step 1: Width+elevation (left) | Details (right) -->
                     <div class="step1-grid" id="standardSizeGrid">
-                        <!-- Column 1: Door type + Elevation images (centered) -->
+                        <!-- Column 1: size chips + panable elevation -->
                         <div class="step1-col step1-images">
-                            <!-- Top: Door type image -->
-                            <div class="doortype-block">
-                                <div class="block-label" data-i18n="config.doorType">Door Type</div>
-                                <div class="btn-group" id="doorTypeGroup">
-                                    <button class="config-btn active" data-value="xt" data-model="TH-XT">
-                                        <span class="cb-icon">&#9650;</span>
-                                        <span data-i18n="config.topFlip">Top-Flip</span>
-                                    </button>
-                                    <button class="config-btn" data-value="wm" data-model="TH-WM">
-                                        <span class="cb-icon">&#9776;</span>
-                                        <span data-i18n="config.rolling">Rolling Shutter</span>
-                                    </button>
-                                </div>
-                                <div class="doortype-preview">
-                                    <img src="assets/images/products/suoer/door-topflip.png" alt="Door type" id="doorTypeImg" class="door-img">
-                                    <div class="door-badge" id="doorBadge">&#9650; <span data-i18n="config.topFlip">Top-Flip</span></div>
-                                </div>
-                            </div>
-                            <!-- Bottom: Elevation image -->
-                            <div class="elevation-block">
-                                <div class="block-label" data-i18n="config.elevation">Elevation View</div>
-                                <div class="elevation-preview">
-                                    <img src="assets/images/products/suoer/2200.png" alt="Elevation" id="elevationImg" class="elevation-img">
-                                    <div class="elevation-size">
-                                        <span class="elev-dimension"><span id="elevWidth">2200</span> &times; 900 &times; 2250 mm</span>
+                            <div class="elev-size-block">
+                                <div class="block-label" data-i18n="config.width">Cabinet Width</div>
+                                <div class="size-picker-scroll">
+                                    <div class="size-picker" id="sizeGroup">
+                                        <button class="size-btn" data-width="2200" data-suffix="-X">
+                                            <span class="size-val">2200</span>
+                                            <span class="size-unit">mm</span>
+                                        </button>
+                                        <button class="size-btn" data-width="2900" data-suffix="">
+                                            <span class="size-val">2900</span>
+                                            <span class="size-unit">mm</span>
+                                        </button>
+                                        <button class="size-btn" data-width="3200" data-suffix="">
+                                            <span class="size-val">3200</span>
+                                            <span class="size-unit">mm</span>
+                                        </button>
+                                        <button class="size-btn" data-width="3500" data-suffix="">
+                                            <span class="size-val">3500</span>
+                                            <span class="size-unit">mm</span>
+                                        </button>
                                     </div>
                                 </div>
+                                <div class="elevation-preview">
+                                    <div class="elevation-scroll" id="elevationScroll" tabindex="0" aria-label="Elevation pan">
+                                        <img src="assets/images/products/suoer/2200.png?t=20260725v4" alt="Elevation" id="elevationImg" class="elevation-img" draggable="false">
+                                    </div>
+                                    <div class="elevation-scroll-hint" aria-hidden="true" data-i18n="config.scrollHint">← 左右滑动查看 →</div>
+                                </div>
+                                <!-- Module widths under CAD (尺寸) -->
+                                <div class="elev-dim-bar" id="elevDimBar" aria-label="Module dimensions"></div>
                             </div>
                         </div>
 
-                        <!-- Column 2: Size selection -->
-                        <div class="step1-col step1-sizes">
-                            <div class="block-label" data-i18n="config.width">Select Width</div>
-                            <div class="size-picker" id="sizeGroup">
-                                <button class="size-btn active" data-width="2200" data-suffix="-X">
-                                    <span class="size-val">2200</span>
-                                    <span class="size-unit">mm</span>
-                                </button>
-                                <button class="size-btn" data-width="2900" data-suffix="">
-                                    <span class="size-val">2900</span>
-                                    <span class="size-unit">mm</span>
-                                </button>
-                                <button class="size-btn" data-width="3200" data-suffix="">
-                                    <span class="size-val">3200</span>
-                                    <span class="size-unit">mm</span>
-                                </button>
-                                <button class="size-btn" data-width="3500" data-suffix="">
-                                    <span class="size-val">3500</span>
-                                    <span class="size-unit">mm</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Column 3: Details -->
+                        <!-- Column 2: Details -->
                         <div class="step1-col step1-details">
-                            <div class="block-label" data-i18n="config.summary">Configuration Details</div>
                             <div class="detail-card" id="detailCard">
-                                <div class="detail-row">
-                                    <span class="detail-model" id="previewModel">TH-XT-001-X</span>
-                                    <span class="detail-price" id="previewPrice">
-                                        <span class="price-value">&yen;36,132</span>
-                                    </span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-dims">
-                                        <span id="previewWidth">2200</span> &times; 900 &times; 2250 mm
-                                    </span>
-                                    <span class="price-note" data-i18n="config.fob">FOB China</span>
-                                </div>
-                                <div class="detail-row detail-row-mat">
-                                    <span class="detail-material">
-                                        <strong data-i18n="config.material">Material:</strong>
-                                        <span data-i18n="config.matVal">Zinc-Aluminum-Magnesium Alloy + Galvanized Steel</span>
-                                    </span>
-                                </div>
+                                <span id="previewModel" class="sr-only">TH-XT-001-X</span>
+                                <span id="previewPrice" class="sr-only"><span class="price-value"></span></span>
                                 <div class="body-color-block" id="bodyColorBlock">
                                     <div class="door-series-label" data-i18n="config.bodyColor">Shell Color</div>
                                     <div class="color-grid body-shell-grid" id="bodyColorGrid">
@@ -243,11 +241,19 @@
                                 <span id="totalFinishPrice">&yen;0</span>
                             </div>
                             <div class="total-row total-final">
-                                <span data-i18n="config.total.total">Estimated Total (FOB)</span>
+                                <span data-i18n="config.total.total">Estimated Total (EXW)</span>
                                 <span id="totalFinalPrice">&yen;36,132</span>
                             </div>
+                            <div class="total-row total-fx-row">
+                                <span data-i18n="config.sticky.fx">汇率</span>
+                                <span id="totalFxRate">1 USD = 6.7 CNY</span>
+                            </div>
+                            <div class="total-row total-usd-row">
+                                <span data-i18n="config.sticky.usd">USD 估价</span>
+                                <span id="totalFinalUsd">$5,393</span>
+                            </div>
                         </div>
-                        <p class="total-note" data-i18n="config.total.note">* Price includes tax &amp; packaging. Shipping quoted separately.</p>
+                        <p class="total-note" data-i18n="config.total.note">* Price includes tax &amp; packaging. Shipping quoted separately. FX from master table.</p>
                         <a href="#contact" class="btn btn-primary" onclick="document.getElementById('configSummary').value=buildSummaryString()" data-i18n="config.total.cta">Request Quote &#10140;</a>
                     </div>
                 </div>
@@ -985,8 +991,9 @@
                 <div class="footer-links">
                     <h4 data-i18n="footer.quickLinks">Quick Links</h4>
                     <ul>
-                        <li><a href="index.html" data-i18n="nav.configure">Configure</a></li>
-                        <li><a href="#products" data-i18n="config.label">Pricing</a></li>
+                        <li><a href="#products" data-i18n="nav.configure">Configure</a></li>
+                        <li><a href="owner-quote.html" data-i18n="nav.quote">Quote</a></li>
+                        <li><a href="margin-console.html" data-i18n="nav.margin">Margin</a></li>
                         <li><a href="#cases" data-i18n="nav.projects">Projects</a></li>
                     </ul>
                 </div>
@@ -1029,7 +1036,7 @@
         </div>
     </div>
 
-    <script src="assets/js/main.js?t=20260722def02w3"></script>
+    <script src="assets/js/main.js?t=20260725v19"></script>
 </body>
 </html>
 

@@ -9,6 +9,8 @@ const i18n = {
     'nav.about':      { en: 'About',          cn: '关于我们' },
     'nav.brand':      { en: 'Brand',          cn: '品牌' },
     'nav.configure':  { en: 'Configure',       cn: '配置方案' },
+    'nav.quote':      { en: 'Quote',           cn: '业主报价' },
+    'nav.margin':     { en: 'Margin',          cn: '利润阶梯' },
     'nav.specs':      { en: 'Specs',            cn: '规格' },
     'nav.hot':        { en: 'Hot Sellers',     cn: '热卖款' },
     'nav.projects':   { en: 'Projects',        cn: '项目案例' },
@@ -38,6 +40,8 @@ const i18n = {
     'config.title':   { en: 'Build Your <em>Outdoor Kitchen</em>', cn: '打造您的<em>户外厨房</em>' },
     'config.desc':    { en: 'Select your size, choose your components, add accessories — see the price instantly.', cn: '选择尺寸、搭配组件、添加配件——价格即时可见。' },
     'config.openCustom': { en: 'Custom Design', cn: '个性定制' },
+    'config.openMargin': { en: 'Margin Ladder', cn: '利润阶梯' },
+    'config.openOwnerQuote': { en: 'Owner Quote', cn: '业主报价' },
     'lib.title': { en: 'Product Library', cn: '产品库' },
     'lib.add': { en: 'Add from library', cn: '从产品库添加' },
     'lib.addHint': { en: 'Filter appliances, fridge, BBQ…', cn: '筛选电器、冰箱、烧烤等' },
@@ -52,12 +56,19 @@ const i18n = {
     'config.step1.title': { en: 'Choose Size & Door Style', cn: '选择尺寸与门型' },
     'config.step1.desc':  { en: 'All cabinets: 900mm deep × 2250mm high. Select width & door — standard components are listed in this model.', cn: '标准柜体：深900mm × 高2250mm。选择尺寸与门型，本型号标准配置见右侧清单。' },
     'config.doorType': { en: 'Door Type', cn: '门型' },
+    'config.productView': { en: 'Product View', cn: '产品效果' },
     'config.topFlip':  { en: 'Top-Flip', cn: '上翻门' },
     'config.rolling':  { en: 'Rolling Shutter', cn: '卷帘门' },
     'config.width':    { en: 'Cabinet Width', cn: '柜体宽度' },
+    'config.scrollHint': { en: '← Swipe to pan →', cn: '← 左右滑动查看 →' },
+    'config.elevation': { en: 'Elevation View', cn: '立面图' },
     'config.material': { en: 'Material:', cn: '材质：' },
     'config.matVal':   { en: 'Zinc-Aluminum-Magnesium Alloy + Galvanized Steel', cn: '锌铝镁合金 + 镀锌钢' },
-    'config.fob':      { en: 'FOB China (base)', cn: '中国离岸价（基础）' },
+    'config.fob':      { en: 'EXW China（base）', cn: 'EXW China（base）' },
+    'config.exw':      { en: 'EXW Price', cn: 'EXW 单价' },
+    'config.tier15':   { en: '1-5 units', cn: '1-5 台' },
+    'config.tier620':  { en: '6-20 units', cn: '6-20 台' },
+    'config.tier20p':  { en: '20+ units', cn: '20+ 台' },
     'config.dlSpec':   { en: '↓ Download Spec Sheet', cn: '↓ 下载规格书' },
     'config.step2.title': { en: 'Configure Interior Components', cn: '配置内部组件' },
     'config.step2.desc':  { en: 'Standard configuration for this size is pre-selected. Adjust as needed.', cn: '该尺寸标准配置已预选，可按需调整。' },
@@ -107,9 +118,14 @@ const i18n = {
     'config.total.base':   { en: 'Base Unit', cn: '基础单元' },
     'config.total.acc':    { en: 'Accessories', cn: '配件' },
     'config.total.finish': { en: 'Finish Upgrade', cn: '饰面升级' },
-    'config.total.total':  { en: 'Estimated Total (FOB)', cn: '预估总价（FOB）' },
-    'config.total.note':   { en: '* Price includes tax & packaging. Shipping quoted separately.', cn: '* 价格含税含包装，运费另计。' },
+    'config.total.total':  { en: 'Estimated Total (EXW CNY)', cn: '预估总价（EXW 人民币）' },
+    'config.total.note':   { en: '* EXW CNY includes tax & packaging. Tier follows master volume map (1-5→25% / 6-20→20% / 20+→15%). USD = CNY ÷ FX. Shipping quoted separately.', cn: '* EXW 人民币含税含包装；数量档按母表（1-5→25% / 6-20→20% / 20+→15%）；美元=人民币÷汇率；运费另计。' },
     'config.total.cta':    { en: 'Request Quote →', cn: '索取报价 →' },
+    'config.sticky.kicker': { en: 'Current config', cn: '当前配置' },
+    'config.sticky.fx':     { en: 'FX rate', cn: '汇率' },
+    'config.sticky.cny':    { en: 'CNY total', cn: '人民币计价' },
+    'config.sticky.usd':    { en: 'USD estimate', cn: 'USD 估价' },
+    'config.sticky.detail': { en: 'Details', cn: '明细' },
     'cases.label':    { en: 'Our Projects',   cn: '我们的项目' },
     'cases.title':    { en: 'Trusted <em>Worldwide</em>', cn: '全球<em>信赖</em>' },
     'cases.desc':     { en: 'From luxury villas in Los Angeles to waterfront properties in Spain — our outdoor kitchens are installed across the globe.', cn: '从洛杉矶的豪华别墅到西班牙的海滨物业——我们的户外厨房安装在全球各地。' },
@@ -184,7 +200,7 @@ const i18n = {
     'specs.th3':      { en: 'Size (WxDxH)',     cn: '尺寸 (宽x深x高)' },
     'specs.th4':      { en: 'Material',          cn: '材质' },
     'specs.th5':      { en: 'Components',        cn: '配置组件' },
-    'specs.th6':      { en: 'Price (FOB)',       cn: '价格 (FOB)' },
+    'specs.th6':      { en: 'Price (EXW)',       cn: '价格 (EXW)' },
     'specs.note1':    { en: '* All prices include tax & packaging. Shipping quoted separately. Valid for 6 months.', cn: '* 以上报价包含税、含包装费用，不包含运费。报价有效期为6个月。' },
     'specs.note2':    { en: 'Supplier: THOR Smart Home (索而智能家居) — Tel: 400-061-6669 — Dongguan, Guangdong', cn: '供应商：索而智能家居有限公司 — 电话：400-061-6669 — 东莞市洪梅镇海新路2号' },
 
@@ -225,7 +241,7 @@ const i18n = {
     'hot.cta':          { en: 'Inquire',                cn: '询价' },
     'hot.more':         { en: 'Show details',           cn: '展开全部' },
     'hot.less':         { en: 'Show less',              cn: '收起' },
-    'hot.setNote':      { en: '* Prices are FOB China. Complete set prices available upon request.', cn: '* 价格为FOB中国离岸价。整套价格请询价。' },
+    'hot.setNote':      { en: '* Prices are EXW China, following the selected qty tier (1-5 / 6-20 / 20+). Complete set prices available upon request.', cn: '* 价格为 EXW 中国离岸价，随顶部数量档（1-5 / 6-20 / 20+）联动。整套价格请询价。' },
     'hot.matBadge1':    { en: '304 Stainless Steel',   cn: '304不锈钢' },
     'hot.matBadge2':    { en: 'KD Flat-pack Shipping', cn: 'KD拆装运输' },
     'hot.matBadge3':    { en: 'Customizable Finish',   cn: '饰面可定制' },
@@ -312,6 +328,7 @@ function applyTranslation() {
     renderAccessories();
     updateHotCardToggleLabels();
     syncStdListToggleLabel();
+    syncHotCardPrices();
 }
 
 function toggleLanguage() {
@@ -329,6 +346,21 @@ const basePrices = {
     'wm': { 2200: 33570, 2900: 38769, 3200: 41231, 3500: 43767 }
 };
 
+/** Master table FX: $成本 = ￥成本 ÷ FX */
+const FX_USD_CNY = 6.7;
+
+/**
+ * Catalog CNY prices = EXW 1-5 (25% margin).
+ * Volume map from cost-master: 1-5→m25, 6-20→m20, 20+→m15.
+ * Factor = (1 - 0.25) / (1 - tierMargin)
+ */
+const QTY_TIER_MARGIN = {
+    '1-5': 0.25,
+    '6-20': 0.2,
+    '20+': 0.15
+};
+const CATALOG_MARGIN = 0.25;
+
 const accessoryPrices = {
     'TV-Mount': 3500,
     'LED-Upgrade': 1200,
@@ -338,41 +370,56 @@ const accessoryPrices = {
     'Brand-Panel': 2000
 };
 
+/**
+ * Size-specific preview art — always the CAD elevation drawings.
+ * (Do not use legacy suoer-topflip / rollshutter sketches.)
+ */
 const productImages = {
-    'xt-2200': 'assets/images/products/suoer/suoer-topflip-2200.png',
-    'xt-2900': 'assets/images/products/suoer/suoer-topflip-2900.png',
-    'xt-3200': 'assets/images/products/suoer/suoer-topflip-3200.png',
-    'xt-3500': 'assets/images/products/suoer/suoer-topflip-3500.png',
-    'wm-2200': 'assets/images/products/suoer/suoer-rollshutter-2200.png',
-    'wm-2900': 'assets/images/products/suoer/suoer-rollshutter-2900.png',
-    'wm-3200': 'assets/images/products/suoer/suoer-rollshutter-3200.png',
-    'wm-3500': 'assets/images/products/suoer/suoer-rollshutter-3500.png'
+    'xt-2200': 'assets/images/products/suoer/2200.png',
+    'xt-2900': 'assets/images/products/suoer/2900.png',
+    'xt-3200': 'assets/images/products/suoer/3200.png',
+    'xt-3500': 'assets/images/products/suoer/3500.png',
+    'wm-2200': 'assets/images/products/suoer/2200.png',
+    'wm-2900': 'assets/images/products/suoer/2900.png',
+    'wm-3200': 'assets/images/products/suoer/3200.png',
+    'wm-3500': 'assets/images/products/suoer/3500.png'
+};
+
+/** Outer frame width printed on elevation CAD (= model width + 100) */
+const elevOuterWidth = {
+    2200: 2300,
+    2900: 3000,
+    3200: 3300,
+    3500: 3600
 };
 
 const HOT_IMG = (sku) => 'assets/images/products/hot-selling/display/sku-' + sku + '.png';
+/** Thumbs from 箱体报价总表 2.0 Color/Picture column */
+const MASTER_IMG = (slug) =>
+    'assets/images/products/from-master/items/' + slug + '.png?t=20260725v3';
 
 /** Component / accessory thumbs — null => placeholder card */
 const componentImageMap = {
     'comp.mainCab': 'dynamic-main',
-    'comp.sink': HOT_IMG('MK01SS304'),
-    'comp.sinkDrawer': HOT_IMG('HGG6006S-1-SINK'),
-    'comp.bbq': HOT_IMG('HGG6006S'),
-    'comp.fridge': HOT_IMG('REF-SS304-A'),
-    'comp.hood': HOT_IMG('HO06B01SS304'),
-    'comp.singleDoor': HOT_IMG('OKSC01B'),
-    'comp.drawer3': HOT_IMG('MK03SS304-W'),
-    'comp.tv': null,
-    'comp.elec': null,
-    'comp.rack': null,
-    'comp.rack2': null
+    'comp.sink': MASTER_IMG('sink'),
+    'comp.sinkDrawer': MASTER_IMG('sink'),
+    'comp.bbq': MASTER_IMG('bbq-grill'),
+    'comp.fridge': MASTER_IMG('fridge'),
+    'comp.hood': MASTER_IMG('range-hood'),
+    'comp.singleDoor': MASTER_IMG('wall-cabinets'),
+    'comp.drawer3': MASTER_IMG('drawer'),
+    'comp.tv': MASTER_IMG('tv'),
+    'comp.elec': MASTER_IMG('socket'),
+    'comp.rack': MASTER_IMG('shelf'),
+    'comp.rack2': MASTER_IMG('shelf')
 };
 
 const accessoryImageMap = {
-    'TV-Mount': null,
-    'LED-Upgrade': null,
-    'Shelf-Extra': null,
-    'Power-Plus': null,
-    'Countertop': HOT_IMG('OKBC01S'),
+    'TV-Mount': MASTER_IMG('tv'),
+    'LED-Upgrade': MASTER_IMG('led-light'),
+    'Shelf-Extra': MASTER_IMG('shelf'),
+    'Power-Plus': MASTER_IMG('socket'),
+    'Countertop': MASTER_IMG('counter-top'),
     'Brand-Panel': null
 };
 
@@ -486,12 +533,20 @@ function resolveCompImage(comp) {
     return mapped || null;
 }
 
+/** Card price: ¥…；$… (optional + on both); follows EXW qty tier */
+function formatDualPrice(cny, opts) {
+    const prefix = (opts && opts.prefix) || '';
+    const n = applyVolumePrice(Number(cny) || 0);
+    return prefix + formatCny(n) + '；' + prefix + formatUsd(cnyToUsd(n));
+}
+
 function formatCompPrice(nameKey) {
     const usd = componentPriceUsd[nameKey];
     if (usd == null) {
         return '<span class="std-line-price is-incl">' + t('comp.includedShort') + '</span>';
     }
-    return '<span class="std-line-price">$' + Number(usd).toLocaleString() + '</span>';
+    const cny = Number(usd) * FX_USD_CNY;
+    return '<span class="std-line-price">' + formatDualPrice(cny) + '</span>';
 }
 
 function renderThumb(src, icon, alt) {
@@ -511,7 +566,19 @@ function renderThumb(src, icon, alt) {
     );
 }
 
-/** Standard package line: left image + compact text (no price column) */
+function removedStdSet(widthMm) {
+    const w = nearestStdWidth(widthMm != null ? widthMm : state.width);
+    if (!state.removedStd[w]) state.removedStd[w] = new Set();
+    return state.removedStd[w];
+}
+
+function activeStdConfigs() {
+    const all = componentConfigs[nearestStdWidth(state.width)] || [];
+    const removed = removedStdSet();
+    return all.filter((c) => !removed.has(c.nameKey));
+}
+
+/** Standard package line: left image + compact text + removable X */
 function renderStdLineCard(comp) {
     const name = t(comp.nameKey) || comp.defaultEn;
     const detail = t(comp.detailKey) || comp.defaultDetail;
@@ -522,6 +589,16 @@ function renderStdLineCard(comp) {
     const params = metaText(meta.params) || detail;
     const paramLine = [material, weight, params].filter(Boolean).join(' · ');
     const src = resolveCompImage(comp);
+    const canRemove = comp.nameKey !== 'comp.mainCab';
+    const removeBtn = canRemove
+        ? '<button type="button" class="std-line-remove" data-remove-key="' +
+          comp.nameKey +
+          '" aria-label="' +
+          t('comp.remove') +
+          '" title="' +
+          t('comp.remove') +
+          '">×</button>'
+        : '';
     const media = src
         ? '<div class="std-line-media"><img src="' + src + '" alt="' + name + '" loading="lazy" ' +
           'onerror="this.parentElement.classList.add(\'is-placeholder\');this.remove();">' +
@@ -530,12 +607,15 @@ function renderStdLineCard(comp) {
           (comp.icon || '') + '</span></div>';
 
     return (
-        '<div class="std-line-card">' +
+        '<div class="std-line-card" data-comp-key="' + comp.nameKey + '">' +
             '<div class="std-line-media-wrap">' + media + '</div>' +
             '<div class="std-line-body">' +
                 '<div class="std-line-row std-line-row-title">' +
                     '<strong class="std-line-name">' + name + '</strong>' +
-                    '<span class="std-line-qty">×1</span>' +
+                    '<span class="std-line-title-actions">' +
+                        '<span class="std-line-qty">×1</span>' +
+                        removeBtn +
+                    '</span>' +
                 '</div>' +
                 '<div class="std-line-row std-line-row-spec">' +
                     '<span class="std-line-spec-text">' + dim + '</span>' +
@@ -569,11 +649,12 @@ const componentConfigs = {
         { icon: '📺', nameKey: 'comp.tv',          detailKey: 'comp.tv.detail', defaultEn: 'TV + Mount', defaultDetail: 'Weatherproof LED TV' },
         { icon: '🔌', nameKey: 'comp.elec',        detailKey: 'comp.elec.detail', defaultEn: 'Electrical', defaultDetail: '4 outlets, LED strip, power track' }
     ],
+    // Order matches elevation CAD left → right
     3200: [
         { icon: '📦', nameKey: 'comp.mainCab',    detailKey: 'comp.mainCab.detail', defaultEn: 'Main Cabinet', defaultDetail: 'Top-flip / Rolling shutter' },
-        { icon: '🗄️', nameKey: 'comp.drawer3',    detailKey: 'comp.drawer3.detail', defaultEn: '3-Drawer Base', defaultDetail: 'Triple drawer cabinet' },
+        { icon: '🚰', nameKey: 'comp.sinkDrawer',  detailKey: 'comp.sinkDrawer.detail', defaultEn: 'Sink Base w/ Drawer', defaultDetail: 'Double-door sink cabinet' },
         { icon: '🔥', nameKey: 'comp.bbq',         detailKey: 'comp.bbq.detail', defaultEn: 'BBQ Grill Cabinet', defaultDetail: 'Double-door base for BBQ' },
-        { icon: '🚰', nameKey: 'comp.sinkDrawer',  detailKey: 'comp.sinkDrawer.detail', defaultEn: 'Sink Base w/ Drawer', defaultDetail: 'False drawer front, sink inside' },
+        { icon: '🗄️', nameKey: 'comp.drawer3',    detailKey: 'comp.drawer3.detail', defaultEn: '3-Drawer Base', defaultDetail: 'Triple drawer cabinet' },
         { icon: '🧊', nameKey: 'comp.fridge',      detailKey: 'comp.fridge.detail', defaultEn: 'Fridge Frame', defaultDetail: 'Mini fridge cabinet' },
         { icon: '💨', nameKey: 'comp.hood',        detailKey: 'comp.hood.detail', defaultEn: 'Extractor Hood', defaultDetail: 'Slide-out extractor' },
         { icon: '📺', nameKey: 'comp.tv',          detailKey: 'comp.tv.detail', defaultEn: 'TV + Mount', defaultDetail: 'Weatherproof LED TV' },
@@ -582,10 +663,10 @@ const componentConfigs = {
     ],
     3500: [
         { icon: '📦', nameKey: 'comp.mainCab',    detailKey: 'comp.mainCab.detail', defaultEn: 'Main Cabinet', defaultDetail: 'Top-flip / Rolling shutter' },
-        { icon: '🗄️', nameKey: 'comp.drawer3',    detailKey: 'comp.drawer3.detail', defaultEn: '3-Drawer Base', defaultDetail: 'Triple drawer cabinet' },
         { icon: '🚪', nameKey: 'comp.singleDoor',  detailKey: 'comp.singleDoor.detail', defaultEn: 'Single-Door Base', defaultDetail: 'Extra storage cabinet' },
+        { icon: '🗄️', nameKey: 'comp.drawer3',    detailKey: 'comp.drawer3.detail', defaultEn: '3-Drawer Base', defaultDetail: 'Triple drawer cabinet' },
         { icon: '🔥', nameKey: 'comp.bbq',         detailKey: 'comp.bbq.detail', defaultEn: 'BBQ Grill Cabinet', defaultDetail: 'Double-door base for BBQ' },
-        { icon: '🚰', nameKey: 'comp.sinkDrawer',  detailKey: 'comp.sinkDrawer.detail', defaultEn: 'Sink Base w/ Drawer', defaultDetail: 'False drawer front, sink inside' },
+        { icon: '🚰', nameKey: 'comp.sinkDrawer',  detailKey: 'comp.sinkDrawer.detail', defaultEn: 'Sink Base w/ Drawer', defaultDetail: 'Double-door sink cabinet' },
         { icon: '🧊', nameKey: 'comp.fridge',      detailKey: 'comp.fridge.detail', defaultEn: 'Fridge Frame', defaultDetail: 'Mini fridge cabinet' },
         { icon: '💨', nameKey: 'comp.hood',        detailKey: 'comp.hood.detail', defaultEn: 'Extractor Hood', defaultDetail: 'Slide-out extractor' },
         { icon: '📺', nameKey: 'comp.tv',          detailKey: 'comp.tv.detail', defaultEn: 'TV + Mount', defaultDetail: 'Weatherproof LED TV' },
@@ -596,6 +677,7 @@ const componentConfigs = {
 
 // Component name translations
 const compI18n = {
+    'comp.remove':        { en: 'Remove from package', cn: '从标准配置中删除' },
     'comp.mainCab':       { en: 'Main Cabinet',      cn: '主柜体' },
     'comp.mainCab.detail':{ en: 'Top-flip / Rolling shutter', cn: '上翻门 / 卷帘门' },
     'comp.sink':          { en: 'Single Sink Base',  cn: '单槽水槽柜' },
@@ -632,6 +714,10 @@ Object.assign(i18n, compI18n);
 let state = {
     doorType: 'xt',
     width: 2200,
+    /** Sticky total only after user picks a width */
+    sizeSelected: false,
+    /** EXW volume tier: 1-5 | 6-20 | 20+ (default batch) */
+    qtyTier: '6-20',
     accessories: {
         'TV-Mount': false,
         'LED-Upgrade': false,
@@ -640,7 +726,9 @@ let state = {
         'Countertop': false,
         'Brand-Panel': false
     },
-    extraItems: []
+    extraItems: [],
+    /** Per-width removed standard lines: { 2200: Set(['comp.hood', ...]) } */
+    removedStd: {}
 };
 
 let colorState = {
@@ -696,55 +784,172 @@ function getBasePrice() {
     return basePrices[state.doorType][nearestStdWidth(state.width)];
 }
 
+/** Price multiplier for current EXW qty tier vs catalog (1-5 / 25%) */
+function getVolumeFactor() {
+    const rate = QTY_TIER_MARGIN[state.qtyTier];
+    const tierMargin = rate != null ? rate : CATALOG_MARGIN;
+    const denom = 1 - tierMargin;
+    if (denom <= 0) return 1;
+    return (1 - CATALOG_MARGIN) / denom;
+}
+
+function applyVolumePrice(cny) {
+    return Math.round(Number(cny) * getVolumeFactor());
+}
+
+function applyVolumeUsd(usd) {
+    return Math.round(Number(usd) * getVolumeFactor());
+}
+
+/** Hot-seller / static SKU cards: keep catalog base USD, redraw with current EXW tier */
+function syncHotCardPrices() {
+    document.querySelectorAll('.hot-card-price').forEach((el) => {
+        let base = Number(el.dataset.baseUsd);
+        if (!Number.isFinite(base) || base <= 0) {
+            const m = String(el.textContent || '').match(/\$\s*([\d,]+(?:\.\d+)?)/);
+            base = m ? Number(m[1].replace(/,/g, '')) : 0;
+            if (Number.isFinite(base) && base > 0) el.dataset.baseUsd = String(base);
+        }
+        if (!Number.isFinite(base) || base <= 0) return;
+        const usd = applyVolumeUsd(base);
+        const cny = applyVolumePrice(base * FX_USD_CNY);
+        el.innerHTML =
+            formatCny(cny) +
+            '<span class="hot-card-price-sep">；</span>' +
+            formatUsd(usd) +
+            ' <small>EXW</small>';
+    });
+}
+
+/** Floor modules shown under CAD — width mm only (蓝色=尺寸) */
+const ELEV_DIM_KEYS = {
+    2200: ['comp.sink', 'comp.bbq', 'comp.fridge'],
+    2900: ['comp.singleDoor', 'comp.bbq', 'comp.sinkDrawer', 'comp.fridge'],
+    3200: ['comp.sinkDrawer', 'comp.bbq', 'comp.drawer3', 'comp.fridge'],
+    3500: ['comp.singleDoor', 'comp.drawer3', 'comp.bbq', 'comp.sinkDrawer', 'comp.fridge']
+};
+
+function dimWidthMm(nameKey) {
+    const dim = (componentMeta[nameKey] && componentMeta[nameKey].dim) || '';
+    const m = String(dim).match(/(\d+)\s*[×xX*]/);
+    return m ? m[1] : '';
+}
+
+function renderElevDimBar() {
+    const bar = document.getElementById('elevDimBar');
+    if (!bar) return;
+    const w = nearestStdWidth(state.width);
+    const keys = ELEV_DIM_KEYS[w] || [];
+    const removed = removedStdSet();
+    const cells = keys
+        .filter((k) => !removed.has(k))
+        .map((k, i) => {
+            const mm = dimWidthMm(k);
+            if (!mm) return '';
+            return (
+                '<div class="elev-dim-cell">' +
+                    '<span class="elev-dim-idx">' + (i + 1) + '#</span>' +
+                    '<strong class="elev-dim-mm">' + mm + '</strong>' +
+                    '<span class="elev-dim-unit">mm</span>' +
+                '</div>'
+            );
+        })
+        .filter(Boolean)
+        .join('');
+    bar.innerHTML = cells || '<div class="elev-dim-cell elev-dim-empty">—</div>';
+}
+
 function updatePreview() {
-    // Update model name and dimensions in detail card
     const modelEl = document.getElementById('previewModel');
-    const widthEl = document.getElementById('previewWidth');
     const priceEl = document.getElementById('previewPrice');
     if (modelEl) modelEl.textContent = getModelName();
-    if (widthEl) widthEl.textContent = state.width;
     if (priceEl) {
         const valEl = priceEl.querySelector('.price-value');
-        if (valEl) valEl.textContent = '¥' + getBasePrice().toLocaleString();
+        if (valEl) valEl.textContent = '¥' + applyVolumePrice(getBasePrice()).toLocaleString();
     }
-    // Update door type image + badge (from 产品立面 folder)
-    const doorImg = document.getElementById('doorTypeImg');
-    const badge = document.getElementById('doorBadge');
-    if (doorImg && badge) {
-        const isXt = state.doorType === 'xt';
-        // Force refresh by adding timestamp
-        const ts = new Date().getTime();
-        doorImg.src = (isXt 
-            ? 'assets/images/products/suoer/door-topflip.png'
-            : 'assets/images/products/suoer/door-rollshutter.png') + '?t=' + ts;
-        const label = isXt 
-            ? (currentLang === 'en' ? '\u25B2 Top-Flip' : '\u25B2 \u4E0A\u7FFB\u95E8')
-            : (currentLang === 'en' ? '\u2630 Rolling Shutter' : '\u2630 \u5377\u5E18\u95E8');
-        badge.innerHTML = label;
-        badge.className = 'door-badge ' + (isXt ? 'xt-badge' : 'wm-badge');
-    }
-    
-    // Update elevation image (use custom elevation images from 产品立面)
+    // Update elevation image (CAD outer width = model + 100)
     const elevImg = document.getElementById('elevationImg');
-    const elevWidth = document.getElementById('elevWidth');
+    const modelW = nearestStdWidth(state.width);
+    const outerW = elevOuterWidth[modelW] || modelW + 100;
     if (elevImg) {
-        // Use size-specific elevation images from the product catalog
-        const ts = new Date().getTime();
-        const elevW = nearestStdWidth(state.width);
-        elevImg.src = 'assets/images/products/suoer/' + elevW + '.png' + '?t=' + ts;
+        const ts = '20260725v4';
+        elevImg.src = 'assets/images/products/suoer/' + modelW + '.png?t=' + ts;
+        elevImg.alt = 'Elevation ' + outerW + ' mm outer / model ' + modelW;
+        const scroll = document.getElementById('elevationScroll');
+        const preview = scroll && scroll.closest('.elevation-preview');
+        if (scroll) scroll.scrollLeft = 0;
+        if (preview) preview.classList.remove('is-scrolled');
     }
-    if (elevWidth) elevWidth.textContent = state.width;
+
+    renderElevDimBar();
+
+    // Keep active width chip visible in horizontal strip
+    const activeSize = document.querySelector('#sizeGroup .size-btn.active');
+    if (activeSize && typeof activeSize.scrollIntoView === 'function') {
+        activeSize.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
     
     // Standard config list = same source as Step 2
     renderStdConfig();
 }
 
+/** Mouse/touch drag-pan for elevation CAD strip */
+function initElevationPan() {
+    const scroll = document.getElementById('elevationScroll');
+    if (!scroll) return;
+    const preview = scroll.closest('.elevation-preview');
+    let dragging = false;
+    let startX = 0;
+    let startLeft = 0;
+
+    scroll.addEventListener('scroll', () => {
+        if (preview && scroll.scrollLeft > 8) preview.classList.add('is-scrolled');
+    }, { passive: true });
+
+    scroll.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        dragging = true;
+        startX = e.clientX;
+        startLeft = scroll.scrollLeft;
+        scroll.setPointerCapture(e.pointerId);
+    });
+    scroll.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        scroll.scrollLeft = startLeft - (e.clientX - startX);
+    });
+    const endDrag = () => { dragging = false; };
+    scroll.addEventListener('pointerup', endDrag);
+    scroll.addEventListener('pointercancel', endDrag);
+}
+
 function renderStdConfig() {
     const specList = document.getElementById('previewSpecsList');
     if (!specList) return;
-    const configs = componentConfigs[nearestStdWidth(state.width)] || [];
+    const configs = activeStdConfigs();
     specList.innerHTML = configs.map(renderStdLineCard).join('');
     syncStdListToggleLabel();
+}
+
+function removeStdComponent(nameKey) {
+    if (!nameKey || nameKey === 'comp.mainCab') return;
+    removedStdSet().add(nameKey);
+    renderStdConfig();
+    renderElevDimBar();
+    if (typeof renderAccessories === 'function') renderAccessories();
+    if (typeof updateTotal === 'function') updateTotal();
+}
+
+function initStdRemoveButtons() {
+    const list = document.getElementById('previewSpecsList');
+    if (!list || list.dataset.removeBound) return;
+    list.dataset.removeBound = '1';
+    list.addEventListener('click', (e) => {
+        const btn = e.target.closest('.std-line-remove');
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        removeStdComponent(btn.dataset.removeKey);
+    });
 }
 
 function syncStdListToggleLabel() {
@@ -877,14 +1082,14 @@ const accessoryMeta = {
 };
 
 const productLibrary = [
-    { id: 'lib-fridge', cat: 'fridge', sku: 'REF-SS304-A', name: { en: 'Outdoor Fridge', cn: '户外冰箱' }, dim: '420×695×450 mm', priceCny: 3200, icon: '🧊', img: HOT_IMG('REF-SS304-A') },
-    { id: 'lib-fridge2', cat: 'fridge', sku: 'BC-152', name: { en: 'Drawer Fridge', cn: '抽屉冰箱' }, dim: '595×598×870 mm', priceCny: 4980, icon: '🧊', img: HOT_IMG('BC-152') },
-    { id: 'lib-appl', cat: 'appliance', sku: 'MK02SS304-W', name: { en: 'Appliance Cabinet', cn: '电器柜' }, dim: '892×660×962 mm', priceCny: 990, icon: '🚪', img: HOT_IMG('MK02SS304-W') },
-    { id: 'lib-hood', cat: 'appliance', sku: 'HO06B01SS304', name: { en: 'Extractor Hood', cn: '抽拉烟机' }, dim: '1465×1180×600 mm', priceCny: 7200, icon: '💨', img: HOT_IMG('HO06B01SS304') },
-    { id: 'lib-bbq', cat: 'bbq', sku: 'HGG6006S', name: { en: '6-Burner BBQ', cn: '六头烧烤炉' }, dim: '1465×1180×600 mm', priceCny: 7800, icon: '🔥', img: HOT_IMG('HGG6006S') },
-    { id: 'lib-sink', cat: 'sink', sku: 'MK01SS304', name: { en: 'Sink Cabinet', cn: '水槽柜' }, dim: '813×660×962 mm', priceCny: 1760, icon: '🚰', img: HOT_IMG('MK01SS304') },
-    { id: 'lib-pizza', cat: 'appliance', sku: 'MK07SS304', name: { en: 'Pizza Oven', cn: '披萨烤炉' }, dim: '702×662×2069 mm', priceCny: 3660, icon: '🍕', img: HOT_IMG('MK07SS304') },
-    { id: 'lib-corner', cat: 'storage', sku: 'MK06SS304', name: { en: 'Corner Cabinet', cn: '转角柜' }, dim: '777×777×962 mm', priceCny: 1690, icon: '📐', img: HOT_IMG('MK06SS304') }
+    { id: 'lib-fridge', cat: 'fridge', sku: 'REF-SS304-A', name: { en: 'Outdoor Fridge', cn: '户外冰箱' }, dim: '420×695×450 mm', priceCny: 3200, icon: '🧊', img: MASTER_IMG('fridge') },
+    { id: 'lib-fridge2', cat: 'fridge', sku: 'BC-152', name: { en: 'Drawer Fridge', cn: '抽屉冰箱' }, dim: '595×598×870 mm', priceCny: 4980, icon: '🧊', img: MASTER_IMG('drawer-fridge') },
+    { id: 'lib-appl', cat: 'appliance', sku: 'MK02SS304-W', name: { en: 'Appliance Cabinet', cn: '电器柜' }, dim: '892×660×962 mm', priceCny: 990, icon: '🚪', img: MASTER_IMG('socket') },
+    { id: 'lib-hood', cat: 'appliance', sku: 'HO06B01SS304', name: { en: 'Extractor Hood', cn: '抽拉烟机' }, dim: '1465×1180×600 mm', priceCny: 7200, icon: '💨', img: MASTER_IMG('range-hood') },
+    { id: 'lib-bbq', cat: 'bbq', sku: 'HGG6006S', name: { en: '6-Burner BBQ', cn: '六头烧烤炉' }, dim: '1465×1180×600 mm', priceCny: 7800, icon: '🔥', img: MASTER_IMG('bbq-grill') },
+    { id: 'lib-sink', cat: 'sink', sku: 'MK01SS304', name: { en: 'Sink Cabinet', cn: '水槽柜' }, dim: '813×660×962 mm', priceCny: 1760, icon: '🚰', img: MASTER_IMG('sink') },
+    { id: 'lib-pizza', cat: 'appliance', sku: 'MK07SS304', name: { en: 'Pizza Oven', cn: '披萨烤炉' }, dim: '702×662×2069 mm', priceCny: 3660, icon: '🍕', img: MASTER_IMG('kamado') },
+    { id: 'lib-corner', cat: 'storage', sku: 'MK06SS304', name: { en: 'Corner Cabinet', cn: '转角柜' }, dim: '777×777×962 mm', priceCny: 1690, icon: '📐', img: MASTER_IMG('wall-cupboard') }
 ];
 
 const libCats = [
@@ -899,7 +1104,7 @@ const libCats = [
 let libFilter = 'all';
 
 function stdCompKeys() {
-    return (componentConfigs[nearestStdWidth(state.width)] || []).map(c => c.nameKey);
+    return activeStdConfigs().map((c) => c.nameKey);
 }
 
 function isAccessoryCovered(key) {
@@ -929,7 +1134,7 @@ function renderAccLineCard(item) {
             '<div class="std-line-body">' +
                 '<div class="std-line-row std-line-row-title">' +
                     '<strong class="std-line-name">' + name + '</strong>' +
-                    '<span class="std-line-price">+¥' + price.toLocaleString() + '</span>' +
+                    '<span class="std-line-price">' + formatDualPrice(price, { prefix: '+' }) + '</span>' +
                 '</div>' +
                 '<div class="std-line-row std-line-row-spec">' +
                     '<span class="std-line-spec-text">' + dim + '</span>' +
@@ -954,7 +1159,7 @@ function renderExtraItemCard(item) {
             '<div class="std-line-body">' +
                 '<div class="std-line-row std-line-row-title">' +
                     '<strong class="std-line-name">' + name + '</strong>' +
-                    '<span class="std-line-price">+¥' + item.priceCny.toLocaleString() + '</span>' +
+                    '<span class="std-line-price">' + formatDualPrice(item.priceCny, { prefix: '+' }) + '</span>' +
                 '</div>' +
                 '<div class="std-line-row std-line-row-spec">' +
                     '<span class="std-line-spec-text">' + item.dim + '</span>' +
@@ -1119,7 +1324,7 @@ function renderProductLibrary() {
                 '<div class="std-line-body">' +
                     '<div class="std-line-row std-line-row-title">' +
                         '<strong class="std-line-name">' + name + '</strong>' +
-                        '<span class="std-line-price">¥' + p.priceCny.toLocaleString() + '</span>' +
+                        '<span class="std-line-price">' + formatDualPrice(p.priceCny) + '</span>' +
                     '</div>' +
                     '<div class="std-line-row std-line-row-spec">' +
                         '<span class="std-line-spec-text">' + p.dim + ' · ' + p.sku + '</span>' +
@@ -1163,18 +1368,112 @@ function initProductLibrary() {
     if (close) close.addEventListener('click', closeProductLibrary);
 }
 
-function updateTotal() {
-    const base = getBasePrice();
-    const accessories = getAccessoriesTotal();
-    const finish = (colorState.premium || 0) + (bodyColorState.premium || 0);
-    const total = base + accessories + finish;
+function formatCny(n) {
+    return '¥\u00A0' + Number(n).toLocaleString('zh-CN', { maximumFractionDigits: 0 });
+}
 
-    totalModel.textContent = getModelName();
-    totalBasePrice.textContent = '¥' + base.toLocaleString();
+function formatUsd(n) {
+    return (
+        '$\u00A0' +
+        Number(n).toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        })
+    );
+}
+
+function cnyToUsd(cny) {
+    return Number(cny) / FX_USD_CNY;
+}
+
+function updateTotal() {
+    const base = applyVolumePrice(getBasePrice());
+    const accessories = applyVolumePrice(getAccessoriesTotal());
+    const finish = applyVolumePrice((colorState.premium || 0) + (bodyColorState.premium || 0));
+    const total = base + accessories + finish;
+    const usd = cnyToUsd(total);
+    const model = getModelName();
+    const fxText = '1 USD = ' + FX_USD_CNY + ' CNY';
+
+    totalModel.textContent = model;
+    totalBasePrice.textContent = formatCny(base);
     document.getElementById('totalAccessoriesRow').style.display = accessories > 0 ? 'flex' : 'none';
-    totalAccessoriesPrice.textContent = accessories > 0 ? '+¥' + accessories.toLocaleString() : '¥0';
-    totalFinishPrice.textContent = finish > 0 ? '+¥' + finish.toLocaleString() : '¥0';
-    totalFinalPrice.textContent = '¥' + total.toLocaleString();
+    totalAccessoriesPrice.textContent = accessories > 0 ? '+' + formatCny(accessories) : formatCny(0);
+    totalFinishPrice.textContent = finish > 0 ? '+' + formatCny(finish) : formatCny(0);
+    totalFinalPrice.textContent = formatCny(total);
+
+    const totalFx = document.getElementById('totalFxRate');
+    const totalUsd = document.getElementById('totalFinalUsd');
+    if (totalFx) totalFx.textContent = fxText;
+    if (totalUsd) totalUsd.textContent = formatUsd(usd);
+
+    // Sticky card:
+    // EXW · qty tier (top)
+    // model · W*D*H · EXW
+    // CNY · FX · USD
+    // material
+    const stickyModel = document.getElementById('stickyModel');
+    const stickyDims = document.getElementById('stickyDims');
+    const stickyFx = document.getElementById('stickyFx');
+    const stickyCny = document.getElementById('stickyTotalCny');
+    const stickyUsd = document.getElementById('stickyTotalUsd');
+    const stickyMaterial = document.getElementById('stickyMaterial');
+    if (stickyModel) stickyModel.textContent = model;
+    if (stickyDims) stickyDims.textContent = state.width + '*900*2250';
+    if (stickyFx) stickyFx.textContent = String(FX_USD_CNY);
+    if (stickyCny) stickyCny.textContent = formatCny(total);
+    if (stickyUsd) stickyUsd.textContent = formatUsd(usd);
+    if (stickyMaterial) stickyMaterial.textContent = t('config.matVal');
+}
+
+let quoteStickyInView = false;
+
+function syncQuoteSticky() {
+    const sticky = document.getElementById('quoteSticky');
+    if (!sticky) return;
+    const on = !!state.sizeSelected && quoteStickyInView;
+    sticky.classList.toggle('is-pinned', on);
+    document.body.classList.toggle('has-quote-sticky', on);
+}
+
+function initQuoteSticky() {
+    const sticky = document.getElementById('quoteSticky');
+    const products = document.getElementById('products');
+    const configurator = products && products.querySelector('.configurator');
+    if (!sticky || !products || !configurator) return;
+
+    // Show total bar only after size is chosen AND configurator is on screen
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                quoteStickyInView = !!(entry && entry.isIntersecting);
+                syncQuoteSticky();
+            },
+            { root: null, threshold: 0, rootMargin: '-8% 0px -8% 0px' }
+        );
+        io.observe(configurator);
+        syncQuoteSticky();
+        return;
+    }
+
+    const syncPinned = () => {
+        const rect = configurator.getBoundingClientRect();
+        const vh = window.innerHeight || 800;
+        quoteStickyInView = rect.top < vh * 0.92 && rect.bottom > vh * 0.08;
+        syncQuoteSticky();
+    };
+    syncPinned();
+    window.addEventListener('scroll', syncPinned, { passive: true });
+    window.addEventListener('resize', syncPinned);
+}
+
+/** Door-type UI removed — keep no-op for any leftover callers */
+function syncDoorTypeCards() {}
+
+function selectDoorType(value) {
+    if (!value || value === state.doorType) return;
+    state.doorType = value;
+    updateAll();
 }
 
 function updateAll() {
@@ -1182,6 +1481,9 @@ function updateAll() {
     renderComponents();
     renderAccessories();
     updateTotal();
+    syncHotCardPrices();
+    const libDrawer = document.getElementById('productLibrary');
+    if (libDrawer && !libDrawer.hidden) renderProductLibrary();
 }
 
 // =============================================
@@ -1191,25 +1493,39 @@ function updateAll() {
 // Language toggle
 document.getElementById('langToggle').addEventListener('click', toggleLanguage);
 
-// Door type buttons
-doorTypeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        doorTypeBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.doorType = btn.dataset.value;
-        updateAll();
-    });
-});
-
-// Size buttons
+// Size buttons — sticky total appears only after a width is chosen
 sizeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         sizeBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        state.width = parseInt(btn.dataset.width);
+        state.width = parseInt(btn.dataset.width, 10);
+        state.sizeSelected = true;
         updateAll();
+        syncQuoteSticky();
     });
 });
+
+// EXW qty tier on sticky — prices (sticky + summary + cards) follow
+(function initQtyTiers() {
+    const group = document.getElementById('qtyTierGroup');
+    if (!group) return;
+    const btns = group.querySelectorAll('.quote-qty-btn');
+    const syncActive = () => {
+        btns.forEach((b) => b.classList.toggle('active', b.dataset.tier === state.qtyTier));
+    };
+    syncActive();
+    btns.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const tier = btn.dataset.tier;
+            if (!tier || tier === state.qtyTier) return;
+            state.qtyTier = tier;
+            syncActive();
+            updateAll();
+        });
+    });
+})();
 
 // Config mode tabs: 标准套餐（当前页）/ 个性定制 → index.html 空框架
 (function initConfigModeTabs() {
@@ -1638,9 +1954,7 @@ document.querySelectorAll('.section, .config-step, .config-total, .case-card, .h
 function buildSummaryString() {
     try {
         const model = document.getElementById('previewModel')?.textContent || '';
-        const doorType = document.querySelector('#doorTypeGroup .config-btn.active')?.dataset.value || 'xt';
-        const width = document.querySelector('#sizeGroup .size-btn.active')?.dataset.width || '2200';
-        const doorLabel = doorType === 'xt' ? (currentLang === 'en' ? 'Top-Flip' : '上翻门') : (currentLang === 'en' ? 'Rolling Shutter' : '卷帘门');
+        const width = document.querySelector('#sizeGroup .size-btn.active')?.dataset.width || String(state.width || 2200);
         const bodyCode = document.getElementById('selectedBodyColorCode')?.textContent || '';
         const bodyName = document.getElementById('selectedBodyColorName')?.textContent?.replace('— ', '') || '';
         const colorCode = document.getElementById('selectedColorCode')?.textContent || '';
@@ -1655,9 +1969,11 @@ function buildSummaryString() {
             }
         });
 
+        const tierKey = { '1-5': 'config.tier15', '6-20': 'config.tier620', '20+': 'config.tier20p' }[state.qtyTier];
+        const tierLabel = tierKey ? t(tierKey) : state.qtyTier;
         const lines = currentLang === 'en'
-            ? [`Model: ${model}`, `Door Type: ${doorLabel}`, `Size: ${width} × 900 × 2250 mm`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, `Accessories: ${accItems.length ? accItems.join(', ') : 'Standard only'}`, `Estimated Total: ${totalPrice} (FOB China)`]
-            : [`型号：${model}`, `门型：${doorLabel}`, `尺寸：${width} × 900 × 2250 mm`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, `配件：${accItems.length ? accItems.join(', ') : '标准配置'}`, `预估总价：${totalPrice}（FOB中国）`];
+            ? [`Model: ${model}`, `Size: ${width} × 900 × 2250 mm`, `EXW Price · ${tierLabel}`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, `Accessories: ${accItems.length ? accItems.join(', ') : 'Standard only'}`, `Estimated Total: ${totalPrice} (EXW China)`]
+            : [`型号：${model}`, `尺寸：${width} × 900 × 2250 mm`, `EXW 单价 · ${tierLabel}`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, `配件：${accItems.length ? accItems.join(', ') : '标准配置'}`, `预估总价：${totalPrice}（EXW中国）`];
         return lines.join('\n');
     } catch(e) {
         return currentLang === 'en' ? 'Configuration: see selections above' : '配置：请参考上方选择';
@@ -1739,5 +2055,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initHotCardExpand();
     initStdListToggle();
     initStdLayoutSwitch();
+    initStdRemoveButtons();
     initProductLibrary();
+    initElevationPan();
+    initQuoteSticky();
+    syncDoorTypeCards();
+    updateTotal();
+    syncHotCardPrices();
 });

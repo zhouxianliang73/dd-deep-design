@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outdoor Kitchen Quote | DD Deep Design</title>
+  <meta name="description" content="Owner quotation using scheme quote-line cards — ready for scheme tools." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css?t=20260725elevfix" />
+  <link rel="stylesheet" href="assets/css/cost-pages.css?t=20260725schemeq" />
+  <link rel="stylesheet" href="assets/css/scheme-quote-cards.css?t=20260725masterimg" />
+</head>
+<body class="cost-body owner-body">
+  <nav class="navbar no-print" id="navbar">
+    <div class="container nav-container">
+      <a href="classic.html" class="logo">
+        <span class="logo-icon">DD</span>
+        <span class="logo-text">Deep Design</span>
+      </a>
+      <div class="nav-toggle" id="navToggle">
+        <span></span><span></span><span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="classic.html#products" class="nav-link">Configure</a></li>
+        <li><a href="owner-quote.html" class="nav-link is-active">Quote</a></li>
+        <li><a href="margin-console.html" class="nav-link">Margin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="c-shell" style="padding-top:12px;padding-bottom:24px">
+    <div class="ext-toolbar no-print">
+      <a class="c-chip" href="classic.html#products">← Classic</a>
+      <div class="quote-mode-tabs" id="quoteModeTabs">
+        <button class="c-chip is-on" type="button" data-mode="images" id="modeImages">带图报价</button>
+        <button class="c-chip" type="button" data-mode="plain" id="modePlain">简洁报价</button>
+      </div>
+      <button class="c-chip" type="button" id="btnPrint">Print / PDF</button>
+      <button class="c-chip" type="button" id="langToggle">中文 / EN</button>
+      <a class="c-chip c-chip-primary" href="margin-console.html">利润阶梯调价</a>
+    </div>
+
+    <article class="owner-sheet" id="sheet" style="margin-top:8px">
+      <p style="color:var(--muted)">Loading quotation…</p>
+    </article>
+  </div>
+
+  <script src="assets/js/cost-engine.js"></script>
+  <script src="assets/js/scheme-quote-cards.js?t=20260725masterimg"></script>
+  <script>
+    const E = window.DDCostEngine;
+    const SQ = window.SchemeQuoteCards;
+
+    let lang = "en";
+    let data = null;
+    let state = null;
+    /** @type {'images'|'plain'} */
+    let quoteMode = "images";
+
+    document.getElementById("navToggle")?.addEventListener("click", () => {
+      document.getElementById("navLinks")?.classList.toggle("open");
+    });
+
+    function L(cn, en) {
+      return lang === "cn" ? cn : en;
+    }
+
+    function resolveQuote() {
+      if (state.lines && state.lines.length) {
+        const totalUsd =
+          state.totalUsd != null
+            ? state.totalUsd
+            : state.lines.reduce((s, l) => s + (l.lineSellUsd || 0), 0);
+        return {
+          widthMm: state.widthMm || E.sizeById(data, state.sizeId)?.widthMm,
+          qty: state.qty || 1,
+          lines: state.lines,
+          totalUsd,
+        };
+      }
+      const q = E.quoteLines(data, {
+        sizeId: state.sizeId,
+        selectedKeys: state.selected || E.defaultSelection(E.sizeById(data, state.sizeId)),
+        marginRate: state.marginRate || data.meta.recommendMargin || 0.3,
+        qty: state.qty || 1,
+      });
+      return {
+        widthMm: q.size.widthMm,
+        qty: q.qty,
+        lines: q.lines,
+        totalUsd: q.totals.sellUsd,
+      };
+    }
+
+    function syncModeTabs() {
+      document.querySelectorAll("#quoteModeTabs .c-chip").forEach((btn) => {
+        btn.classList.toggle("is-on", btn.dataset.mode === quoteMode);
+      });
+    }
+
+    function renderPlain(q) {
+      const rows = q.lines
+        .map(
+          (line, i) => `<tr>
+            <td>${i + 1}</td>
+            <td>${lang === "cn" ? line.nameCn || line.name : line.name}
+              <div style="color:var(--muted);font-size:0.8rem">${line.dims || ""}</div>
+            </td>
+            <td class="num">${line.qty}</td>
+            <td class="num">${E.money(line.unitUsd, "USD")}</td>
+            <td class="num">${E.money(line.lineSellUsd, "USD")}</td>
+          </tr>`
+        )
+        .join("");
+
+      return `<div class="c-table-wrap">
+        <table class="c-table" style="min-width:0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>${L("项目", "Item")}</th>
+              <th>${L("数量", "Qty")}</th>
+              <th>${L("单价", "Unit")}</th>
+              <th>${L("小计", "Amount")}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    }
+
+    async function render() {
+      if (!SQ) {
+        throw new Error("scheme-quote-cards.js failed to load");
+      }
+      const q = resolveQuote();
+      const validDays = state.validDays || 7;
+      const modeLabel =
+        quoteMode === "images"
+          ? L("带图版 · Scheme 卡片", "Illustrated · Scheme cards")
+          : L("简洁版", "Text only");
+
+      let body = "";
+      if (quoteMode === "images") {
+        const elev = SQ.elevBannerHtml(q.widthMm);
+        const cards = await SQ.renderCardsHtml(q.lines, {
+          widthMm: q.widthMm,
+          lang,
+        });
+        body = elev + cards;
+      } else {
+        body = renderPlain(q);
+      }
+
+      document.getElementById("sheet").innerHTML = `
+        <div class="owner-head">
+          <div>
+            <h1>${L("户外厨房标准报价", "Outdoor Kitchen Quotation")}</h1>
+            <div class="owner-meta">
+              DD Deep Design · Scheme Center<br/>
+              ${L("型号", "Model")}：Ultra ${q.widthMm}mm ·
+              ${L("数量", "Qty")}：${q.qty} ·
+              ${L("报价日", "Date")}：${state.createdAt || "—"} ·
+              EXW · ${modeLabel}
+            </div>
+          </div>
+          <div class="owner-total">
+            <div class="label">${L("报价合计", "Total EXW")}</div>
+            <div class="sum">${E.money(q.totalUsd, "USD")}</div>
+          </div>
+        </div>
+
+        ${body}
+
+        <div class="owner-note">
+          1. ${L(`价格有效期：自报价日起 ${validDays} 天。`, `Price validity: ${validDays} days from quote date.`)}<br/>
+          2. ${L("贸易术语：EXW（不含海运、关税、目的地安装）。", "Incoterms: EXW (ocean freight, duties, and on-site install excluded).")}<br/>
+          3. ${L("如配置变更，以更新后的报价为准。", "If configuration changes, the revised quotation prevails.")}<br/>
+          4. ${L("带图清单使用 Scheme 卡片结构（quote-line-card）。", "Illustrated lines use Scheme card structure (quote-line-card).")}
+        </div>
+      `;
+      syncModeTabs();
+    }
+
+    function setMode(mode) {
+      quoteMode = mode === "plain" ? "plain" : "images";
+      state.quoteMode = quoteMode;
+      try {
+        const hash = E.encodeOwnerState(state);
+        history.replaceState(null, "", `#${hash}`);
+      } catch (_) {
+        /* ignore */
+      }
+      render();
+    }
+
+    async function init() {
+      if (!E) throw new Error("cost-engine.js failed to load");
+      if (!SQ) throw new Error("scheme-quote-cards.js failed to load (check assets/js path)");
+
+      data = await E.load();
+      const hash = location.hash.replace(/^#/, "");
+      state = hash ? E.decodeOwnerState(hash) : null;
+
+      if (!state) {
+        const size = data.sizes.find((s) => s.widthMm === 3200) || data.sizes[0];
+        state = {
+          sizeId: size.id,
+          selected: E.defaultSelection(size),
+          marginRate: data.meta.recommendMargin || 0.3,
+          qty: 1,
+          fx: data.meta.fx,
+          validDays: 7,
+          createdAt: new Date().toISOString().slice(0, 10),
+          quoteMode: "images",
+        };
+      }
+
+      if (state.fx) data.meta.fx = state.fx;
+      quoteMode = state.quoteMode === "plain" ? "plain" : "images";
+
+      SQ.loadCatalog().catch(() => {});
+
+      document.getElementById("btnPrint").addEventListener("click", () => window.print());
+      document.getElementById("langToggle").addEventListener("click", () => {
+        lang = lang === "cn" ? "en" : "cn";
+        render();
+      });
+      document.getElementById("modeImages").addEventListener("click", () => setMode("images"));
+      document.getElementById("modePlain").addEventListener("click", () => setMode("plain"));
+
+      await render();
+    }
+
+    init().catch((err) => {
+      document.getElementById("sheet").innerHTML =
+        `<p style="color:#991b1b">Unable to load quote: ${err.message}</p>`;
+    });
+  </script>
+</body>
+</html>

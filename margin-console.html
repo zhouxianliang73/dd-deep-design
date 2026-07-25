@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>利润阶梯 | DD Deep Design</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="DD Deep Design margin ladder console — classic site extension." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css?t=20260725elevalign" />
+  <link rel="stylesheet" href="assets/css/cost-pages.css" />
+</head>
+<body class="cost-body">
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="classic.html" class="logo">
+        <span class="logo-icon">DD</span>
+        <span class="logo-text">Deep Design</span>
+      </a>
+      <div class="nav-toggle" id="navToggle">
+        <span></span><span></span><span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="classic.html#products" class="nav-link">配置方案</a></li>
+        <li><a href="owner-quote.html" class="nav-link">业主报价</a></li>
+        <li><a href="margin-console.html" class="nav-link is-active">利润阶梯</a></li>
+        <li><a href="classic.html#hot-products" class="nav-link">热卖款</a></li>
+        <li><a href="classic.html#contact" class="nav-link">联系我们</a></li>
+        <li><a href="index.html" class="nav-link">个性定制</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="c-shell">
+    <section class="c-hero">
+      <div class="section-label" style="margin-bottom:10px">Classic Extension · Internal</div>
+      <h1>利润阶梯 · <em>可调成本</em></h1>
+      <p>这是 classic.html 标准套餐的扩展页：调汇率、毛利档、￥成本（木箱跟阶梯价），确认后生成可发给业主的标准报价链接。</p>
+    </section>
+
+    <div class="ext-toolbar">
+      <a class="c-chip" href="classic.html#products">← 返回标准套餐</a>
+      <a class="c-chip c-chip-primary" href="owner-quote.html" id="linkOwner">业主报价页</a>
+    </div>
+
+    <div class="c-grid c-grid-2">
+      <section class="c-card">
+        <h2>可调参数</h2>
+        <p class="hint">改完即生效，保存在本机浏览器。</p>
+        <div class="c-fields">
+          <div class="c-field">
+            <label>锁定汇率 USD/CNY</label>
+            <input type="number" id="fx" step="0.01" min="1" />
+          </div>
+          <div class="c-field">
+            <label>尺寸系列</label>
+            <select id="sizeId"></select>
+          </div>
+          <div class="c-field">
+            <label>数量（台）</label>
+            <input type="number" id="qty" value="1" min="1" step="1" />
+          </div>
+          <div class="c-field">
+            <label>最低毛利红线</label>
+            <input type="number" id="minMargin" step="0.01" min="0" max="0.9" />
+          </div>
+        </div>
+
+        <h2 style="margin-top:22px">利润阶梯（点选当前出价档）</h2>
+        <p class="hint">售价 = $成本 ÷ (1 − 毛利率)。木箱已恢复跟毛利阶梯（也可在下表单独设一口价覆盖）。</p>
+        <div class="c-tiers" id="tiers"></div>
+      </section>
+
+      <section class="c-card">
+        <h2>整单毛利试算</h2>
+        <div class="c-summary" id="summary"></div>
+        <div class="c-field" style="margin-top:12px">
+          <label>发给业主的报价样式</label>
+          <select id="quoteMode">
+            <option value="images">带图报价（图文清单）</option>
+            <option value="plain">简洁报价（仅文字表格）</option>
+          </select>
+        </div>
+        <div class="c-actions">
+          <button class="c-btn c-btn-accent" type="button" id="btnOwner">生成业主报价链接</button>
+          <button class="c-btn" type="button" id="btnCopy">复制链接</button>
+          <button class="c-btn" type="button" id="btnReset">恢复出厂数据</button>
+        </div>
+        <p class="hint" id="shareHint" style="margin-top:12px"></p>
+      </section>
+    </div>
+
+    <section class="c-card" style="margin-top:16px">
+      <h2>SKU 成本（本尺寸）</h2>
+      <p class="hint">勾选进入报价；改「￥成本」或「一口价$」后阶梯价自动重算。</p>
+      <div class="c-table-wrap">
+        <table class="c-table" id="skuTable">
+          <thead>
+            <tr>
+              <th>选</th>
+              <th>品名</th>
+              <th>分类</th>
+              <th>￥成本</th>
+              <th>$成本</th>
+              <th>当前档售价$</th>
+              <th>一口价$</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/cost-engine.js"></script>
+  <script>
+    const E = window.DDCostEngine;
+    let data = null;
+    let marginRate = 0.3;
+    let selected = new Set();
+    let lastShareUrl = "";
+
+    document.getElementById("navToggle")?.addEventListener("click", () => {
+      document.getElementById("navLinks")?.classList.toggle("open");
+    });
+
+    function currentSize() {
+      return E.sizeById(data, document.getElementById("sizeId").value);
+    }
+
+    function renderTiers() {
+      const box = document.getElementById("tiers");
+      box.innerHTML = data.meta.marginTiers
+        .map((t) => {
+          const active = Math.abs(t.rate - marginRate) < 1e-6;
+          return `<div class="c-tier ${active ? "is-active" : ""}" data-rate="${t.rate}">
+            <strong>${t.label}</strong>
+            <span>${t.role}</span>
+            <span>÷${t.factor}</span>
+          </div>`;
+        })
+        .join("");
+      box.querySelectorAll(".c-tier").forEach((el) => {
+        el.addEventListener("click", () => {
+          marginRate = Number(el.dataset.rate);
+          render();
+        });
+      });
+    }
+
+    function renderSummary(q) {
+      const t = q.totals;
+      const badge = t.belowMin
+        ? `<span class="badge badge-danger">低于红线，需审批</span>`
+        : `<span class="badge badge-ok">可通过</span>`;
+      document.getElementById("summary").innerHTML = `
+        <div class="c-kpi"><span>总成本</span><span class="v">${E.money(t.costCny, "CNY")}</span></div>
+        <div class="c-kpi"><span>对业主总价</span><span class="v">${E.money(t.sellUsd, "USD")}</span></div>
+        <div class="c-kpi"><span>折合人民币</span><span class="v">${E.money(t.sellCny, "CNY")}</span></div>
+        <div class="c-kpi"><span>整单毛利率 ${badge}</span><span class="v">${(t.margin * 100).toFixed(1)}%</span></div>
+        <div class="c-kpi"><span>当前档 / 汇率</span><span class="v">${(marginRate * 100).toFixed(0)}% · ${data.meta.fx}</span></div>
+      `;
+    }
+
+    function renderTable() {
+      const size = currentSize();
+      const fx = data.meta.fx;
+      const tbody = document.querySelector("#skuTable tbody");
+      tbody.innerHTML = size.items
+        .map((item) => {
+          const on = item.mandatory || selected.has(item.key);
+          const usd = E.costUsd(item, fx);
+          const price = E.tierPrice(item, fx, marginRate);
+          const disabled = item.mandatory ? "disabled" : "";
+          return `<tr>
+            <td><input type="checkbox" data-key="${item.key}" ${on ? "checked" : ""} ${disabled} /></td>
+            <td>${item.nameCn || item.name}<div style="color:var(--muted);font-size:0.78rem">${item.name}</div></td>
+            <td>${item.selection || ""} / ${item.category || ""}</td>
+            <td><input type="number" data-cost="${item.key}" value="${item.costCny ?? ""}" step="1" /></td>
+            <td class="num">${usd == null ? "—" : usd.toFixed(2)}</td>
+            <td class="num">${price == null ? "—" : price.toFixed(2)}${item.flatExwUsd != null ? ' <span class="badge badge-warn">一口价</span>' : ""}</td>
+            <td><input type="number" data-flat="${item.key}" value="${item.flatExwUsd ?? ""}" step="1" placeholder="—" /></td>
+          </tr>`;
+        })
+        .join("");
+
+      tbody.querySelectorAll("input[type=checkbox]").forEach((el) => {
+        el.addEventListener("change", () => {
+          if (el.checked) selected.add(el.dataset.key);
+          else selected.delete(el.dataset.key);
+          render();
+        });
+      });
+      tbody.querySelectorAll("input[data-cost]").forEach((el) => {
+        el.addEventListener("change", () => {
+          const item = size.items.find((i) => i.key === el.dataset.cost);
+          if (!item) return;
+          item.costCny = el.value === "" ? null : Number(el.value);
+          E.save(data);
+          render();
+        });
+      });
+      tbody.querySelectorAll("input[data-flat]").forEach((el) => {
+        el.addEventListener("change", () => {
+          const item = size.items.find((i) => i.key === el.dataset.flat);
+          if (!item) return;
+          item.flatExwUsd = el.value === "" ? null : Number(el.value);
+          E.save(data);
+          render();
+        });
+      });
+    }
+
+    function quoteNow() {
+      return E.quoteLines(data, {
+        sizeId: document.getElementById("sizeId").value,
+        selectedKeys: [...selected],
+        marginRate,
+        qty: Number(document.getElementById("qty").value) || 1,
+      });
+    }
+
+    function render() {
+      renderTiers();
+      const q = quoteNow();
+      renderSummary(q);
+      renderTable();
+    }
+
+    function buildOwnerUrl() {
+      const q = quoteNow();
+      const quoteMode = document.getElementById("quoteMode")?.value || "images";
+      const state = {
+        sizeId: q.size.id,
+        sizeLabel: q.size.label,
+        widthMm: q.size.widthMm,
+        qty: q.qty,
+        marginRate,
+        fx: data.meta.fx,
+        validDays: 7,
+        createdAt: new Date().toISOString().slice(0, 10),
+        quoteMode,
+        totalUsd: q.totals.sellUsd,
+        lines: q.lines.map((l) => ({
+          key: l.key,
+          name: l.name,
+          nameCn: l.nameCn,
+          dims: l.dims,
+          qty: l.qty,
+          unitUsd: l.unitUsd,
+          lineSellUsd: l.lineSellUsd,
+        })),
+      };
+      const hash = E.encodeOwnerState(state);
+      lastShareUrl = new URL(`owner-quote.html#${hash}`, location.href).href;
+      document.getElementById("shareHint").textContent =
+        `已生成业主链接（${quoteMode === "images" ? "带图版" : "简洁版"}，仅售价快照）。可复制发送。`;
+      document.getElementById("linkOwner").href = `owner-quote.html#${hash}`;
+      return lastShareUrl;
+    }
+
+    async function init() {
+      data = await E.load();
+      marginRate = data.meta.recommendMargin || 0.3;
+      document.getElementById("fx").value = data.meta.fx;
+      document.getElementById("minMargin").value = data.meta.minMargin;
+      const sel = document.getElementById("sizeId");
+      sel.innerHTML = data.sizes
+        .map((s) => `<option value="${s.id}">${s.label}</option>`)
+        .join("");
+      sel.value = data.sizes.find((s) => s.widthMm === 3200)?.id || data.sizes[0].id;
+      selected = new Set(E.defaultSelection(currentSize()));
+
+      sel.addEventListener("change", () => {
+        selected = new Set(E.defaultSelection(currentSize()));
+        render();
+      });
+      document.getElementById("fx").addEventListener("change", (e) => {
+        data.meta.fx = Number(e.target.value) || 6.7;
+        E.save(data);
+        render();
+      });
+      document.getElementById("minMargin").addEventListener("change", (e) => {
+        data.meta.minMargin = Number(e.target.value) || 0.15;
+        E.save(data);
+        render();
+      });
+      document.getElementById("qty").addEventListener("change", render);
+      document.getElementById("btnOwner").addEventListener("click", () => {
+        location.href = buildOwnerUrl();
+      });
+      document.getElementById("btnCopy").addEventListener("click", async () => {
+        const url = buildOwnerUrl();
+        await navigator.clipboard.writeText(url);
+        document.getElementById("shareHint").textContent = "链接已复制，可直接发给业主。";
+      });
+      document.getElementById("btnReset").addEventListener("click", async () => {
+        if (!confirm("恢复打包的出厂成本数据？本机修改会清空。")) return;
+        E.resetToBundled();
+        data = await E.load();
+        selected = new Set(E.defaultSelection(currentSize()));
+        document.getElementById("fx").value = data.meta.fx;
+        document.getElementById("minMargin").value = data.meta.minMargin;
+        marginRate = data.meta.recommendMargin || 0.3;
+        render();
+      });
+
+      render();
+    }
+
+    init().catch((err) => {
+      document.querySelector(".c-shell").innerHTML =
+        `<p style="color:#991b1b">加载失败：${err.message}</p>`;
+    });
+  </script>
+</body>
+</html>

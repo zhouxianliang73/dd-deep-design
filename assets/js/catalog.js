@@ -20,8 +20,8 @@ window.DDCatalog = (() => {
       baseCny: { xt: 36132, wm: 33570 },
       baseUsd: { xt: 5999, wm: 5600 },
       image: {
-        xt: 'assets/images/products/suoer/suoer-topflip-2200.png',
-        wm: 'assets/images/products/suoer/suoer-rollshutter-2200.png',
+        xt: 'assets/images/products/suoer/2200.png',
+        wm: 'assets/images/products/suoer/2200.png',
         elev: 'assets/images/products/suoer/2200.png',
       },
       slots: ['sink', 'bbq', 'fridge', 'hood'],
@@ -43,8 +43,8 @@ window.DDCatalog = (() => {
       baseCny: { xt: 39500, wm: 37200 },
       baseUsd: { xt: 7029, wm: 6680 },
       image: {
-        xt: 'assets/images/products/suoer/suoer-topflip-2900.png',
-        wm: 'assets/images/products/suoer/suoer-rollshutter-2900.png',
+        xt: 'assets/images/products/suoer/2900.png',
+        wm: 'assets/images/products/suoer/2900.png',
         elev: 'assets/images/products/suoer/2900.png',
       },
       slots: ['sink', 'bbq', 'fridge', 'hood', 'topCab'],
@@ -68,8 +68,8 @@ window.DDCatalog = (() => {
       baseCny: { xt: 40788, wm: 38769 },
       baseUsd: { xt: 7200, wm: 6850 },
       image: {
-        xt: 'assets/images/products/suoer/suoer-topflip-2900.png',
-        wm: 'assets/images/products/suoer/suoer-rollshutter-2900.png',
+        xt: 'assets/images/products/suoer/2900.png',
+        wm: 'assets/images/products/suoer/2900.png',
         elev: 'assets/images/products/suoer/2900.png',
       },
       slots: ['sink', 'bbq', 'kamado', 'fridge', 'hood', 'tv'],
@@ -92,8 +92,8 @@ window.DDCatalog = (() => {
       baseCny: { xt: 44326, wm: 41231 },
       baseUsd: { xt: 7699, wm: 7350 },
       image: {
-        xt: 'assets/images/products/suoer/suoer-topflip-3200.png',
-        wm: 'assets/images/products/suoer/suoer-rollshutter-3200.png',
+        xt: 'assets/images/products/suoer/3200.png',
+        wm: 'assets/images/products/suoer/3200.png',
         elev: 'assets/images/products/suoer/3200.png',
       },
       slots: ['sink', 'bbq', 'kamado', 'fridge', 'hood', 'topCab', 'tv'],
@@ -115,8 +115,8 @@ window.DDCatalog = (() => {
       baseCny: { xt: 46460, wm: 43767 },
       baseUsd: { xt: 8200, wm: 7850 },
       image: {
-        xt: 'assets/images/products/suoer/suoer-topflip-3500.png',
-        wm: 'assets/images/products/suoer/suoer-rollshutter-3500.png',
+        xt: 'assets/images/products/suoer/3500.png',
+        wm: 'assets/images/products/suoer/3500.png',
         elev: 'assets/images/products/suoer/3500.png',
       },
       slots: ['sink', 'bbq', 'kamado', 'fridge', 'hood', 'topCab', 'tv', 'drawer'],
@@ -133,7 +133,7 @@ window.DDCatalog = (() => {
         en: 'Lift-up shed door — open canopy feel',
         cn: '上翻箱体门 — 打开即成凉棚感',
       },
-      image: 'assets/images/products/suoer/door-topflip.png',
+      image: 'assets/images/products/suoer/3200.png',
     },
     {
       id: 'wm',
@@ -143,7 +143,7 @@ window.DDCatalog = (() => {
         en: 'Compact footprint when open',
         cn: '开启后占用空间更小',
       },
-      image: 'assets/images/products/suoer/door-rollshutter.png',
+      image: 'assets/images/products/suoer/2900.png',
     },
   ];
 

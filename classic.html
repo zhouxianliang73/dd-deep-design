@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260725v19">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260726match1">
 </head>
 <body>
     <!-- Navigation -->
@@ -56,12 +56,14 @@
                 <aside class="quote-sticky" id="quoteSticky" aria-live="polite">
                     <div class="quote-sticky-inner">
                         <div class="quote-sticky-row quote-sticky-row-tier">
-                            <strong class="quote-sticky-exw" data-i18n="config.exw">EXW Price</strong>
-                            <div class="quote-qty-tiers" id="qtyTierGroup" role="radiogroup" aria-label="Order quantity">
-                                <button type="button" class="quote-qty-btn" data-tier="1-5" data-i18n="config.tier15">1-5 units</button>
-                                <button type="button" class="quote-qty-btn active" data-tier="6-20" data-i18n="config.tier620">6-20 units</button>
+                            <strong class="quote-sticky-exw" data-i18n="config.exw">Website Price</strong>
+                            <div class="quote-qty-tiers is-locked" id="qtyTierGroup" role="radiogroup" aria-label="Order quantity">
+                                <button type="button" class="quote-qty-btn active" data-tier="1-5" data-i18n="config.tier15">1-5 units</button>
+                                <button type="button" class="quote-qty-btn" data-tier="6-20" data-i18n="config.tier620">6-20 units</button>
                                 <button type="button" class="quote-qty-btn" data-tier="20+" data-i18n="config.tier20p">20+ units</button>
+                                <button type="button" class="quote-tier-unlock" id="tierUnlockBtn" data-i18n="config.tierUnlock">解锁阶梯价</button>
                             </div>
+                            <span class="quote-tier-lock-hint" id="tierLockHint" data-i18n="config.tierLocked">货柜台数阶梯：仅管理员</span>
                         </div>
                         <a href="#configTotal" class="quote-sticky-body" title="Details">
                             <div class="quote-sticky-row quote-sticky-row-meta">
@@ -112,13 +114,15 @@
                                     </div>
                                 </div>
                                 <div class="elevation-preview">
+                                    <button type="button" class="elev-nav elev-nav-prev" id="elevNavPrev" aria-label="Pan left">‹</button>
                                     <div class="elevation-scroll" id="elevationScroll" tabindex="0" aria-label="Elevation pan">
-                                        <img src="assets/images/products/suoer/2200.png?t=20260725v4" alt="Elevation" id="elevationImg" class="elevation-img" draggable="false">
+                                        <img src="assets/images/products/suoer/2200.png?t=20260726match1" alt="" id="elevationImg" class="elevation-img elevation-img-source" draggable="false" hidden>
+                                        <img src="assets/images/products/suoer/2200-door-mask.png?t=20260726match1" alt="" id="elevationDoorMask" class="elevation-img-source" hidden>
+                                        <canvas id="elevationCanvas" class="elevation-img elevation-canvas" width="1008" height="585" aria-label="Product preview"></canvas>
                                     </div>
-                                    <div class="elevation-scroll-hint" aria-hidden="true" data-i18n="config.scrollHint">← 左右滑动查看 →</div>
+                                    <button type="button" class="elev-nav elev-nav-next" id="elevNavNext" aria-label="Pan right">›</button>
+                                    <div class="elevation-scroll-hint" aria-hidden="true" data-i18n="config.scrollHint">← Swipe / click / drag →</div>
                                 </div>
-                                <!-- Module widths under CAD (尺寸) -->
-                                <div class="elev-dim-bar" id="elevDimBar" aria-label="Module dimensions"></div>
                             </div>
                         </div>
 
@@ -142,10 +146,15 @@
                                         <span id="selectedBodyColorName">— CK02F</span>
                                     </div>
                                     <div class="shell-preview-card" id="shellPreviewCard">
-                                        <div class="shell-preview-label" data-i18n="config.shellPreview">Shell Preview</div>
+                                        <div class="shell-door-tabs" id="shellDoorTabs" role="radiogroup" aria-label="Door type">
+                                            <button type="button" class="shell-door-tab is-active" data-door="xt" data-i18n="config.topFlip">翻盖</button>
+                                            <button type="button" class="shell-door-tab" data-door="wm" data-i18n="config.rolling">卷帘门</button>
+                                            <button type="button" class="shell-door-tab" data-door="mini" data-i18n="config.mini">迷你款</button>
+                                        </div>
                                         <div class="shell-preview-stage">
-                                            <img src="assets/img/shell-preview.png?t=20260722ref" alt="" id="shellPreviewSource" class="shell-preview-source" width="570" height="492" decoding="async">
-                                            <canvas id="shellPreviewCanvas" class="shell-preview-canvas" width="570" height="492" aria-label="Shell color preview"></canvas>
+                                            <img src="assets/img/shell-preview.png?t=20260726match1" alt="" id="shellPreviewSource" class="shell-preview-source" width="1002" height="818" decoding="async" data-src-xt="assets/img/shell-preview.png?t=20260726match1" data-src-wm="assets/img/shell-preview-roll.png?t=20260725v1" data-src-mini="assets/img/shell-preview-mini.png?t=20260726v2">
+                                            <img src="assets/img/door-preview-mask.png?t=20260726match1" alt="" id="shellDoorMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
+                                            <canvas id="shellPreviewCanvas" class="shell-preview-canvas" width="1002" height="818" aria-label="Shell color preview"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -216,9 +225,9 @@
                     <div class="door-preview-card" id="doorPreviewCard">
                         <div class="door-preview-label" data-i18n="config.doorPreview">Door Panel Preview</div>
                         <div class="door-preview-stage">
-                            <img src="assets/img/door-preview.png" alt="" id="doorPreviewSource" class="door-preview-hidden" width="700" height="621" decoding="async">
-                            <img src="assets/img/door-preview-mask.png" alt="" id="doorPreviewMask" class="door-preview-hidden" width="700" height="621" decoding="async">
-                            <canvas id="doorPreviewCanvas" class="door-preview-canvas" width="700" height="621" aria-label="Door panel color preview"></canvas>
+                            <img src="assets/img/door-preview.png?t=20260726match1" alt="" id="doorPreviewSource" class="door-preview-hidden" width="1002" height="818" decoding="async">
+                            <img src="assets/img/door-preview-mask.png?t=20260726match1" alt="" id="doorPreviewMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
+                            <canvas id="doorPreviewCanvas" class="door-preview-canvas" width="1002" height="818" aria-label="Door panel color preview"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1036,7 +1045,9 @@
         </div>
     </div>
 
-    <script src="assets/js/main.js?t=20260725v19"></script>
+    <script src="assets/js/outdoor-quote-data.js?t=20260726v1"></script>
+    <script src="assets/js/outdoor-quote.js?t=20260726v1"></script>
+    <script src="assets/js/main.js?t=20260726match1"></script>
 </body>
 </html>
 

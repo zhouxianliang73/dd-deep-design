@@ -5,6 +5,8 @@ scripts/
 # Temp files
 ~$*
 户外厨房/
+assets/img/_pdf_p*
+assets/images/products/suoer-backup-before-master/
 
 # OS files
 .DS_Store

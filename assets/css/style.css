@@ -881,18 +881,36 @@
 .std-list-toggle:hover { color: var(--clr-accent-dark); }
 #detailSpecs.is-expanded .std-list-toggle { transform: rotate(0deg); }
 
-/* Fully collapse / fully expand standard config + accessories */
+/* Equipment collapse only affects std list — accessories fold separately */
 #detailSpecs:not(.is-expanded) .detail-specs-body {
     display: none;
 }
 
-.acc-section-label {
+.acc-section {
+    margin-top: 4px;
+}
+.acc-section-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
     margin: 14px 0 8px;
     padding-top: 12px;
     border-top: 1px solid #e8e8e8;
+}
+.acc-section-label {
+    margin: 0;
+    padding: 0;
+    border: 0;
     font-size: 0.88rem;
     font-weight: 600;
     color: #888;
+}
+.acc-section:not(.is-expanded) .acc-section-body {
+    display: none;
+}
+#accSection.is-expanded .acc-section-toggle {
+    transform: rotate(0deg);
 }
 
 /* Larger clearer thumbs in standard config (list mode) */
@@ -1228,14 +1246,14 @@
     .elev-size-block .size-btn .size-val { font-size: 16px; }
 }
 
-/* Shell colors — sits under Material in Configuration Details */
+/* Shell colors — first block inside unified color area with door picks */
 .body-color-block {
-    margin: 12px 0 4px;
-    padding-top: 10px;
-    border-top: 1px solid var(--clr-border);
+    margin: 0;
+    padding-top: 0;
+    border-top: none;
 }
 .body-color-block .door-series-label {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 600;
     color: var(--clr-dark);
     margin-bottom: 8px;
@@ -1261,6 +1279,9 @@
     padding: 10px 12px;
     font-size: 0.8rem;
 }
+.color-preview-card {
+    margin-top: 16px;
+}
 .shell-preview-card {
     margin-top: 12px;
     padding: 10px;
@@ -1278,7 +1299,26 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
-    margin-bottom: 8px;
+    margin: 8px 0 10px;
+}
+
+.elev-size-block > .shell-door-tabs {
+    width: 100%;
+    margin: 0 0 12px;
+}
+
+.elev-size-block > .block-label + .shell-door-tabs {
+    margin-top: 0;
+}
+
+#finishStep .body-color-block {
+    margin-bottom: 0;
+}
+#finishStep .color-pick-area {
+    gap: 18px;
+}
+#finishStep .door-series-list-nested {
+    gap: 14px;
 }
 .shell-door-tab {
     appearance: none;
@@ -1324,7 +1364,14 @@
     object-fit: contain;
 }
 .door-color-heading {
-    margin: 0 0 10px;
+    margin: 4px 0 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--clr-dark);
+}
+.color-pick-area > .door-color-heading {
+    padding-top: 4px;
+    border-top: 1px solid var(--clr-border);
 }
 .door-preview-card {
     margin-top: 16px;
@@ -1391,12 +1438,13 @@
 
 @media (max-width: 768px) {
     .config-mode-tabs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 6px;
-        margin: -4px 0 18px;
+        margin: -4px 0 8px;
+        max-width: none;
     }
 
     .config-mode-tab {
-        flex: 1 1 calc(33.33% - 6px);
         min-width: 0;
         padding: 8px 6px;
         font-size: 0.78rem;
@@ -2795,11 +2843,13 @@ ul { list-style: none; }
    ============================================ */
 
 .config-mode-tabs {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
-    justify-content: center;
-    margin: -8px 0 28px;
+    margin: -8px 0 10px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .config-mode-tab {
@@ -2819,23 +2869,24 @@ ul { list-style: none; }
     transition: var(--transition);
 }
 
-.config-mode-tab:hover {
+.config-mode-tab:hover,
+.config-mode-link:hover {
     border-color: var(--clr-dark);
+    color: var(--clr-dark);
+    background: var(--clr-white);
+}
+
+.config-mode-tab.active {
+    border-color: var(--clr-dark);
+    background: #f3f4f6;
     color: var(--clr-dark);
 }
 
-.config-mode-tab.active,
-.config-mode-link:hover {
-    background: var(--clr-dark);
-    border-color: var(--clr-dark);
-    color: var(--clr-white);
-}
-
-/* Middle CTA emphasis for 个性定制 */
+/* Outline style — no solid black fill */
 .config-mode-link {
-    background: var(--clr-dark);
-    border-color: var(--clr-dark);
-    color: var(--clr-white);
+    background: var(--clr-white);
+    border-color: var(--clr-border);
+    color: var(--clr-text);
 }
 
 .custom-size-panel {
@@ -2880,11 +2931,44 @@ ul { list-style: none; }
 .hidden { display: none !important; }
 
 /* Accessories merged under Included — dark by default, bright when selected */
-.accessories-list {
+.acc-list-panel {
     margin-top: 2px;
+}
+
+.accessories-list {
     gap: 8px;
     display: flex;
     flex-direction: column;
+}
+
+/* ~3.5 cards visible; click toggle to expand */
+.accessories-list.is-collapsed {
+    max-height: 17.6rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+
+.acc-expand-toggle {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 8px 10px;
+    border: 1px dashed #c4c4c4;
+    border-radius: 8px;
+    background: #f7f7f7;
+    color: #555;
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.acc-expand-toggle:hover {
+    border-color: #999;
+    color: var(--clr-dark);
+    background: #fff;
 }
 
 .accessories-list .std-line-card {
@@ -3468,19 +3552,28 @@ ul { list-style: none; }
 
 /* --- Finish grid kept for reference, replaced by color picker above --- */
 
-/* --- Sticky quote card (3 rows) --- */
+/* --- Sticky quote card: collapsed until size selected --- */
 .quote-sticky {
     position: sticky;
     top: var(--nav-height, 72px);
     z-index: 90;
-    margin: 0 0 8px;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-4px);
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transform: translateY(-6px);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        max-height 0.22s ease,
+        margin 0.22s ease;
 }
 
 .quote-sticky.is-pinned {
+    max-height: 320px;
+    margin: 0 0 12px;
+    overflow: visible;
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);

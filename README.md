@@ -5,9 +5,7 @@
 ## 在线地址（GitHub Pages）
 
 - 报价配置器：https://zhouxianliang73.github.io/dd-deep-design/classic.html
-- 个性定制：https://zhouxianliang73.github.io/dd-deep-design/index.html
 - 利润阶梯（内部）：https://zhouxianliang73.github.io/dd-deep-design/margin-console.html
-- 业主报价：https://zhouxianliang73.github.io/dd-deep-design/owner-quote.html
 
 推送到 `master` 后由 GitHub Actions 自动发布。
 

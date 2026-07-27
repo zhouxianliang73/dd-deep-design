@@ -461,6 +461,13 @@ table.c-table.quote-with-img td.quote-item {
   margin-bottom: 8px;
 }
 
+/* Owner quote: three actions evenly spaced */
+.owner-body .ext-toolbar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+}
+
 .ext-toolbar .c-chip {
   border: 1px solid var(--line);
   background: #fff;
@@ -469,6 +476,18 @@ table.c-table.quote-with-img td.quote-item {
   cursor: pointer;
   font-size: 0.88rem;
   font-weight: 500;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.owner-body .ext-toolbar .c-chip {
+  padding: 8px 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
 }
 
 .ext-toolbar .c-chip-primary {

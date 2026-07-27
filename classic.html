@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260726match1">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260727accFold">
 </head>
 <body>
     <!-- Navigation -->
@@ -24,7 +24,6 @@
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#products" class="nav-link" data-i18n="nav.configure">Configure</a></li>
-                <li><a href="owner-quote.html" class="nav-link" data-i18n="nav.quote">Quote</a></li>
                 <li><a href="margin-console.html" class="nav-link" data-i18n="nav.margin">Margin</a></li>
                 <li><a href="#hot-products" class="nav-link" data-i18n="nav.hot">Hot Sellers</a></li>
                 <li><a href="#cases" class="nav-link" data-i18n="nav.projects">Projects</a></li>
@@ -41,13 +40,12 @@
         <div class="container">
             <div class="section-label" data-i18n="config.label">Product Configurator</div>
             <h2 class="section-title" data-i18n="config.title">Build Your <em>Outdoor Kitchen</em></h2>
-            <p class="section-desc" data-i18n="config.desc">Select your size, choose your components, add accessories &mdash; see the price instantly.</p>
+            <p class="section-desc" data-i18n="config.desc">Style → size → equipment → color — see the price instantly.</p>
 
-            <div class="config-mode-tabs" id="configModeTabs" role="tablist">
-                <button type="button" class="config-mode-tab active" data-mode="standard" data-i18n="config.modeStandard">标准套餐</button>
-                <a class="config-mode-tab config-mode-link" href="margin-console.html" data-i18n="config.openMargin">利润阶梯</a>
-                <a class="config-mode-tab config-mode-link" href="owner-quote.html" data-i18n="config.openOwnerQuote">业主报价</a>
-                <a class="config-mode-tab config-mode-link" href="index.html" data-i18n="config.openCustom">个性定制</a>
+            <div class="config-mode-tabs" id="configModeTabs" role="toolbar" aria-label="Quick actions">
+                <a class="config-mode-tab config-mode-link" href="margin-console.html#costControl" data-i18n="config.openCost">成本控制</a>
+                <a class="config-mode-tab config-mode-link" href="owner-quote.html" data-i18n="config.openOwnerShow">业主展示</a>
+                <button type="button" class="config-mode-tab config-mode-link lang-toggle" id="langToggleBar" data-lang-toggle data-i18n="config.langSwitch">中英切换</button>
             </div>
 
             <div class="configurator">
@@ -92,6 +90,12 @@
                         <!-- Column 1: size chips + panable elevation -->
                         <div class="step1-col step1-images">
                             <div class="elev-size-block">
+                                <div class="block-label" data-i18n="config.style">Style</div>
+                                <div class="shell-door-tabs" id="shellDoorTabs" role="radiogroup" aria-label="Style">
+                                    <button type="button" class="shell-door-tab is-active" data-door="xt" data-i18n="config.topFlip">翻盖</button>
+                                    <button type="button" class="shell-door-tab" data-door="wm" data-i18n="config.rolling">卷帘门</button>
+                                    <button type="button" class="shell-door-tab" data-door="mini" data-i18n="config.mini">迷你款</button>
+                                </div>
                                 <div class="block-label" data-i18n="config.width">Cabinet Width</div>
                                 <div class="size-picker-scroll">
                                     <div class="size-picker" id="sizeGroup">
@@ -131,37 +135,9 @@
                             <div class="detail-card" id="detailCard">
                                 <span id="previewModel" class="sr-only">TH-XT-001-X</span>
                                 <span id="previewPrice" class="sr-only"><span class="price-value"></span></span>
-                                <div class="body-color-block" id="bodyColorBlock">
-                                    <div class="door-series-label" data-i18n="config.bodyColor">Shell Color</div>
-                                    <div class="color-grid body-shell-grid" id="bodyColorGrid">
-                                        <button class="color-swatch body-swatch" data-code="CK01F" data-premium="0" data-bar="#ebe8e2" title="CK01F"><span class="sw-preview" style="background:#ebe8e2"></span>CK01F</button>
-                                        <button class="color-swatch body-swatch color-active" data-code="CK02F" data-premium="0" data-bar="#8f8b84" title="CK02F"><span class="sw-preview" style="background:#8f8b84"></span>CK02F</button>
-                                        <button class="color-swatch body-swatch" data-code="CK03F" data-premium="0" data-bar="#3a3c3e" title="CK03F"><span class="sw-preview" style="background:#3a3c3e"></span>CK03F</button>
-                                        <button class="color-swatch body-swatch" data-code="CK13F" data-premium="0" data-bar="#c5c8cc" title="CK13F"><span class="sw-preview" style="background:#c5c8cc"></span>CK13F</button>
-                                        <button class="color-swatch body-swatch" data-code="CK05F" data-premium="0" data-bar="#111111" title="CK05F"><span class="sw-preview" style="background:#111111"></span>CK05F</button>
-                                    </div>
-                                    <div class="color-selected-info body-selected-info" id="bodyColorSelectedInfo">
-                                        <span data-i18n="config.bodySelected">Shell: </span>
-                                        <strong id="selectedBodyColorCode">CK02F</strong>
-                                        <span id="selectedBodyColorName">— CK02F</span>
-                                    </div>
-                                    <div class="shell-preview-card" id="shellPreviewCard">
-                                        <div class="shell-door-tabs" id="shellDoorTabs" role="radiogroup" aria-label="Door type">
-                                            <button type="button" class="shell-door-tab is-active" data-door="xt" data-i18n="config.topFlip">翻盖</button>
-                                            <button type="button" class="shell-door-tab" data-door="wm" data-i18n="config.rolling">卷帘门</button>
-                                            <button type="button" class="shell-door-tab" data-door="mini" data-i18n="config.mini">迷你款</button>
-                                        </div>
-                                        <div class="shell-preview-stage">
-                                            <img src="assets/img/shell-preview.png?t=20260726match1" alt="" id="shellPreviewSource" class="shell-preview-source" width="1002" height="818" decoding="async" data-src-xt="assets/img/shell-preview.png?t=20260726match1" data-src-wm="assets/img/shell-preview-roll.png?t=20260725v1" data-src-mini="assets/img/shell-preview-mini.png?t=20260726v2">
-                                            <img src="assets/img/door-preview-mask.png?t=20260726match1" alt="" id="shellDoorMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
-                                            <canvas id="shellPreviewCanvas" class="shell-preview-canvas" width="1002" height="818" aria-label="Shell color preview"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="detail-divider"></div>
                                 <div class="detail-specs is-expanded" id="detailSpecs">
                                     <div class="detail-specs-hd">
-                                        <div class="detail-specs-title" data-i18n="config.included">本型号标准配置：</div>
+                                        <div class="detail-specs-title" data-i18n="config.equipment">Equipment</div>
                                         <div class="detail-specs-actions">
                                             <div class="std-layout-switch" role="group" aria-label="Layout">
                                                 <button type="button" class="std-layout-btn is-active" data-layout="list" aria-label="List" title="清单">
@@ -179,8 +155,16 @@
                                     </div>
                                     <div class="detail-specs-body" id="detailSpecsBody">
                                         <div class="std-config-list" id="previewSpecsList" aria-live="polite"></div>
+                                    </div>
+                                </div>
+                                <div class="acc-section is-expanded" id="accSection">
+                                    <div class="acc-section-hd">
                                         <div class="acc-section-label" data-i18n="config.step3.title">Add Accessories</div>
-                                        <div class="std-config-list accessories-list" id="accessoriesGrid" aria-live="polite"></div>
+                                        <button type="button" class="std-list-toggle acc-section-toggle" id="accSectionToggle" aria-label="Collapse accessories" title="Collapse" aria-expanded="true">▴</button>
+                                    </div>
+                                    <div class="acc-section-body" id="accListPanel">
+                                        <div class="std-config-list accessories-list is-collapsed" id="accessoriesGrid" aria-live="polite"></div>
+                                        <button type="button" class="acc-expand-toggle" id="accExpandToggle" hidden aria-expanded="false" data-i18n="config.accExpand">Show more ▾</button>
                                     </div>
                                 </div>
                             </div>
@@ -188,30 +172,49 @@
                     </div>
                 </div>
 
-                <!-- Door panel colors -->
+                <!-- Colors last: shell + door in one area -->
                 <div class="config-step" id="finishStep">
                     <div class="step-header step-header-plain">
-                        <h3 data-i18n="config.step4.title">Select Door Colors</h3>
+                        <h3 data-i18n="config.step4.title">Select Colors</h3>
                     </div>
 
-                    <div class="door-series-label door-color-heading" data-i18n="config.doorColor">Door Panel Color</div>
-                    <div class="door-series-list" id="doorSeriesList">
-                        <div class="door-series-block" data-series="matte">
-                            <div class="door-series-label" data-i18n="config.doorMatte">Solid Color</div>
-                            <div class="color-grid door-panel-grid">
-                                <button class="color-swatch" data-code="DP-BK" data-premium="0" data-bar="#2c2e31" title="Matte Black"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-black.jpg')"></span>DP-BK<br><small data-i18n="config.door.black">Matte Black</small></button>
-                                <button class="color-swatch" data-code="DP-WH" data-premium="0" data-bar="#f4f4f2" title="Matte White"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-white.jpg')"></span>DP-WH<br><small data-i18n="config.door.white">Matte White</small></button>
-                                <button class="color-swatch" data-code="DP-BL" data-premium="0" data-bar="#5f7d86" title="Dusty Blue"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-blue.jpg')"></span>DP-BL<br><small data-i18n="config.door.blue">Dusty Blue</small></button>
-                                <button class="color-swatch" data-code="DP-GN" data-premium="0" data-bar="#4a5c4a" title="Forest Green"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-green.jpg')"></span>DP-GN<br><small data-i18n="config.door.green">Forest Green</small></button>
+                    <div class="door-series-list color-pick-area" id="colorPickArea">
+                        <div class="door-series-block body-color-block" id="bodyColorBlock" data-series="shell">
+                            <div class="door-series-label" data-i18n="config.bodyColor">Shell Color</div>
+                            <div class="color-grid body-shell-grid" id="bodyColorGrid">
+                                <button class="color-swatch body-swatch" data-code="CK01F" data-premium="0" data-bar="#ebe8e2" title="CK01F"><span class="sw-preview" style="background:#ebe8e2"></span>CK01F</button>
+                                <button class="color-swatch body-swatch color-active" data-code="CK02F" data-premium="0" data-bar="#8f8b84" title="CK02F"><span class="sw-preview" style="background:#8f8b84"></span>CK02F</button>
+                                <button class="color-swatch body-swatch" data-code="CK03F" data-premium="0" data-bar="#3a3c3e" title="CK03F"><span class="sw-preview" style="background:#3a3c3e"></span>CK03F</button>
+                                <button class="color-swatch body-swatch" data-code="CK13F" data-premium="0" data-bar="#c5c8cc" title="CK13F"><span class="sw-preview" style="background:#c5c8cc"></span>CK13F</button>
+                                <button class="color-swatch body-swatch" data-code="CK05F" data-premium="0" data-bar="#111111" title="CK05F"><span class="sw-preview" style="background:#111111"></span>CK05F</button>
+                            </div>
+                            <div class="color-selected-info body-selected-info" id="bodyColorSelectedInfo">
+                                <span data-i18n="config.bodySelected">Shell: </span>
+                                <strong id="selectedBodyColorCode">CK02F</strong>
+                                <span id="selectedBodyColorName">— CK02F</span>
                             </div>
                         </div>
-                        <div class="door-series-block" data-series="texture">
-                            <div class="door-series-label" data-i18n="config.doorTexture">Texture Finish</div>
-                            <div class="color-grid door-texture-grid">
-                                <button class="color-swatch texture-swatch" data-code="DP-W1" data-premium="0" data-bar="#4a2e1e" data-texture="assets/img/colors/dp-walnut.jpg" title="Dark Walnut"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-walnut.jpg')"></span><span class="sw-meta">DP-W1<br><small data-i18n="config.door.walnut">Dark Walnut</small></span></button>
-                                <button class="color-swatch texture-swatch" data-code="DP-W2" data-premium="0" data-bar="#2a2826" data-texture="assets/img/colors/dp-charcoal.jpg" title="Charcoal Ash"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-charcoal.jpg')"></span><span class="sw-meta">DP-W2<br><small data-i18n="config.door.charcoal">Charcoal Ash</small></span></button>
-                                <button class="color-swatch texture-swatch color-active" data-code="DP-W3" data-premium="0" data-bar="#a07848" data-texture="assets/img/colors/dp-oak.jpg" title="Natural Oak"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-oak.jpg')"></span><span class="sw-meta">DP-W3<br><small data-i18n="config.door.oak">Natural Oak</small></span></button>
-                                <button class="color-swatch texture-swatch" data-code="DP-W4" data-premium="0" data-bar="#d4c4a8" data-texture="assets/img/colors/dp-ash.jpg" title="Light Ash"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-ash.jpg')"></span><span class="sw-meta">DP-W4<br><small data-i18n="config.door.ash">Light Ash</small></span></button>
+
+                        <div class="door-series-label door-color-heading" data-i18n="config.doorColor">Door Panel Color</div>
+
+                        <div id="doorSeriesList" class="door-series-list door-series-list-nested">
+                            <div class="door-series-block" data-series="matte">
+                                <div class="door-series-label" data-i18n="config.doorMatte">Solid Color</div>
+                                <div class="color-grid door-panel-grid">
+                                    <button class="color-swatch" data-code="DP-BK" data-premium="0" data-bar="#2c2e31" title="Matte Black"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-black.jpg')"></span>DP-BK<br><small data-i18n="config.door.black">Matte Black</small></button>
+                                    <button class="color-swatch" data-code="DP-WH" data-premium="0" data-bar="#f4f4f2" title="Matte White"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-white.jpg')"></span>DP-WH<br><small data-i18n="config.door.white">Matte White</small></button>
+                                    <button class="color-swatch" data-code="DP-BL" data-premium="0" data-bar="#5f7d86" title="Dusty Blue"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-blue.jpg')"></span>DP-BL<br><small data-i18n="config.door.blue">Dusty Blue</small></button>
+                                    <button class="color-swatch" data-code="DP-GN" data-premium="0" data-bar="#4a5c4a" title="Forest Green"><span class="sw-preview sw-preview-img" style="background-image:url('assets/img/colors/dp-green.jpg')"></span>DP-GN<br><small data-i18n="config.door.green">Forest Green</small></button>
+                                </div>
+                            </div>
+                            <div class="door-series-block" data-series="texture">
+                                <div class="door-series-label" data-i18n="config.doorTexture">Texture Finish</div>
+                                <div class="color-grid door-texture-grid">
+                                    <button class="color-swatch texture-swatch" data-code="DP-W1" data-premium="0" data-bar="#4a2e1e" data-texture="assets/img/colors/dp-walnut.jpg" title="Dark Walnut"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-walnut.jpg')"></span><span class="sw-meta">DP-W1<br><small data-i18n="config.door.walnut">Dark Walnut</small></span></button>
+                                    <button class="color-swatch texture-swatch" data-code="DP-W2" data-premium="0" data-bar="#2a2826" data-texture="assets/img/colors/dp-charcoal.jpg" title="Charcoal Ash"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-charcoal.jpg')"></span><span class="sw-meta">DP-W2<br><small data-i18n="config.door.charcoal">Charcoal Ash</small></span></button>
+                                    <button class="color-swatch texture-swatch color-active" data-code="DP-W3" data-premium="0" data-bar="#a07848" data-texture="assets/img/colors/dp-oak.jpg" title="Natural Oak"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-oak.jpg')"></span><span class="sw-meta">DP-W3<br><small data-i18n="config.door.oak">Natural Oak</small></span></button>
+                                    <button class="color-swatch texture-swatch" data-code="DP-W4" data-premium="0" data-bar="#d4c4a8" data-texture="assets/img/colors/dp-ash.jpg" title="Light Ash"><span class="sw-preview sw-texture-preview" style="background-image:url('assets/img/colors/dp-ash.jpg')"></span><span class="sw-meta">DP-W4<br><small data-i18n="config.door.ash">Light Ash</small></span></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -222,12 +225,12 @@
                         <span id="selectedColorName">— Natural Oak</span>
                     </div>
 
-                    <div class="door-preview-card" id="doorPreviewCard">
-                        <div class="door-preview-label" data-i18n="config.doorPreview">Door Panel Preview</div>
-                        <div class="door-preview-stage">
-                            <img src="assets/img/door-preview.png?t=20260726match1" alt="" id="doorPreviewSource" class="door-preview-hidden" width="1002" height="818" decoding="async">
-                            <img src="assets/img/door-preview-mask.png?t=20260726match1" alt="" id="doorPreviewMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
-                            <canvas id="doorPreviewCanvas" class="door-preview-canvas" width="1002" height="818" aria-label="Door panel color preview"></canvas>
+                    <div class="shell-preview-card color-preview-card" id="shellPreviewCard">
+                        <div class="door-preview-label" data-i18n="config.colorPreview">Color Preview</div>
+                        <div class="shell-preview-stage">
+                            <img src="assets/img/shell-preview.png?t=20260726match1" alt="" id="shellPreviewSource" class="shell-preview-source" width="1002" height="818" decoding="async" data-src-xt="assets/img/shell-preview.png?t=20260726match1" data-src-wm="assets/img/shell-preview-roll.png?t=20260725v1" data-src-mini="assets/img/shell-preview-mini.png?t=20260726v2">
+                            <img src="assets/img/door-preview-mask.png?t=20260726match1" alt="" id="shellDoorMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
+                            <canvas id="shellPreviewCanvas" class="shell-preview-canvas" width="1002" height="818" aria-label="Color preview"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1001,7 +1004,6 @@
                     <h4 data-i18n="footer.quickLinks">Quick Links</h4>
                     <ul>
                         <li><a href="#products" data-i18n="nav.configure">Configure</a></li>
-                        <li><a href="owner-quote.html" data-i18n="nav.quote">Quote</a></li>
                         <li><a href="margin-console.html" data-i18n="nav.margin">Margin</a></li>
                         <li><a href="#cases" data-i18n="nav.projects">Projects</a></li>
                     </ul>
@@ -1047,7 +1049,7 @@
 
     <script src="assets/js/outdoor-quote-data.js?t=20260726v1"></script>
     <script src="assets/js/outdoor-quote.js?t=20260726v1"></script>
-    <script src="assets/js/main.js?t=20260726match1"></script>
+    <script src="assets/js/main.js?t=20260727accFold"></script>
 </body>
 </html>
 

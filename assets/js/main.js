@@ -38,9 +38,12 @@ const i18n = {
     'about.f4b':      { en: 'Design → Produce → Install', cn: '设计 → 生产 → 安装' },
     'config.label':   { en: 'Product Configurator', cn: '产品配置器' },
     'config.title':   { en: 'Build Your <em>Outdoor Kitchen</em>', cn: '打造您的<em>户外厨房</em>' },
-    'config.desc':    { en: 'Select your size, choose your components, add accessories — see the price instantly.', cn: '选择尺寸、搭配组件、添加配件——价格即时可见。' },
+    'config.desc':    { en: 'Style → size → equipment → color — see the price instantly.', cn: '先定款式，再定尺寸，再定设备，最后定颜色——价格即时可见。' },
     'config.openCustom': { en: 'Custom Design', cn: '个性定制' },
-    'config.openMargin': { en: 'Margin Ladder', cn: '利润阶梯' },
+    'config.openMargin': { en: 'Margin Ladder', cn: 'Margin Ladder' },
+    'config.openCost': { en: 'Cost Control', cn: '成本控制' },
+    'config.openOwnerShow': { en: 'Owner View', cn: '业主展示' },
+    'config.langSwitch': { en: 'EN / 中文', cn: '中英切换' },
     'config.openOwnerQuote': { en: 'Owner Quote', cn: '业主报价' },
     'lib.title': { en: 'Product Library', cn: '产品库' },
     'lib.add': { en: 'Add from library', cn: '从产品库添加' },
@@ -53,9 +56,12 @@ const i18n = {
     'lib.fitWarn': { en: 'This item may not fit in the current cabinet cavity ({w} × 900 × 2250 mm). Add anyway?', cn: '该产品尺寸可能超出当前柜体内空（{w} × 900 × 2250 mm）。仍要添加吗？' },
     'lib.cabHint': { en: 'Cabinet cavity ref: {w} × 900 × 2250 mm — check before adding', cn: '柜体内空参考：{w} × 900 × 2250 mm — 添加前请确认能否放下' },
     'config.modeStandard': { en: 'Standard Package', cn: '标准套餐' },
-    'config.step1.title': { en: 'Choose Size & Door Style', cn: '选择尺寸与门型' },
-    'config.step1.desc':  { en: 'All cabinets: 900mm deep × 2250mm high. Select width & door — standard components are listed in this model.', cn: '标准柜体：深900mm × 高2250mm。选择尺寸与门型，本型号标准配置见右侧清单。' },
+    'config.step1.title': { en: 'Style → Size → Equipment → Color', cn: '款式 → 尺寸 → 设备 → 颜色' },
+    'config.step1.desc':  { en: 'Pick style first, then width; equipment is on the right; colors come last.', cn: '先选款式，再选尺寸；右侧选设备，最后选颜色。' },
     'config.doorType': { en: 'Door Type', cn: '门型' },
+    'config.style':    { en: 'Style', cn: '款式' },
+    'config.styleSoon':{ en: 'TBD', cn: '待定' },
+    'config.equipment':{ en: 'Equipment', cn: '设备配置' },
     'config.productView': { en: 'Product View', cn: '产品效果' },
     'config.topFlip':  { en: 'Flip Cover', cn: '翻盖' },
     'config.rolling':  { en: 'Rolling Door', cn: '卷帘门' },
@@ -82,13 +88,16 @@ const i18n = {
     'config.step2.desc':  { en: 'Standard configuration for this size is pre-selected. Adjust as needed.', cn: '该尺寸标准配置已预选，可按需调整。' },
     'config.step3.title': { en: 'Add Accessories', cn: '添加配件' },
     'config.step3.desc':  { en: 'Enhance your outdoor kitchen with optional extras.', cn: '用可选配件升级您的户外厨房。' },
-    'config.step4.title': { en: 'Select Door Colors', cn: '选择门板颜色' },
-    'config.step4.desc':  { en: 'Choose door panel colors — codes appear in your quote.', cn: '选择门板颜色——色号将出现在报价中。' },
-    'config.bodyColor':   { en: 'Shell Color', cn: '柜体颜色' },
-    'config.shellPreview':{ en: 'Shell Preview', cn: '柜体预览' },
+    'config.accExpand':   { en: 'Show more ▾', cn: '展开更多 ▾' },
+    'config.accCollapse': { en: 'Show less ▴', cn: '收起 ▴' },
+    'config.step4.title': { en: 'Select Colors', cn: '选择颜色' },
+    'config.step4.desc':  { en: 'Choose shell and door colors — codes appear in your quote.', cn: '选择柜体与门板颜色——色号将出现在报价中。' },
+    'config.bodyColor':   { en: 'Shell Color', cn: '外框颜色' },
+    'config.shellPreview':{ en: 'Shell Preview', cn: '外框预览' },
     'config.doorPreview': { en: 'Door Panel Preview', cn: '门板预览' },
+    'config.colorPreview':{ en: 'Color Preview', cn: '颜色预览' },
     'config.doorColor':   { en: 'Door Panel Color', cn: '门板颜色' },
-    'config.bodySelected':{ en: 'Shell: ', cn: '柜体：' },
+    'config.bodySelected':{ en: 'Shell: ', cn: '外框：' },
     'config.doorSelected':{ en: 'Door: ', cn: '门板：' },
     'config.doorMatte':    { en: 'Solid Color', cn: '纯色' },
     'config.doorTexture':  { en: 'Texture Finish', cn: '纹理饰面' },
@@ -322,13 +331,16 @@ function applyTranslation() {
         }
     });
 
-    // Update lang toggle button text
-    const langBtn = document.getElementById('langToggle');
-    if (langBtn) {
-        langBtn.textContent = currentLang === 'en' ? 'EN / 中文' : '中文 / EN';
+    // Update lang toggle button(s)
+    document.querySelectorAll('#langToggle, [data-lang-toggle]').forEach((langBtn) => {
+        if (langBtn.hasAttribute('data-i18n') && langBtn.id === 'langToggleBar') {
+            langBtn.textContent = t('config.langSwitch');
+        } else {
+            langBtn.textContent = currentLang === 'en' ? 'EN / 中文' : '中文 / EN';
+        }
         langBtn.dataset.lang = currentLang;
         langBtn.title = currentLang === 'en' ? 'Switch to Chinese' : '切换到英文';
-    }
+    });
 
     // Re-render dynamic content
     renderComponents();
@@ -1021,6 +1033,28 @@ function initStdListToggle() {
     });
 }
 
+function syncAccSectionToggleLabel() {
+    const wrap = document.getElementById('accSection');
+    const btn = document.getElementById('accSectionToggle');
+    if (!wrap || !btn) return;
+    const open = wrap.classList.contains('is-expanded');
+    btn.textContent = open ? '▴' : '▾';
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.title = open ? t('hot.less') : t('hot.more');
+}
+
+function initAccSectionToggle() {
+    const wrap = document.getElementById('accSection');
+    const btn = document.getElementById('accSectionToggle');
+    if (!wrap || !btn || btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => {
+        wrap.classList.toggle('is-expanded');
+        syncAccSectionToggleLabel();
+    });
+    syncAccSectionToggleLabel();
+}
+
 const STD_LAYOUT_KEY = 'dd-std-layout';
 
 function applyStdLayout(layout) {
@@ -1258,6 +1292,34 @@ function libFitLabel(fit) {
     return fit.ok ? t('lib.fitOk') : t('lib.fitNo');
 }
 
+let accListExpanded = false;
+
+function syncAccListCollapse() {
+    const grid = accessoriesGrid;
+    const btn = document.getElementById('accExpandToggle');
+    if (!grid || !btn) return;
+    const count = grid.querySelectorAll('.std-line-card').length;
+    const needToggle = count > 4;
+    grid.classList.toggle('is-collapsed', needToggle && !accListExpanded);
+    btn.hidden = !needToggle;
+    if (!needToggle) {
+        accListExpanded = false;
+        return;
+    }
+    btn.textContent = accListExpanded ? t('config.accCollapse') : t('config.accExpand');
+    btn.setAttribute('aria-expanded', accListExpanded ? 'true' : 'false');
+}
+
+function initAccListToggle() {
+    const btn = document.getElementById('accExpandToggle');
+    if (!btn || btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => {
+        accListExpanded = !accListExpanded;
+        syncAccListCollapse();
+    });
+}
+
 function renderAccessories() {
     if (!accessoriesGrid) return;
     const opts = window.OutdoorQuote
@@ -1313,6 +1375,9 @@ function renderAccessories() {
 
     const addBtn = document.getElementById('openProductLibrary');
     if (addBtn) addBtn.addEventListener('click', () => openProductLibrary());
+
+    initAccListToggle();
+    syncAccListCollapse();
 }
 
 function getAccessoriesTotal() {
@@ -1576,7 +1641,7 @@ function initShellDoorTabs() {
     syncDoorTypeCards();
     tabs.addEventListener('click', (e) => {
         const btn = e.target.closest('.shell-door-tab');
-        if (!btn) return;
+        if (!btn || btn.disabled || btn.classList.contains('is-placeholder') || !btn.dataset.door) return;
         selectDoorType(btn.dataset.door);
     });
 }
@@ -1598,8 +1663,10 @@ function updateAll() {
 // EVENT BINDINGS
 // =============================================
 
-// Language toggle
-document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+// Language toggle (nav + toolbar)
+document.querySelectorAll('#langToggle, [data-lang-toggle]').forEach((btn) => {
+    btn.addEventListener('click', toggleLanguage);
+});
 
 // Size buttons — sticky total appears only after a width is chosen
 sizeBtns.forEach(btn => {
@@ -1699,15 +1766,6 @@ sizeBtns.forEach(btn => {
     window.syncQtyTierUi = syncTierUi;
 })();
 
-// Config mode tabs: 标准套餐（当前页）/ 个性定制 → index.html 空框架
-(function initConfigModeTabs() {
-    const tabs = document.querySelectorAll('#configModeTabs [data-mode]');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.toggle('active', t === tab));
-        });
-    });
-})();
 
 // Shell preview: recolor black cabinet photo to selected shell swatch
 const shellPreview = {
@@ -1877,7 +1935,7 @@ function loadShellPreviewForDoor() {
 
 function initShellPreview() {
     shellPreview.source = document.getElementById('shellPreviewSource');
-    shellPreview.maskImg = document.getElementById('shellDoorMask') || document.getElementById('doorPreviewMask');
+    shellPreview.maskImg = document.getElementById('shellDoorMask');
     shellPreview.canvas = document.getElementById('shellPreviewCanvas');
     if (!shellPreview.source || !shellPreview.canvas) return;
     shellPreview.ctx = shellPreview.canvas.getContext('2d', { willReadFrequently: true });
@@ -1915,44 +1973,15 @@ document.addEventListener('click', function(e) {
     if (nameEl) nameEl.textContent = '— ' + bodyColorState.name;
     syncColorSelectedBar(swatch, 'bodyColorSelectedInfo');
     paintShellPreviewActive();
-    // Keep door preview shell in sync with this selection
-    paintDoorPreviewFromSwatch();
     updateTotal();
 });
 
-// Door preview: recolor masked door panels to selected solid/texture
-const doorPreview = {
-    source: null,
-    maskImg: null,
-    canvas: null,
-    ctx: null,
-    baseData: null,
-    maskData: null,
-    ready: false,
-    textureCache: Object.create(null)
-};
-
-function cacheDoorPreviewBase() {
-    if (!doorPreview.source || !doorPreview.maskImg || !doorPreview.ctx) return false;
-    const img = doorPreview.source;
-    const mask = doorPreview.maskImg;
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
-    if (!w || !h || !mask.naturalWidth) return false;
-    doorPreview.canvas.width = w;
-    doorPreview.canvas.height = h;
-    doorPreview.ctx.drawImage(img, 0, 0, w, h);
-    doorPreview.baseData = doorPreview.ctx.getImageData(0, 0, w, h);
-    doorPreview.ctx.drawImage(mask, 0, 0, w, h);
-    doorPreview.maskData = doorPreview.ctx.getImageData(0, 0, w, h);
-    doorPreview.ctx.putImageData(doorPreview.baseData, 0, 0);
-    doorPreview.ready = true;
-    return true;
-}
+// Texture cache + elev sync (single color preview canvas handles shell + door)
+const doorTextureCache = Object.create(null);
 
 function loadDoorTexture(url) {
     if (!url) return Promise.resolve(null);
-    if (doorPreview.textureCache[url]) return Promise.resolve(doorPreview.textureCache[url]);
+    if (doorTextureCache[url]) return Promise.resolve(doorTextureCache[url]);
     return new Promise((resolve) => {
         const img = new Image();
         img.decoding = 'async';
@@ -1967,80 +1996,12 @@ function loadDoorTexture(url) {
                 h: c.height,
                 data: cx.getImageData(0, 0, c.width, c.height).data
             };
-            doorPreview.textureCache[url] = data;
+            doorTextureCache[url] = data;
             resolve(data);
         };
         img.onerror = () => resolve(null);
         img.src = url;
     });
-}
-
-function getActiveShellHex() {
-    const active = document.querySelector('#bodyColorGrid .body-swatch.color-active');
-    return active?.dataset.bar || parseSwatchColor(active) || '#8f8b84';
-}
-
-function renderDoorPreview(opts) {
-    const hex = opts?.hex || '#2c2e31';
-    const shellHex = opts?.shellHex || getActiveShellHex();
-    const texture = opts?.texture || null;
-    if (!doorPreview.ready && !cacheDoorPreviewBase()) return;
-    const base = doorPreview.baseData;
-    const mask = doorPreview.maskData;
-    if (!base || !mask) return;
-    const { r: tr, g: tg, b: tb } = parseHexColor(hex);
-    const { r: sr, g: sg, b: sb } = parseHexColor(shellHex);
-    const out = new ImageData(new Uint8ClampedArray(base.data), base.width, base.height);
-    const d = out.data;
-    const src = base.data;
-    const m = mask.data;
-    const tw = texture?.w || 0;
-    const th = texture?.h || 0;
-    const td = texture?.data || null;
-    const refLum = 0.48; // ~avg teal luminance
-
-    for (let i = 0, p = 0; i < d.length; i += 4, p++) {
-        const pr = src[i], pg = src[i + 1], pb = src[i + 2], pa = src[i + 3];
-        if (pa < 8) continue;
-
-        // Door panels (masked)
-        if (m[i] >= 128) {
-            const lum = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
-            const shade = Math.min(1.35, Math.max(0.25, lum / refLum));
-            let rr = tr, gg = tg, bb = tb;
-            if (td && tw && th) {
-                const x = p % base.width;
-                const y = (p / base.width) | 0;
-                const tx = ((x * 1.15) | 0) % tw;
-                const ty = ((y * 1.15) | 0) % th;
-                const ti = (ty * tw + tx) * 4;
-                rr = td[ti];
-                gg = td[ti + 1];
-                bb = td[ti + 2];
-            }
-            d[i] = Math.min(255, Math.round(rr * shade));
-            d[i + 1] = Math.min(255, Math.round(gg * shade));
-            d[i + 2] = Math.min(255, Math.round(bb * shade));
-            continue;
-        }
-
-        // Shell / frame: match selected Shell Color (same logic as shell preview card)
-        const maxc = Math.max(pr, pg, pb);
-        const minc = Math.min(pr, pg, pb);
-        if (minc > 235 && maxc - minc < 18) continue; // studio bg
-        if (maxc > 190 && pr > pg && pg > pb + 8 && (pr - pb) > 25) continue; // LED
-        if (maxc > 175 && maxc - minc < 22 && minc > 140) continue; // gas struts only
-        // stainless countertop / silver accents (keep brighter metals)
-        if (maxc > 155 && maxc - minc < 30 && minc > 110) continue;
-        // Remap dark + mid shell (incl. edge glare) to matte shell color
-        if (maxc > 170 || (maxc - minc > 55 && minc > 40)) continue;
-        const lum = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
-        const tint = tintShellRgb(sr, sg, sb, lum);
-        d[i] = tint.r;
-        d[i + 1] = tint.g;
-        d[i + 2] = tint.b;
-    }
-    doorPreview.ctx.putImageData(out, 0, 0);
 }
 
 async function paintDoorPreviewFromSwatch(swatch) {
@@ -2051,31 +2012,12 @@ async function paintDoorPreviewFromSwatch(swatch) {
     const hex = swatch.dataset.bar || parseSwatchColor(swatch) || '#2c2e31';
     const textureUrl = swatch.dataset.texture || '';
     const texture = textureUrl ? await loadDoorTexture(textureUrl) : null;
-    renderDoorPreview({ hex, texture, shellHex: getActiveShellHex() });
     paintElevDoors(hex, texture);
-    if (typeof paintShellPreviewActive === 'function') paintShellPreviewActive();
+    paintShellPreviewActive();
 }
 
 function initDoorPreview() {
-    doorPreview.source = document.getElementById('doorPreviewSource');
-    doorPreview.maskImg = document.getElementById('doorPreviewMask');
-    doorPreview.canvas = document.getElementById('doorPreviewCanvas');
-    if (!doorPreview.source || !doorPreview.maskImg || !doorPreview.canvas) return;
-    doorPreview.ctx = doorPreview.canvas.getContext('2d', { willReadFrequently: true });
-
-    let pending = 2;
-    const tryReady = () => {
-        pending -= 1;
-        if (pending > 0) return;
-        cacheDoorPreviewBase();
-        paintDoorPreviewFromSwatch();
-    };
-
-    if (doorPreview.source.complete && doorPreview.source.naturalWidth) tryReady();
-    else doorPreview.source.addEventListener('load', tryReady, { once: true });
-
-    if (doorPreview.maskImg.complete && doorPreview.maskImg.naturalWidth) tryReady();
-    else doorPreview.maskImg.addEventListener('load', tryReady, { once: true });
+    // Legacy no-op: shell + door colors share #shellPreviewCanvas
 }
 
 // Door panel color selection (delegated across 4 series)
@@ -2317,6 +2259,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initHotCardExpand();
     initStdListToggle();
+    initAccSectionToggle();
     initStdLayoutSwitch();
     initStdRemoveButtons();
     initProductLibrary();

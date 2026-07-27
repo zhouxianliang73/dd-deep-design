@@ -115,8 +115,8 @@
     },
     roundLamp: {
       icon: '💡',
-      en: 'Round Lamp',
-      cn: '圆灯',
+      en: 'Downlight',
+      cn: '筒灯',
       detailEn: '4000K 7W 24V',
       detailCn: '4000K 7W 24V',
       img: 'round-lamp',
@@ -183,7 +183,7 @@
       detailEn: 'Crate + pallet pack',
       detailCn: '木箱+栈板包装',
       img: 'wooden-box',
-      dim: 'by length'
+      dim: '2230 × 2450 × 1000 mm'
     }
   };
 
@@ -258,12 +258,17 @@
     const L = String(nearestLength(length));
     const std = new Set(stdKeys(length, doorType));
     const notRec = new Set((data.notRecommended && data.notRecommended[L]) || []);
+    const blocked = new Set((data.incompatible && data.incompatible[L]) || []);
     return Object.keys(data.items).filter((k) => {
       if (std.has(k)) return false;
       // Shell chosen via door tabs (Standard / Mini), not as add-on
       if (k === 'shedMini' || k === 'shedStd') return false;
       return true;
-    }).map((k) => ({ key: k, notRecommended: notRec.has(k) }));
+    }).map((k) => ({
+      key: k,
+      notRecommended: notRec.has(k) && !blocked.has(k),
+      incompatible: blocked.has(k)
+    }));
   }
 
   function sumKeysListUsd(keys, length, tier) {

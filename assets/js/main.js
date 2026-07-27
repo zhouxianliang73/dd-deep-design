@@ -82,6 +82,7 @@ const i18n = {
     'config.tierPinPrompt': { en: 'Enter admin / approved PIN', cn: '请输入管理员或授权 PIN' },
     'config.tierPinBad': { en: 'Incorrect PIN', cn: 'PIN 不正确' },
     'config.optNotRec': { en: 'Not recommended for this length', cn: '本长度不推荐' },
+    'config.optBlocked': { en: 'Not recommended for this length', cn: '本长度不推荐' },
     'config.total.note': { en: '* Website price = EXW ÷ 0.7 (~30% margin). Shipping quoted separately. FX from master table.', cn: '* 网站价 = EXW÷0.7（约30%毛利）。运费另计。汇率取自总表。' },
     'config.dlSpec':   { en: '↓ Download Spec Sheet', cn: '↓ 下载规格书' },
     'config.step2.title': { en: 'Configure Interior Components', cn: '配置内部组件' },
@@ -255,8 +256,8 @@ const i18n = {
     'hot.tab4':         { en: 'US 3-Piece + Fridge',   cn: '美规三件套+冰箱' },
     'hot.tab5':         { en: 'European 3-Piece + Fridge', cn: '欧洲三件套+冰箱' },
     'hot.cta':          { en: 'Inquire',                cn: '询价' },
-    'hot.more':         { en: 'Show details',           cn: '展开全部' },
-    'hot.less':         { en: 'Show less',              cn: '收起' },
+    'hot.more':         { en: 'Show details',           cn: '查看详情' },
+    'hot.less':         { en: 'Hide details',           cn: '收起详情' },
     'hot.setNote':      { en: '* Prices are EXW China, following the selected qty tier (1-5 / 6-20 / 20+). Complete set prices available upon request.', cn: '* 价格为 EXW 中国离岸价，随顶部数量档（1-5 / 6-20 / 20+）联动。整套价格请询价。' },
     'hot.matBadge1':    { en: '304 Stainless Steel',   cn: '304不锈钢' },
     'hot.matBadge2':    { en: 'KD Flat-pack Shipping', cn: 'KD拆装运输' },
@@ -373,7 +374,7 @@ const PUBLIC_COST_RATIO = (window.OutdoorQuote && OutdoorQuote.costRatio()) || 0
 const HOT_IMG = (sku) => 'assets/images/products/hot-selling/display/sku-' + sku + '.png';
 /** Thumbs from 箱体报价总表 2.0 Color/Picture column */
 const MASTER_IMG = (slug) =>
-    'assets/images/products/from-master/items/' + slug + '.png?t=20260726v5';
+    'assets/images/products/from-master/items/' + slug + '.png?t=20260727socket';
 
 const ELEV_CACHE = '20260726match1';
 
@@ -471,12 +472,35 @@ function resolveCompImage(comp) {
     return itemImage(key);
 }
 
-/** Card price: ¥…；$… from list USD (EXW÷0.7) */
+/** Card price: ¥ left · $ right from list USD (EXW÷0.7) */
 function formatDualPriceFromUsd(listUsd, opts) {
     const prefix = (opts && opts.prefix) || '';
     const usd = Math.round(Number(listUsd) || 0);
     const cny = Math.round(usd * FX_USD_CNY);
-    return prefix + formatCny(cny) + '；' + prefix + formatUsd(usd);
+    return (
+        '<span class="price-cny">' + prefix + formatCny(cny) + '</span>' +
+        '<span class="price-usd">' + prefix + formatUsd(usd) + '</span>'
+    );
+}
+
+/** Footer: ¥ | qty(optional, center) | $ */
+function renderLineFooter(listUsd, opts, qtyHtml) {
+    const priceHtml = formatDualPriceFromUsd(listUsd, opts);
+    if (qtyHtml) {
+        return (
+            '<div class="std-line-footer has-qty">' +
+                priceHtml.replace(
+                    '</span><span class="price-usd">',
+                    '</span>' + qtyHtml + '<span class="price-usd">'
+                ) +
+            '</div>'
+        );
+    }
+    return (
+        '<div class="std-line-footer">' +
+            '<span class="std-line-price">' + priceHtml + '</span>' +
+        '</div>'
+    );
 }
 
 function formatDualPrice(cny, opts) {
@@ -490,8 +514,7 @@ function formatCompPrice(compOrKey) {
     const usd = window.OutdoorQuote
         ? OutdoorQuote.listUsd(key, state.width, state.qtyTier)
         : 0;
-    return '<span class="std-line-price is-incl">' + t('comp.includedShort') +
-        ' <small>' + formatDualPriceFromUsd(usd) + '</small></span>';
+    return formatDualPriceFromUsd(usd);
 }
 
 function renderThumb(src, icon, alt) {
@@ -543,15 +566,54 @@ function activeStdKeys() {
     return activeStdConfigs().map((c) => c.key);
 }
 
+/** Keys that support per-line quantity steppers */
+const ITEM_QTY_KEYS = new Set(['roundLamp', 'shelf']);
+const ITEM_QTY_MAX = 24;
+
+function supportsItemQty(key) {
+    return ITEM_QTY_KEYS.has(key);
+}
+
+function getItemQty(key) {
+    if (!supportsItemQty(key)) return 1;
+    const q = Number(state.itemQty && state.itemQty[key]);
+    if (!Number.isFinite(q) || q < 1) return 1;
+    return Math.min(ITEM_QTY_MAX, Math.floor(q));
+}
+
+function setItemQty(key, next) {
+    if (!supportsItemQty(key)) return getItemQty(key);
+    if (!state.itemQty) state.itemQty = {};
+    state.itemQty[key] = Math.max(1, Math.min(ITEM_QTY_MAX, Math.floor(Number(next) || 1)));
+    return state.itemQty[key];
+}
+
+function renderItemQtyControls(key, opts) {
+    if (!supportsItemQty(key)) return '';
+    const qty = getItemQty(key);
+    const disabled = !!(opts && opts.disabled);
+    return (
+        '<div class="std-line-qty is-enabled' + (disabled ? ' is-disabled' : '') + '" data-qty-key="' + key + '">' +
+            '<button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity" ' +
+                (disabled || qty <= 1 ? 'disabled' : '') + '>−</button>' +
+            '<span class="qty-val">' + qty + '</span>' +
+            '<button type="button" class="qty-btn qty-plus" aria-label="Increase quantity" ' +
+                (disabled || qty >= ITEM_QTY_MAX ? 'disabled' : '') + '>+</button>' +
+        '</div>'
+    );
+}
+
 /** Standard package line: left image + compact text + removable X */
 function renderStdLineCard(comp) {
     const key = comp.key;
     const name = t(comp.nameKey) || comp.defaultEn;
     const detail = t(comp.detailKey) || comp.defaultDetail;
     const dim = resolveItemDim(key);
-    const listUsd = window.OutdoorQuote
+    const unitUsd = window.OutdoorQuote
         ? OutdoorQuote.listUsd(key, state.width, state.qtyTier)
         : 0;
+    const qty = getItemQty(key);
+    const listUsd = unitUsd * qty;
     const src = resolveCompImage(comp);
     const locked = key === 'shedStd' || key === 'shedMini' || key === 'woodenBox';
     const removeBtn = !locked
@@ -569,26 +631,16 @@ function renderStdLineCard(comp) {
           '<span class="item-ph-icon" aria-hidden="true">' + (comp.icon || '') + '</span></div>'
         : '<div class="std-line-media is-placeholder"><span class="item-ph-icon" aria-hidden="true">' +
           (comp.icon || '') + '</span></div>';
+    const qtyHtml = renderItemQtyControls(key);
 
     return (
         '<div class="std-line-card" data-comp-key="' + key + '">' +
+            removeBtn +
             '<div class="std-line-media-wrap">' + media + '</div>' +
             '<div class="std-line-body">' +
-                '<div class="std-line-row std-line-row-title">' +
-                    '<strong class="std-line-name">' + name + '</strong>' +
-                    '<span class="std-line-title-actions">' +
-                        formatCompPrice(comp) +
-                        '<span class="std-line-qty">×1</span>' +
-                        removeBtn +
-                    '</span>' +
-                '</div>' +
-                '<div class="std-line-row std-line-row-spec">' +
-                    '<span class="std-line-spec-text">' + dim + '</span>' +
-                '</div>' +
-                '<div class="std-line-row std-line-row-params">' +
-                    '<span class="std-line-params-text">' + detail +
-                    ' · ' + formatDualPriceFromUsd(listUsd) + '</span>' +
-                '</div>' +
+                '<strong class="std-line-name">' + name + (qty > 1 ? ' ×' + qty : '') + '</strong>' +
+                '<div class="std-line-details-panel">' + dim + (detail ? ' · ' + detail : '') + '</div>' +
+                renderLineFooter(listUsd, null, qtyHtml) +
             '</div>' +
         '</div>'
     );
@@ -612,6 +664,8 @@ let state = {
     qtyTier: '1-5',
     accessories: {},
     extraItems: [],
+    /** Per-item quantity (e.g. roundLamp / 筒灯) */
+    itemQty: {},
     /** Per-width removed standard item keys: { 2200: Set(['rangeHood', ...]) } */
     removedStd: {}
 };
@@ -656,10 +710,7 @@ function nearestStdWidth(w) {
 
 function getModelName() {
     const w = nearestStdWidth(state.width);
-    const base =
-        state.doorType === 'wm' ? 'TH-WM' :
-        state.doorType === 'mini' ? 'TH-MN' :
-        'TH-XT';
+    const base = state.doorType === 'wm' ? 'TH-WM' : 'TH-XT';
     let seriesNum = '001';
     if (w === 3200) seriesNum = '002';
     else if (w === 3500) seriesNum = '003';
@@ -670,27 +721,23 @@ function getModelName() {
 
 /** Standard package list CNY (website = EXW÷0.7) */
 function getBasePrice() {
-    if (!window.OutdoorQuote) return 0;
-    const usd = OutdoorQuote.sumKeysListUsd(activeStdKeys(), state.width, state.qtyTier);
-    return Math.round(usd * FX_USD_CNY);
+    return Math.round(getBaseListUsd() * FX_USD_CNY);
 }
 
 function getBaseListUsd() {
     if (!window.OutdoorQuote) return 0;
-    return OutdoorQuote.sumKeysListUsd(activeStdKeys(), state.width, state.qtyTier);
+    return activeStdKeys().reduce((sum, key) => {
+        return sum + OutdoorQuote.listUsd(key, state.width, state.qtyTier) * getItemQty(key);
+    }, 0);
 }
 
 function getElevationSrc(modelW) {
     const w = modelW || nearestStdWidth(state.width);
-    if (state.doorType === 'mini') {
-        return 'assets/images/products/suoer/mini-' + w + '.png?t=' + ELEV_CACHE;
-    }
     return 'assets/images/products/suoer/' + w + '.png?t=' + ELEV_CACHE;
 }
 
 function getElevationMaskSrc(modelW) {
     const w = modelW || nearestStdWidth(state.width);
-    if (state.doorType === 'mini') return '';
     return 'assets/images/products/suoer/' + w + '-door-mask.png?t=' + ELEV_CACHE;
 }
 
@@ -832,10 +879,8 @@ function syncHotCardPrices() {
         const usd = Math.round((window.OutdoorQuote ? OutdoorQuote.exwToList(base) : base / PUBLIC_COST_RATIO));
         const cny = Math.round(usd * FX_USD_CNY);
         el.innerHTML =
-            formatCny(cny) +
-            '<span class="hot-card-price-sep">；</span>' +
-            formatUsd(usd) +
-            ' <small>List</small>';
+            '<span class="price-cny">' + formatCny(cny) + '</span>' +
+            '<span class="price-usd">' + formatUsd(usd) + '</span>';
     });
 }
 
@@ -855,7 +900,7 @@ function updatePreview() {
     if (elevCanvas) {
         elevCanvas.setAttribute(
             'aria-label',
-            (state.doorType === 'mini' ? 'Mini ' : 'Package ') + outerW + ' / ' + modelW
+            'Package ' + outerW + ' / ' + modelW
         );
         const preview = document.getElementById('elevationScroll')?.closest('.elevation-preview');
         if (preview) preview.classList.remove('is-scrolled');
@@ -1012,6 +1057,44 @@ function initStdRemoveButtons() {
     });
 }
 
+function initItemQtyControls() {
+    if (document.body.dataset.itemQtyBound) return;
+    document.body.dataset.itemQtyBound = '1';
+    document.body.addEventListener('click', (e) => {
+        const btn = e.target.closest('.qty-btn');
+        if (!btn || btn.disabled) return;
+        const wrap = btn.closest('[data-qty-key]');
+        const key = wrap && wrap.getAttribute('data-qty-key');
+        if (!key || !supportsItemQty(key)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const cur = getItemQty(key);
+        if (btn.classList.contains('qty-plus')) setItemQty(key, cur + 1);
+        else setItemQty(key, cur - 1);
+
+        const inStd = !!document.querySelector('#previewSpecsList [data-comp-key="' + key + '"]');
+        const inAcc = !!document.querySelector('#accessoriesGrid .acc-check[data-accessory="' + key + '"]');
+        if (inStd) renderStdConfig();
+        if (inAcc) renderAccessories();
+        updateTotal();
+    });
+}
+
+function initCatalogDetailsToggle() {
+    if (document.body.dataset.catalogDetailsBound) return;
+    document.body.dataset.catalogDetailsBound = '1';
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.std-line-details');
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const card = btn.closest('.std-line-card');
+        if (!card) return;
+        const open = card.classList.toggle('is-details-open');
+        btn.textContent = open ? t('hot.less') : t('hot.more');
+    });
+}
+
 function syncStdListToggleLabel() {
     const wrap = document.getElementById('detailSpecs');
     const btn = document.getElementById('stdListToggle');
@@ -1059,11 +1142,16 @@ const STD_LAYOUT_KEY = 'dd-std-layout';
 
 function applyStdLayout(layout) {
     const list = document.getElementById('previewSpecsList');
+    const acc = document.getElementById('accessoriesGrid');
     const switcher = document.querySelector('#detailSpecs .std-layout-switch');
     if (!list || !switcher) return;
     const mode = (layout === 'grid' || layout === 'large') ? layout : 'list';
     list.classList.toggle('is-grid', mode === 'grid');
     list.classList.toggle('is-large', mode === 'large');
+    if (acc) {
+        acc.classList.toggle('is-grid', mode === 'grid');
+        acc.classList.toggle('is-large', mode === 'large');
+    }
     switcher.querySelectorAll('.std-layout-btn').forEach(btn => {
         btn.classList.toggle('is-active', btn.dataset.layout === mode);
     });
@@ -1187,35 +1275,41 @@ function renderAccLineCard(item) {
     const name = t('acc.' + key) || m.cn || m.en || key;
     const detail = t('acc.' + key + '.detail') || (currentLang === 'cn' ? m.detailCn : m.detailEn) || '';
     const dim = resolveItemDim(key);
-    const listUsd = accessoryListUsd(key);
+    const unitUsd = accessoryListUsd(key);
+    const qty = getItemQty(key);
+    const listUsd = unitUsd * qty;
     const price = Math.round(listUsd * FX_USD_CNY);
     const src = itemImage(key);
     const icon = m.icon || '➕';
-    const warn = item.notRecommended
-        ? '<span class="acc-warn">' + t('config.optNotRec') + '</span>'
+    const fit = checkFitsCabinet(dim);
+    const blocked = !!(item.incompatible || (!fit.ok && !fit.unknown));
+    const caution = !blocked && !!item.notRecommended;
+    const warn = (blocked || caution)
+        ? '<span class="acc-warn">' + t(blocked ? 'config.optBlocked' : 'config.optNotRec') + '</span>'
         : '';
     const media = src
         ? '<div class="std-line-media"><img src="' + src + '" alt="' + name + '" loading="lazy" onerror="this.parentElement.classList.add(\'is-placeholder\');this.remove();"><span class="item-ph-icon" aria-hidden="true">' + icon + '</span></div>'
         : '<div class="std-line-media is-placeholder"><span class="item-ph-icon" aria-hidden="true">' + icon + '</span></div>';
-    const checked = item.checked ? 'is-checked' : '';
-    const notRecClass = item.notRecommended ? ' is-not-rec' : '';
+    const stateClass = blocked ? ' is-disabled' : (caution ? ' is-not-rec' : '');
+    const checked = !blocked && item.checked ? 'is-checked' : '';
+    const detailHtml =
+        '<div class="std-line-details-panel">' +
+            (dim ? '<div class="std-line-dim">' + dim + '</div>' : '') +
+            (detail ? '<div class="std-line-desc">• ' + detail + '</div>' : '') +
+            warn +
+        '</div>';
+    const qtyHtml = renderItemQtyControls(key, { disabled: blocked || !item.checked });
 
     return (
-        '<label class="std-line-card acc-line-card ' + checked + notRecClass + '">' +
-            '<input type="checkbox" class="acc-check" data-accessory="' + key + '" data-price="' + price + '" ' + (item.checked ? 'checked' : '') + '>' +
+        '<label class="std-line-card acc-line-card ' + checked + stateClass + '"' +
+            (blocked ? ' aria-disabled="true"' : '') + '>' +
+            '<input type="checkbox" class="acc-check" data-accessory="' + key + '" data-price="' + price + '" ' +
+                (checked ? 'checked' : '') + (blocked ? ' disabled' : '') + '>' +
             '<div class="std-line-media-wrap">' + media + '</div>' +
             '<div class="std-line-body">' +
-                '<div class="std-line-row std-line-row-title">' +
-                    '<strong class="std-line-name">' + name + '</strong>' +
-                    '<span class="std-line-price">' + formatDualPriceFromUsd(listUsd, { prefix: '+' }) + '</span>' +
-                '</div>' +
-                '<div class="std-line-row std-line-row-spec">' +
-                    '<span class="std-line-spec-text">' + dim + '</span>' +
-                    '<span class="std-line-qty">×1</span>' +
-                '</div>' +
-                '<div class="std-line-row std-line-row-params">' +
-                    '<span class="std-line-params-text">' + detail + warn + '</span>' +
-                '</div>' +
+                '<strong class="std-line-name">' + name + (checked && qty > 1 ? ' ×' + qty : '') + '</strong>' +
+                detailHtml +
+                renderLineFooter(listUsd, { prefix: '+' }, qtyHtml) +
             '</div>' +
         '</label>'
     );
@@ -1228,15 +1322,13 @@ function renderExtraItemCard(item) {
         : '<div class="std-line-media is-placeholder"><span class="item-ph-icon" aria-hidden="true">' + item.icon + '</span></div>';
     return (
         '<div class="std-line-card acc-line-card is-checked" data-extra-id="' + item.id + '">' +
+            '<button type="button" class="std-line-remove acc-remove" data-remove-extra="' + item.id + '" aria-label="Remove">×</button>' +
             '<div class="std-line-media-wrap">' + media + '</div>' +
             '<div class="std-line-body">' +
-                '<div class="std-line-row std-line-row-title">' +
-                    '<strong class="std-line-name">' + name + '</strong>' +
+                '<strong class="std-line-name">' + name + '</strong>' +
+                '<div class="std-line-details-panel">' + item.dim + '</div>' +
+                '<div class="std-line-footer">' +
                     '<span class="std-line-price">' + formatDualPrice(item.priceCny, { prefix: '+' }) + '</span>' +
-                '</div>' +
-                '<div class="std-line-row std-line-row-spec">' +
-                    '<span class="std-line-spec-text">' + item.dim + '</span>' +
-                    '<button type="button" class="acc-remove" data-remove-extra="' + item.id + '" aria-label="Remove">×</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
@@ -1248,12 +1340,8 @@ function renderAddCard() {
         '<button type="button" class="std-line-card std-add-card acc-add-card" id="openProductLibrary">' +
             '<div class="std-line-media-wrap"><div class="std-line-media is-placeholder std-add-media"><span class="item-ph-icon">＋</span></div></div>' +
             '<div class="std-line-body">' +
-                '<div class="std-line-row std-line-row-title">' +
-                    '<strong class="std-line-name" data-i18n-keep>' + t('lib.add') + '</strong>' +
-                '</div>' +
-                '<div class="std-line-row std-line-row-spec">' +
-                    '<span class="std-line-spec-text">' + t('lib.addHint') + '</span>' +
-                '</div>' +
+                '<strong class="std-line-name" data-i18n-keep>' + t('lib.add') + '</strong>' +
+                '<div class="std-line-details-panel" style="display:block">' + t('lib.addHint') + '</div>' +
             '</div>' +
         '</button>'
     );
@@ -1330,12 +1418,18 @@ function renderAccessories() {
         const active = new Set(activeStdKeys());
         const L = String(nearestStdWidth(state.width));
         const nrec = (window.OUTDOOR_QUOTE && window.OUTDOOR_QUOTE.notRecommended) || {};
+        const blockedMap = (window.OUTDOOR_QUOTE && window.OUTDOOR_QUOTE.incompatible) || {};
         const notRec = new Set(nrec[L] || []);
+        const blocked = new Set(blockedMap[L] || []);
         OutdoorQuote.stdKeys(state.width, state.doorType).forEach((k) => {
             if (active.has(k)) return;
             if (k === 'shedStd' || k === 'shedMini' || k === 'woodenBox') return;
             if (!opts.some((o) => o.key === k)) {
-                opts.push({ key: k, notRecommended: notRec.has(k) });
+                opts.push({
+                    key: k,
+                    notRecommended: notRec.has(k) && !blocked.has(k),
+                    incompatible: blocked.has(k)
+                });
             }
         });
     }
@@ -1344,11 +1438,18 @@ function renderAccessories() {
         if (!allowed.has(k)) state.accessories[k] = false;
     });
 
-    const accData = opts.map((o) => ({
-        key: o.key,
-        notRecommended: o.notRecommended,
-        checked: !!state.accessories[o.key]
-    }));
+    const accData = opts.map((o) => {
+        const dim = resolveItemDim(o.key);
+        const fit = checkFitsCabinet(dim);
+        const incompatible = !!(o.incompatible || (!fit.ok && !fit.unknown));
+        if (incompatible && state.accessories[o.key]) state.accessories[o.key] = false;
+        return {
+            key: o.key,
+            notRecommended: o.notRecommended,
+            incompatible,
+            checked: !incompatible && !!state.accessories[o.key]
+        };
+    });
 
     let html = accData.map(renderAccLineCard).join('');
     html += (state.extraItems || []).map(renderExtraItemCard).join('');
@@ -1357,8 +1458,14 @@ function renderAccessories() {
 
     accessoriesGrid.querySelectorAll('.acc-check').forEach(cb => {
         cb.addEventListener('change', function() {
-            state.accessories[this.dataset.accessory] = this.checked;
-            this.closest('.acc-line-card')?.classList.toggle('is-checked', this.checked);
+            const key = this.dataset.accessory;
+            state.accessories[key] = this.checked;
+            if (supportsItemQty(key)) {
+                if (this.checked) setItemQty(key, Math.max(1, getItemQty(key)));
+                renderAccessories();
+            } else {
+                this.closest('.acc-line-card')?.classList.toggle('is-checked', this.checked);
+            }
             updateTotal();
         });
     });
@@ -1383,11 +1490,11 @@ function renderAccessories() {
 function getAccessoriesTotal() {
     let total = 0;
     for (const [key, checked] of Object.entries(state.accessories)) {
-        if (checked) total += accessoryPriceCny(key);
+        if (checked) total += accessoryPriceCny(key) * getItemQty(key);
     }
     (state.extraItems || []).forEach(item => {
         if (item.itemKey && window.OutdoorQuote) {
-            total += accessoryPriceCny(item.itemKey);
+            total += accessoryPriceCny(item.itemKey) * getItemQty(item.itemKey);
         } else {
             total += item.priceCny || 0;
         }
@@ -1398,11 +1505,11 @@ function getAccessoriesTotal() {
 function getAccessoriesListUsd() {
     let total = 0;
     for (const [key, checked] of Object.entries(state.accessories)) {
-        if (checked) total += accessoryListUsd(key);
+        if (checked) total += accessoryListUsd(key) * getItemQty(key);
     }
     (state.extraItems || []).forEach(item => {
         if (item.itemKey && window.OutdoorQuote) {
-            total += accessoryListUsd(item.itemKey);
+            total += accessoryListUsd(item.itemKey) * getItemQty(item.itemKey);
         } else {
             total += (item.priceCny || 0) / FX_USD_CNY;
         }
@@ -1461,19 +1568,16 @@ function renderProductLibrary() {
                     (p.img ? '<img src="' + p.img + '" alt="' + name + '" loading="lazy">' : '') +
                     '<span class="item-ph-icon" aria-hidden="true">' + p.icon + '</span></div></div>' +
                 '<div class="std-line-body">' +
-                    '<div class="std-line-row std-line-row-title">' +
-                        '<strong class="std-line-name">' + name + '</strong>' +
-                        '<span class="std-line-price">' + formatDualPrice(p.priceCny) + '</span>' +
+                    '<strong class="std-line-name">' + name + '</strong>' +
+                    '<div class="std-line-details-panel">' + p.dim + ' · ' + p.sku +
+                        (fitText ? '<br><span class="lib-fit-badge ' + fitClass + '">' + fitText + '</span>' : '') +
                     '</div>' +
-                    '<div class="std-line-row std-line-row-spec">' +
-                        '<span class="std-line-spec-text">' + p.dim + ' · ' + p.sku + '</span>' +
-                        '<button type="button" class="lib-add-btn" data-add-lib="' + p.id + '" ' + (already ? 'disabled' : '') + '>' +
+                    '<div class="std-line-footer">' +
+                        '<span class="std-line-price">' + formatDualPrice(p.priceCny) + '</span>' +
+                        '<button type="button" class="std-line-cta lib-add-btn" data-add-lib="' + p.id + '" ' + (already ? 'disabled' : '') + '>' +
                             (already ? t('lib.added') : t('lib.addBtn')) +
                         '</button>' +
                     '</div>' +
-                    (fitText
-                        ? '<div class="std-line-row"><span class="lib-fit-badge ' + fitClass + '">' + fitText + '</span></div>'
-                        : '') +
                 '</div>' +
             '</div>'
         );
@@ -1559,9 +1663,7 @@ function updateTotal() {
     const stickyFob = document.getElementById('stickyFob');
     if (stickyModel) stickyModel.textContent = model;
     if (stickyDims) {
-        stickyDims.textContent = state.doorType === 'mini'
-            ? state.width + '*800*1450'
-            : state.width + '*900*2200';
+        stickyDims.textContent = state.width + '*900*2200';
     }
     if (stickyFx) stickyFx.textContent = String(FX_USD_CNY);
     if (stickyCny) stickyCny.textContent = formatCny(total);
@@ -1627,7 +1729,7 @@ function syncDoorTypeCards() {
 }
 
 function selectDoorType(value) {
-    if (!value || value === state.doorType) return;
+    if (!value || value === 'mini' || value === state.doorType) return;
     state.doorType = value;
     syncDoorTypeCards();
     if (typeof loadShellPreviewForDoor === 'function') loadShellPreviewForDoor();
@@ -1638,6 +1740,7 @@ function initShellDoorTabs() {
     const tabs = document.getElementById('shellDoorTabs');
     if (!tabs || tabs.dataset.bound) return;
     tabs.dataset.bound = '1';
+    if (state.doorType === 'mini') state.doorType = 'xt';
     syncDoorTypeCards();
     tabs.addEventListener('click', (e) => {
         const btn = e.target.closest('.shell-door-tab');
@@ -1648,9 +1751,6 @@ function initShellDoorTabs() {
 
 function updateAll() {
     updatePreview();
-    if (state.doorType === 'mini' && typeof loadShellPreviewForDoor === 'function') {
-        loadShellPreviewForDoor();
-    }
     renderComponents();
     renderAccessories();
     updateTotal();
@@ -1891,14 +1991,6 @@ function renderShellPreview(hex, doorHex, doorTexture) {
 }
 
 async function paintShellPreviewActive() {
-    // Mini uses a full product render — show as-is (no shell recolor)
-    if (state.doorType === 'mini') {
-        if (!shellPreview.ready && !cacheShellPreviewBase()) return;
-        if (shellPreview.baseData) {
-            shellPreview.ctx.putImageData(shellPreview.baseData, 0, 0);
-        }
-        return;
-    }
     const active = document.querySelector('#bodyColorGrid .body-swatch.color-active');
     const hex = (active && (active.dataset.bar || parseSwatchColor(active))) || '#8f8b84';
     const doorSwatch = document.querySelector('#doorSeriesList .color-swatch.color-active');
@@ -1908,16 +2000,13 @@ async function paintShellPreviewActive() {
     renderShellPreview(hex, doorHex, texture);
 }
 
-/** Switch flip-cover / rolling-door / mini base photo, then re-tint */
+/** Switch flip-cover / rolling-door base photo, then re-tint */
 function loadShellPreviewForDoor() {
     const srcEl = shellPreview.source || document.getElementById('shellPreviewSource');
     if (!srcEl) return;
     let next = srcEl.dataset.srcXt || 'assets/img/shell-preview.png';
     if (state.doorType === 'wm') {
         next = srcEl.dataset.srcWm || 'assets/img/shell-preview-roll.png';
-    } else if (state.doorType === 'mini') {
-        const w = nearestStdWidth(state.width);
-        next = 'assets/images/products/suoer/mini-' + w + '.png?t=' + ELEV_CACHE;
     }
     shellPreview.ready = false;
     shellPreview.baseData = null;
@@ -2170,11 +2259,15 @@ function buildSummaryString() {
                 accItems.push(label);
             }
         });
-        const stdNames = activeStdConfigs().map((c) => t(c.nameKey) || c.defaultEn);
+        const stdNames = activeStdConfigs().map((c) => {
+            const label = t(c.nameKey) || c.defaultEn;
+            const q = getItemQty(c.key);
+            return q > 1 ? label + ' ×' + q : label;
+        });
 
         const tierKey = { '1-5': 'config.tier15', '6-20': 'config.tier620', '20+': 'config.tier20p' }[state.qtyTier];
         const tierLabel = tierKey ? t(tierKey) : state.qtyTier;
-        const dims = state.doorType === 'mini' ? `${width} × 800 × 1450 mm` : `${width} × 900 × 2200 mm`;
+        const dims = `${width} × 900 × 2200 mm`;
         const usdTotal = document.getElementById('totalFinalUsd')?.textContent || '';
         const lines = currentLang === 'en'
             ? [`Model: ${model}`, `Size: ${dims}`, `List price (EXW÷0.7) · ${tierLabel}`, `Package: ${stdNames.join(', ')}`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, `Options: ${accItems.length ? accItems.join(', ') : 'none'}`, `Estimated Total: ${totalPrice} / ${usdTotal}`]
@@ -2200,38 +2293,10 @@ function updateHotCardToggleLabels() {
 }
 
 function initHotCardExpand() {
-    document.querySelectorAll('.hot-card').forEach(card => {
-        if (card.classList.contains('hot-card-remark')) return;
-        const body = card.querySelector('.hot-card-body');
-        if (!body || body.querySelector('.hot-card-toggle')) return;
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'hot-card-toggle';
-        btn.textContent = hotToggleLabel(false);
-
-        const footer = body.querySelector('.hot-card-footer');
-        if (footer) body.insertBefore(btn, footer);
-        else body.appendChild(btn);
-
-        const toggle = (e) => {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            const open = card.classList.toggle('is-expanded');
-            btn.textContent = hotToggleLabel(open);
-            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        };
-
-        btn.setAttribute('aria-expanded', 'false');
-        btn.addEventListener('click', toggle);
-
-        // Tap card (not inquire) to expand/collapse on mobile
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('.hot-card-btn') || e.target.closest('.hot-card-toggle')) return;
-            toggle(e);
-        });
+    // Details always visible — no expand toggle
+    document.querySelectorAll('.hot-card-toggle').forEach((btn) => btn.remove());
+    document.querySelectorAll('.hot-card').forEach((card) => {
+        card.classList.add('is-expanded');
     });
 }
 
@@ -2262,6 +2327,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initAccSectionToggle();
     initStdLayoutSwitch();
     initStdRemoveButtons();
+    initItemQtyControls();
+    initCatalogDetailsToggle();
     initProductLibrary();
     initElevationPan();
     initQuoteSticky();

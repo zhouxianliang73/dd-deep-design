@@ -77,8 +77,15 @@ window.OUTDOOR_QUOTE = {
   "notRecommended": {
     "2200": [
       "kamado",
-      "kegerator",
       "tv"
+    ],
+    "2900": [],
+    "3200": [],
+    "3500": []
+  },
+  "incompatible": {
+    "2200": [
+      "kegerator"
     ],
     "2900": [
       "kegerator"
@@ -603,7 +610,7 @@ window.OUTDOOR_QUOTE = {
     "woodenBox": {
       "row": 25,
       "name": "Wooden Box",
-      "dim": "木箱+栈板；费用随长度阶梯 / Wooden crate + pallet; cost steps by length",
+      "dim": "2230 × 2450 × 1000 mm",
       "exw": {
         "2200": {
           "1-5": 449.75,

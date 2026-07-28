@@ -7,6 +7,9 @@
 // =============================================
 const i18n = {
     'nav.about':      { en: 'About',          cn: '关于我们' },
+    'tab.pick':       { en: 'Select',         cn: '选品' },
+    'tab.projects':   { en: 'Projects',       cn: '项目' },
+    'tab.company':    { en: 'Company',        cn: '公司介绍' },
     'nav.brand':      { en: 'Brand',          cn: '品牌' },
     'nav.configure':  { en: 'Configure',       cn: '配置方案' },
     'nav.quote':      { en: 'Quote',           cn: '业主报价' },
@@ -322,6 +325,9 @@ const i18n = {
 (function applyFrenchI18n() {
     const FR = {
         'nav.about': 'À propos',
+        'tab.pick': 'Sélection',
+        'tab.projects': 'Projets',
+        'tab.company': 'Entreprise',
         'nav.brand': 'Marque',
         'nav.configure': 'Configurer',
         'nav.quote': 'Devis',
@@ -3004,6 +3010,51 @@ function consumeCustomerPickReturnHash() {
     }
 }
 
+function initH5Tabbar() {
+    const bar = document.getElementById('h5Tabbar');
+    if (!bar) return;
+    const tabs = Array.from(bar.querySelectorAll('.h5-tab'));
+    const targets = tabs
+        .map((tab) => {
+            const id = tab.getAttribute('data-tab-target');
+            const el = id ? document.getElementById(id) : null;
+            return el ? { tab, el } : null;
+        })
+        .filter(Boolean);
+
+    function setActive(id) {
+        tabs.forEach((tab) => {
+            tab.classList.toggle('is-active', tab.getAttribute('data-tab-target') === id);
+        });
+    }
+
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', (e) => {
+            const id = tab.getAttribute('data-tab-target');
+            const el = id && document.getElementById(id);
+            if (!el) return;
+            e.preventDefault();
+            setActive(id);
+            const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 56;
+            const top = el.getBoundingClientRect().top + window.scrollY - navH - 8;
+            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+            history.replaceState(null, '', '#' + id);
+        });
+    });
+
+    if (!('IntersectionObserver' in window) || !targets.length) return;
+    const io = new IntersectionObserver(
+        (entries) => {
+            const visible = entries
+                .filter((en) => en.isIntersecting)
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (visible && visible.target && visible.target.id) setActive(visible.target.id);
+        },
+        { rootMargin: '-35% 0px -45% 0px', threshold: [0.08, 0.2, 0.4] }
+    );
+    targets.forEach(({ el }) => io.observe(el));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     applyChannelChrome();
     if (typeof window.syncQtyTiersUi === 'function') window.syncQtyTiersUi();
@@ -3045,4 +3096,5 @@ document.addEventListener('DOMContentLoaded', function() {
     consumeCustomerPickReturnHash();
     updateTotal();
     syncHotCardPrices();
+    initH5Tabbar();
 });

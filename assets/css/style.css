@@ -1973,16 +1973,20 @@
         padding: 2px 0 0;
     }
 
-    .config-meta-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
-    }
+  .config-meta-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
 
-    .lang-text {
-        justify-content: center;
-        font-size: 0.8rem;
-    }
+  .config-head-row {
+    margin-bottom: 2px;
+  }
+
+  .lang-text {
+    justify-content: flex-end;
+    font-size: 0.9rem;
+  }
 
     /* Configurator shell */
     .configurator { max-width: none; }

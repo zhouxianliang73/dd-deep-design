@@ -62,14 +62,28 @@ body.quote-channel-mp .section.products .section-desc {
   margin-right: auto;
 }
 
+.config-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto 4px;
+}
+
+.config-head-row .section-label {
+  margin-bottom: 0;
+}
+
 .lang-text {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 2px 0;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #6b7280;
+  gap: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.02em;
 }
 
 .lang-text .lang-opt {
@@ -77,10 +91,12 @@ body.quote-channel-mp .section.products .section-desc {
   background: transparent;
   color: inherit;
   font: inherit;
-  font-weight: 600;
-  padding: 4px 6px;
+  font-weight: 700;
+  padding: 2px 5px;
   cursor: pointer;
   border-radius: 4px;
+  min-width: 1.4em;
+  text-align: center;
 }
 
 .lang-text .lang-opt.is-active {
@@ -92,7 +108,7 @@ body.quote-channel-mp .section.products .section-desc {
 
 .lang-text .lang-sep {
   color: #d1d5db;
-  padding: 0 2px;
+  padding: 0 1px;
   user-select: none;
 }
 
@@ -101,11 +117,12 @@ body.quote-channel-mp .section.products .section-desc {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin: 0;
+  margin: 0 auto 10px;
   padding: 4px 0;
   background: transparent;
   border: 0;
   border-radius: 0;
+  max-width: 720px;
 }
 
 .margin-tier-label {
@@ -164,6 +181,14 @@ body.quote-channel-mp .section.products .section-desc {
   body.quote-channel-internal .channel-banner,
   body.quote-channel-mp .channel-banner {
     display: none;
+  }
+
+  .config-head-row {
+    margin-bottom: 2px;
+  }
+
+  .margin-tier-bar {
+    margin-bottom: 8px;
   }
 }
 

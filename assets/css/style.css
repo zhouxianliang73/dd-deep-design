@@ -402,7 +402,12 @@
 .elev-size-block {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+}
+
+.elev-size-block > .shell-door-tabs {
+    width: 100%;
+    margin: 0;
 }
 
 .elev-size-block > .block-label {

@@ -108,14 +108,12 @@
                         <!-- Column 1: size chips + panable elevation -->
                         <div class="step1-col step1-images">
                             <div class="elev-size-block">
-                                <div class="block-label" data-i18n="config.style">Style</div>
                                 <div class="shell-door-tabs" id="shellDoorTabs" role="radiogroup" aria-label="Style">
                                     <button type="button" class="shell-door-tab is-active" data-door="xt" data-i18n="config.topFlip">翻盖</button>
                                     <button type="button" class="shell-door-tab" data-door="wm" data-i18n="config.rolling">卷帘门</button>
                                 </div>
-                                <div class="block-label" data-i18n="config.width">Cabinet Width</div>
                                 <div class="size-picker-scroll">
-                                    <div class="size-picker" id="sizeGroup">
+                                    <div class="size-picker" id="sizeGroup" role="group" aria-label="Cabinet Width">
                                         <button class="size-btn" data-width="2200" data-suffix="-X">
                                             <span class="size-val">2200</span>
                                             <span class="size-unit">mm</span>

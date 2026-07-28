@@ -29,7 +29,7 @@ body.quote-channel-mp .navbar {
 
 body.quote-channel-internal .section.products,
 body.quote-channel-mp .section.products {
-  padding-top: calc(var(--nav-height) + 10px);
+  padding-top: calc(var(--nav-height) + 4px);
   padding-bottom: 28px;
 }
 
@@ -73,6 +73,29 @@ body.quote-channel-mp .section.products .section-desc {
 
 .config-head-row .section-label {
   margin-bottom: 0;
+}
+
+.config-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 720px;
+  margin: 0 auto 6px;
+}
+
+.config-title-row .section-title {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.config-title-row .lang-text {
+  flex-shrink: 0;
+  margin-top: 0.35em;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #9ca3af;
 }
 
 .lang-text {
@@ -174,7 +197,7 @@ body.quote-channel-mp .section.products .section-desc {
 @media (max-width: 768px) {
   body.quote-channel-internal .section.products,
   body.quote-channel-mp .section.products {
-    padding-top: calc(var(--nav-height) + 6px);
+    padding-top: calc(var(--nav-height) + 2px);
     padding-bottom: 20px;
   }
 
@@ -185,6 +208,15 @@ body.quote-channel-mp .section.products .section-desc {
 
   .config-head-row {
     margin-bottom: 2px;
+  }
+
+  .config-title-row {
+    margin-bottom: 4px;
+  }
+
+  .config-title-row .lang-text {
+    font-size: 0.88rem;
+    margin-top: 0.2em;
   }
 
   .margin-tier-bar {

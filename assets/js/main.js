@@ -1538,6 +1538,9 @@ function syncColorSelectedBar(swatch, barId) {
     bar.classList.toggle('is-light', light);
     bar.classList.toggle('is-dark', !light);
     bar.classList.toggle('has-texture', !!texture);
+    bar.classList.add('is-filled');
+    const block = bar.closest('.color-pick-block');
+    if (block) block.classList.add('has-color-selection');
 }
 
 function renderComponents() {

@@ -1653,6 +1653,17 @@
 .color-pick-block + .color-pick-block {
     margin-top: 14px;
 }
+.color-pick-block.has-color-selection {
+    padding: 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fafafa;
+}
+
+.color-pick-block.has-color-selection .door-series-label {
+    color: #111827;
+    font-weight: 700;
+}
 .color-expand-toggle {
     margin-top: 8px;
 }
@@ -1681,12 +1692,36 @@
 }
 .color-pick-area .color-swatch.color-card:hover {
     border-color: #c4a35a;
+    transform: translateY(-1px);
 }
 .color-pick-area .color-swatch.color-card.color-active {
-    border-color: #b8954a;
+    border-color: #111827;
     background: #fff;
     color: #222;
-    box-shadow: 0 0 0 1px #b8954a;
+    box-shadow:
+        0 0 0 2px #111827,
+        0 0 0 5px rgba(184, 149, 74, 0.45),
+        0 8px 18px rgba(17, 24, 39, 0.14);
+    transform: translateY(-2px);
+    z-index: 2;
+    position: relative;
+}
+.color-pick-area .color-swatch.color-card.color-active::after {
+    content: "✓";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #111827;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
 }
 .color-pick-area .color-swatch.color-card .sw-card-preview {
     display: block;
@@ -1726,20 +1761,18 @@
     color: #8a8a8a;
 }
 .body-selected-info {
-    margin-top: 8px;
-    padding: 10px 12px;
-    font-size: 0.8rem;
+    margin-top: 12px;
 }
 .color-preview-card {
     margin-top: 16px;
 }
 .shell-preview-card {
     margin-top: 12px;
-    padding: 12px;
-    border: 1px solid #e6e6e6;
+    padding: 14px;
+    border: 2px solid #111827;
     border-radius: 14px;
     background: #fff;
-    box-shadow: none;
+    box-shadow: 0 10px 28px rgba(17, 24, 39, 0.1);
 }
 .shell-preview-label {
     font-size: 0.7rem;
@@ -3380,26 +3413,40 @@ ul { list-style: none; }
 }
 
 .color-selected-info {
-    margin-top: 20px;
-    padding: 14px 20px;
+    margin-top: 14px;
+    padding: 16px 18px;
+    min-height: 52px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
     background: var(--clr-bg-alt);
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+    border: 2px solid #111827;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--clr-text-light);
-    transition: background-color 0.2s ease, color 0.2s ease;
+    box-shadow: 0 6px 16px rgba(17, 24, 39, 0.1);
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .color-selected-info strong {
     color: inherit;
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 1.05em;
+    letter-spacing: 0.02em;
 }
 
 .color-selected-info.is-light {
-    color: #222;
+    color: #111827;
+    border-color: #111827;
+    box-shadow: 0 6px 18px rgba(17, 24, 39, 0.12);
 }
 
 .color-selected-info.is-dark {
     color: #fff;
+    border-color: #111827;
+    box-shadow: 0 8px 22px rgba(17, 24, 39, 0.28);
 }
 
 .color-dl-link {

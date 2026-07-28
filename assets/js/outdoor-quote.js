@@ -203,6 +203,27 @@
     }
   };
 
+  // French product names (UI); details fall back to English
+  Object.assign(META.shedMini, { fr: 'Abri mini', detailFr: META.shedMini.detailEn });
+  Object.assign(META.shedStd, { fr: 'Abri standard', detailFr: META.shedStd.detailEn });
+  Object.assign(META.cabinets, { fr: 'Meubles de cuisine', detailFr: META.cabinets.detailEn });
+  Object.assign(META.counter, { fr: 'Plan de travail', detailFr: META.counter.detailEn });
+  Object.assign(META.bbq, { fr: 'Barbecue', detailFr: META.bbq.detailEn });
+  Object.assign(META.sink, { fr: 'Évier', detailFr: META.sink.detailEn });
+  Object.assign(META.fridge, { fr: 'Réfrigérateur', detailFr: META.fridge.detailEn });
+  Object.assign(META.drawerFridge, { fr: 'Réfrigérateur tiroirs', detailFr: META.drawerFridge.detailEn });
+  Object.assign(META.kamado, { fr: 'Kamado', detailFr: META.kamado.detailEn });
+  Object.assign(META.kegerator, { fr: 'Tireuse à bière', detailFr: META.kegerator.detailEn });
+  Object.assign(META.rangeHood, { fr: 'Hotte', detailFr: META.rangeHood.detailEn });
+  Object.assign(META.roundLamp, { fr: 'Lampe ronde', detailFr: META.roundLamp.detailEn });
+  Object.assign(META.led, { fr: 'Bande LED', detailFr: META.led.detailEn });
+  Object.assign(META.socket, { fr: 'Prises', detailFr: META.socket.detailEn });
+  Object.assign(META.drawer, { fr: 'Tiroirs', detailFr: META.drawer.detailEn });
+  Object.assign(META.trash, { fr: 'Poubelle extractible', detailFr: META.trash.detailEn });
+  Object.assign(META.wallCabinets, { fr: 'Meubles hauts', detailFr: META.wallCabinets.detailEn });
+  Object.assign(META.woodenBox, { fr: 'Caisse bois', detailFr: META.woodenBox.detailEn });
+  if (META.tv) Object.assign(META.tv, { fr: 'TV', detailFr: META.tv.detailEn });
+
   function nearestLength(w) {
     const sizes = (Q() && Q().lengths) || [2200, 2900, 3200, 3500];
     return sizes.reduce((best, n) => (Math.abs(n - w) < Math.abs(best - w) ? n : best), sizes[0]);

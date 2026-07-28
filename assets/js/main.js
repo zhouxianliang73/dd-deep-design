@@ -316,14 +316,121 @@ const i18n = {
     'hot.eu3.appliance':{ en: 'Appliance Cabinet',     cn: '电器柜' }
 };
 
+/* French UI strings — missing keys fall back to English via t() */
+(function applyFrenchI18n() {
+    const FR = {
+        'nav.about': 'À propos',
+        'nav.brand': 'Marque',
+        'nav.configure': 'Configurer',
+        'nav.quote': 'Devis',
+        'nav.margin': 'Marges',
+        'nav.specs': 'Specs',
+        'nav.hot': 'Best-sellers',
+        'nav.projects': 'Projets',
+        'nav.contact': 'Contact',
+        'hero.badge': 'Extérieur haut de gamme',
+        'hero.title': 'Design <em>plus profond</em>.<br>Construire <em>mieux</em>.',
+        'hero.desc': 'Cuisines d’extérieur et stations BBQ en alliage zinc-aluminium-magnésium et acier inoxydable — conçues pour durer et impressionner.',
+        'hero.cta1': 'Voir les produits',
+        'hero.cta2': 'Demander un devis',
+        'hero.cta3': 'Voir les specs →',
+        'hero.stat1': 'Projets livrés',
+        'hero.stat2': 'Pays desservis',
+        'hero.stat3': 'Expérience export',
+        'about.label': 'À propos',
+        'about.title': 'Votre partenaire en cuisines d’extérieur <em>premium</em>',
+        'about.p1': 'DD Deep Design conçoit, fabrique et exporte des cuisines d’extérieur haut de gamme, en partenariat avec des fabricants chinois de premier plan.',
+        'about.p2': 'Chaque meuble utilise des matériaux anticorrosion — alliage Zn-Al-Mg, acier galvanisé et inox 304 — pour résister au soleil, à la pluie et à l’air salin.',
+        'about.f1a': 'Délais rapides',
+        'about.f1b': 'Production 15–30 jours',
+        'about.f2a': 'Livraison mondiale',
+        'about.f2b': 'Maritime & aérien',
+        'about.f3a': 'Entièrement personnalisable',
+        'about.f3b': 'Matériaux, couleurs & layout',
+        'about.f4a': 'Service clé en main',
+        'about.f4b': 'Design → Production → Pose',
+        'config.label': 'Configurateur produit',
+        'config.title': 'Créez votre <em>cuisine d’extérieur</em>',
+        'config.desc': 'Style → taille → équipements → couleur — prix instantané.',
+        'config.openCustom': 'Sur mesure',
+        'config.openMargin': 'Échelle de marge',
+        'config.openCost': 'Contrôle des coûts',
+        'config.openOwnerShow': 'Vue propriétaire',
+        'config.openOwnerShow.copied': 'Lien devis propriétaire copié',
+        'config.openOwnerShow.fail': 'Impossible d’ouvrir la vue propriétaire',
+        'config.customerPick': 'Envoyer pour choix client',
+        'config.customerPick.copied': 'Lien client copié',
+        'config.customerPick.imported': 'Choix client importés',
+        'config.customerPick.fail': 'Impossible de créer le lien',
+        'config.mpImport': 'Copier le code mini-programme',
+        'config.mpImport.copied': 'Code d’import copié',
+        'config.mpImport.fail': 'Impossible de créer le code',
+        'config.langSwitch': 'FR / EN / 中文',
+        'config.openOwnerQuote': 'Devis propriétaire',
+        'lib.title': 'Bibliothèque produits',
+        'lib.add': 'Ajouter depuis la bibliothèque',
+        'lib.addHint': 'Filtrer appareils, frigo, BBQ…',
+        'lib.addBtn': 'Ajouter',
+        'lib.added': 'Ajouté',
+        'lib.empty': 'Aucun produit dans ce filtre',
+        'lib.fitOk': 'Compatible',
+        'lib.fitNo': 'Peut ne pas rentrer',
+        'lib.fitWarn': 'Cet article peut dépasser la cavité ({w} × 900 × 2250 mm). Ajouter quand même ?',
+        'lib.cabHint': 'Cavité ref. : {w} × 900 × 2250 mm',
+        'config.modeStandard': 'Pack standard',
+        'config.step1.title': 'Style → Taille → Équipements → Couleur',
+        'config.step1.desc': 'Choisissez le style, puis la largeur ; équipements à droite ; couleurs ensuite.',
+        'config.doorType': 'Type de porte',
+        'config.style': 'Style',
+        'config.styleSoon': 'À définir',
+        'config.equipment': 'Équipements',
+        'config.productView': 'Vue produit',
+        'config.topFlip': 'Abattant',
+        'config.rolling': 'Rideau roulant',
+        'config.mini': 'Mini',
+        'config.width': 'Largeur du meuble',
+        'config.scrollHint': '← Glisser / cliquer →',
+        'config.elevation': 'Élévation',
+        'config.material': 'Matériau :',
+        'config.matVal': 'Alliage Zn-Al-Mg + acier galvanisé',
+        'config.fob': 'Interne · prix marge (impression seule)',
+        'config.exw': 'Prix interne',
+        'config.exwMp': 'Prix MP (coût × 2,5)',
+        'config.fobMp': 'Liste mini-programme = coût × 2,5',
+        'config.tier30': 'Marge 30 %',
+        'config.tier25': 'Marge 25 %',
+        'config.tier20': 'Marge 20 %',
+        'config.tier15m': 'Marge 15 %',
+        'contact.desc': 'Devis, projet sur mesure ou distribution ? Écrivez-nous.',
+        'cases.desc': 'Des villas de Los Angeles aux propriétés en bord de mer en Espagne — nos cuisines d’extérieur sont installées dans le monde entier.',
+        'hot.desc': 'Kits cuisine d’extérieur en inox 304 — prêts à expédier.',
+        'comp.remove': 'Retirer du pack',
+        'comp.included': '✓ Inclus',
+        'comp.includedShort': 'Inclus'
+    };
+    Object.keys(FR).forEach((k) => {
+        if (!i18n[k]) i18n[k] = { en: FR[k], cn: FR[k], fr: FR[k] };
+        else i18n[k].fr = FR[k];
+    });
+})();
+
 // =============================================
 // LANGUAGE STATE
 // =============================================
 let currentLang = 'en';
+const LANG_HTML = { en: 'en', cn: 'zh-CN', fr: 'fr' };
 
 function t(key) {
     if (!i18n[key]) return key;
-    return i18n[key][currentLang] || i18n[key]['en'] || key;
+    const row = i18n[key];
+    return row[currentLang] || row.en || row.cn || key;
+}
+
+function syncLangButtons() {
+    document.querySelectorAll('[data-set-lang]').forEach((btn) => {
+        btn.classList.toggle('is-active', btn.getAttribute('data-set-lang') === currentLang);
+    });
+    document.documentElement.lang = LANG_HTML[currentLang] || 'en';
 }
 
 function applyTranslation() {
@@ -345,16 +452,7 @@ function applyTranslation() {
         }
     });
 
-    // Update lang toggle button(s)
-    document.querySelectorAll('#langToggle, [data-lang-toggle]').forEach((langBtn) => {
-        if (langBtn.hasAttribute('data-i18n') && langBtn.id === 'langToggleBar') {
-            langBtn.textContent = t('config.langSwitch');
-        } else {
-            langBtn.textContent = currentLang === 'en' ? 'EN / 中文' : '中文 / EN';
-        }
-        langBtn.dataset.lang = currentLang;
-        langBtn.title = currentLang === 'en' ? 'Switch to Chinese' : '切换到英文';
-    });
+    syncLangButtons();
 
     // Re-render dynamic content
     renderComponents();
@@ -365,8 +463,10 @@ function applyTranslation() {
     if (typeof window.syncQtyTierUi === 'function') window.syncQtyTierUi();
 }
 
-function toggleLanguage() {
-    currentLang = currentLang === 'en' ? 'cn' : 'en';
+function setLanguage(lang) {
+    if (!lang || (lang !== 'en' && lang !== 'cn' && lang !== 'fr')) return;
+    if (currentLang === lang) return;
+    currentLang = lang;
     applyTranslation();
     if (window.COLOR_OPTIONS) {
         renderColorPickers({
@@ -378,7 +478,10 @@ function toggleLanguage() {
         syncColorExpandUi('door');
         paintShellPreviewActive();
     }
-    updateTotal();
+}
+
+function toggleLanguage() {
+    setLanguage(currentLang === 'en' ? 'cn' : currentLang === 'cn' ? 'fr' : 'en');
 }
 
 // =============================================
@@ -461,17 +564,19 @@ function buildComponentConfigs() {
 
 function buildItemI18n() {
     const out = {
-        'comp.remove': { en: 'Remove from package', cn: '从标准配置中删除' },
-        'comp.included': { en: '✓ Included', cn: '✓ 已含' },
-        'comp.includedShort': { en: 'Incl.', cn: '已含' }
+        'comp.remove': { en: 'Remove from package', cn: '从标准配置中删除', fr: 'Retirer du pack' },
+        'comp.included': { en: '✓ Included', cn: '✓ 已含', fr: '✓ Inclus' },
+        'comp.includedShort': { en: 'Incl.', cn: '已含', fr: 'Inclus' }
     };
     if (!window.OutdoorQuote) return out;
     Object.keys(OutdoorQuote.META).forEach((key) => {
         const m = OutdoorQuote.META[key];
-        out['item.' + key] = { en: m.en, cn: m.cn };
-        out['item.' + key + '.detail'] = { en: m.detailEn || '', cn: m.detailCn || '' };
-        out['acc.' + key] = { en: m.en, cn: m.cn };
-        out['acc.' + key + '.detail'] = { en: m.detailEn || '', cn: m.detailCn || '' };
+        const fr = m.fr || m.en;
+        const detailFr = m.detailFr || m.detailEn || '';
+        out['item.' + key] = { en: m.en, cn: m.cn, fr: fr };
+        out['item.' + key + '.detail'] = { en: m.detailEn || '', cn: m.detailCn || '', fr: detailFr };
+        out['acc.' + key] = { en: m.en, cn: m.cn, fr: fr };
+        out['acc.' + key + '.detail'] = { en: m.detailEn || '', cn: m.detailCn || '', fr: detailFr };
     });
     return out;
 }
@@ -479,7 +584,11 @@ function buildItemI18n() {
 function metaText(field) {
     if (!field) return '';
     if (typeof field === 'string') return field;
-    return field[currentLang] || field.en || '';
+    return field[currentLang] || field.en || field.cn || '';
+}
+
+function isChineseLang() {
+    return currentLang === 'cn';
 }
 
 function resolveItemDim(key) {
@@ -1141,7 +1250,7 @@ function renderListAccessoryCard(key) {
     const m = itemMeta(key);
     const name = t('acc.' + key) || t('item.' + key) || m.cn || m.en || key;
     const detail = t('acc.' + key + '.detail') || t('item.' + key + '.detail') ||
-        (currentLang === 'cn' ? m.detailCn : m.detailEn) || '';
+        (isChineseLang() ? m.detailCn : m.detailEn) || '';
     const dim = resolveItemDim(key);
     const unitUsd = accessoryListUsd(key);
     const qty = getItemQty(key);
@@ -1476,7 +1585,7 @@ function renderAccLineCard(item) {
     const key = item.key;
     const m = itemMeta(key);
     const name = t('acc.' + key) || m.cn || m.en || key;
-    const detail = t('acc.' + key + '.detail') || (currentLang === 'cn' ? m.detailCn : m.detailEn) || '';
+    const detail = t('acc.' + key + '.detail') || (isChineseLang() ? m.detailCn : m.detailEn) || '';
     const dim = resolveItemDim(key);
     const unitUsd = accessoryListUsd(key);
     const qty = getItemQty(key);
@@ -1763,7 +1872,7 @@ function renderProductLibrary() {
 
     filters.innerHTML = libCats.map(c => (
         '<button type="button" class="lib-filter-btn' + (libFilter === c.id ? ' active' : '') + '" data-cat="' + c.id + '">' +
-        (currentLang === 'cn' ? c.cn : c.en) + '</button>'
+        (isChineseLang() ? c.cn : c.en) + '</button>'
     )).join('');
 
     filters.querySelectorAll('.lib-filter-btn').forEach(btn => {
@@ -1981,10 +2090,11 @@ function updateAll() {
 // EVENT BINDINGS
 // =============================================
 
-// Language toggle (nav + toolbar)
-document.querySelectorAll('#langToggle, [data-lang-toggle]').forEach((btn) => {
-    btn.addEventListener('click', toggleLanguage);
+// Language select (nav + toolbar): 法文 / 英文 / 中文
+document.querySelectorAll('[data-set-lang]').forEach((btn) => {
+    btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-set-lang')));
 });
+syncLangButtons();
 
 // Size buttons — sticky total appears only after a width is chosen
 sizeBtns.forEach(btn => {
@@ -2248,14 +2358,14 @@ function getColorOptions() {
 
 function colorItemName(item) {
     if (!item) return '';
-    return (currentLang === 'cn' ? item.cn : item.en) || item.en || item.code;
+    return (isChineseLang() ? item.cn : item.en) || item.en || item.code;
 }
 
 function colorSeriesLabel(key, meta) {
     if (!meta) return key;
     const i18nKey = 'config.' + key;
     if (i18n[i18nKey]) return t(i18nKey);
-    return currentLang === 'cn' ? meta.cn : meta.en;
+    return isChineseLang() ? meta.cn : meta.en;
 }
 
 function buildColorSwatchHtml(item, { body = false, active = false, more = false } = {}) {
@@ -2581,10 +2691,10 @@ if (contactForm) {
         }
         const btn = contactForm.querySelector('.btn-submit');
         const originalText = btn.textContent;
-        btn.textContent = currentLang === 'en' ? 'Sending...' : '发送中...';
+        btn.textContent = isChineseLang() ? '发送中...' : (currentLang === 'fr' ? 'Envoi…' : 'Sending...');
         btn.disabled = true;
         setTimeout(() => {
-            btn.textContent = currentLang === 'en' ? 'Message Sent! ✓' : '已发送！✓';
+            btn.textContent = isChineseLang() ? '已发送！✓' : (currentLang === 'fr' ? 'Message envoyé ! ✓' : 'Message Sent! ✓');
             btn.style.background = '#2d8a4e';
             setTimeout(() => {
                 btn.textContent = originalText;
@@ -2664,12 +2774,15 @@ function buildSummaryString() {
         const usdTotal = document.getElementById('totalFinalUsd')?.textContent || '';
         const topLineEn = topCode && topCode !== '—' ? `Countertop: ${topCode} — ${topName}` : null;
         const topLineCn = topCode && topCode !== '—' ? `台面颜色：${topCode} — ${topName}` : null;
-        const lines = currentLang === 'en'
-            ? [`Model: ${model}`, `Size: ${dims}`, `Website price · ${tierLabel}`, `Package: ${stdNames.join(', ')}`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, topLineEn, `Options: ${accItems.length ? accItems.join(', ') : 'none'}`, `Estimated Total: ${totalPrice} / ${usdTotal}`].filter(Boolean)
-            : [`型号：${model}`, `尺寸：${dims}`, `网站报价 · ${tierLabel}`, `标配：${stdNames.join('、')}`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, topLineCn, `选配：${accItems.length ? accItems.join('、') : '无'}`, `预估总价：${totalPrice} / ${usdTotal}`].filter(Boolean);
+        const topLineFr = topCode && topCode !== '—' ? `Plan de travail : ${topCode} — ${topName}` : null;
+        const lines = isChineseLang()
+            ? [`型号：${model}`, `尺寸：${dims}`, `网站报价 · ${tierLabel}`, `标配：${stdNames.join('、')}`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, topLineCn, `选配：${accItems.length ? accItems.join('、') : '无'}`, `预估总价：${totalPrice} / ${usdTotal}`].filter(Boolean)
+            : currentLang === 'fr'
+            ? [`Modèle : ${model}`, `Taille : ${dims}`, `Prix site · ${tierLabel}`, `Pack : ${stdNames.join(', ')}`, `Caisson : ${bodyCode} — ${bodyName}`, `Porte : ${colorCode} — ${colorName}`, topLineFr, `Options : ${accItems.length ? accItems.join(', ') : 'aucune'}`, `Total estimé : ${totalPrice} / ${usdTotal}`].filter(Boolean)
+            : [`Model: ${model}`, `Size: ${dims}`, `Website price · ${tierLabel}`, `Package: ${stdNames.join(', ')}`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, topLineEn, `Options: ${accItems.length ? accItems.join(', ') : 'none'}`, `Estimated Total: ${totalPrice} / ${usdTotal}`].filter(Boolean);
         return lines.join('\n');
     } catch(e) {
-        return currentLang === 'en' ? 'Configuration: see selections above' : '配置：请参考上方选择';
+        return isChineseLang() ? '配置：请参考上方选择' : (currentLang === 'fr' ? 'Configuration : voir les sélections ci-dessus' : 'Configuration: see selections above');
     }
 }
 

@@ -1920,17 +1920,29 @@
 
 @media (max-width: 768px) {
     .config-mode-tabs {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 6px;
         margin: -4px 0 8px;
         max-width: none;
+        justify-content: stretch;
     }
 
     .config-mode-tab {
         min-width: 0;
-        padding: 8px 6px;
+        padding: 8px 8px;
         font-size: 0.78rem;
         text-align: center;
+        flex: 1 1 calc(33.33% - 6px);
+    }
+
+    .lang-switch {
+        flex: 1 1 100%;
+        justify-content: stretch;
+    }
+
+    .lang-switch .lang-opt {
+        flex: 1;
+        padding: 8px 6px;
+        font-size: 0.78rem;
     }
 
     /* Configurator shell */
@@ -3445,20 +3457,21 @@ ul { list-style: none; }
    ============================================ */
 
 .config-mode-tabs {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin: -8px 0 10px;
     max-width: 720px;
     margin-left: auto;
     margin-right: auto;
+    justify-content: center;
 }
 
 .config-mode-tab {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 18px;
+    padding: 10px 14px;
     border: 1px solid var(--clr-border);
     border-radius: var(--radius-sm);
     background: var(--clr-white);
@@ -3469,6 +3482,62 @@ ul { list-style: none; }
     cursor: pointer;
     text-decoration: none;
     transition: var(--transition);
+    white-space: nowrap;
+}
+
+.lang-switch {
+    display: inline-flex;
+    gap: 0;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--clr-white);
+}
+
+.lang-switch .lang-opt {
+    border: 0;
+    border-radius: 0;
+    border-right: 1px solid var(--clr-border);
+    padding: 10px 12px;
+    min-width: 3.2em;
+    background: transparent;
+}
+
+.lang-switch .lang-opt:last-child {
+    border-right: 0;
+}
+
+.lang-switch .lang-opt.is-active,
+.nav-lang .lang-opt.is-active {
+    background: var(--clr-dark);
+    color: #fff;
+    border-color: var(--clr-dark);
+}
+
+.nav-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--clr-border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-left: 4px;
+}
+
+.nav-lang .lang-opt {
+    border: 0;
+    background: transparent;
+    color: var(--clr-text);
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-right: 1px solid var(--clr-border);
+}
+
+.nav-lang .lang-opt:last-child {
+    border-right: 0;
 }
 
 .config-mode-tab:hover,

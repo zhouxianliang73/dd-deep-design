@@ -43,6 +43,15 @@ const i18n = {
     'config.openMargin': { en: 'Margin Ladder', cn: 'Margin Ladder' },
     'config.openCost': { en: 'Cost Control', cn: '成本控制' },
     'config.openOwnerShow': { en: 'Owner View', cn: '业主展示' },
+    'config.openOwnerShow.copied': { en: 'Owner quote link copied — open to share / import to mini-program', cn: '业主报价链接已复制 — 可发给业主确认，页内可复制小程序导入码' },
+    'config.openOwnerShow.fail': { en: 'Could not open owner view', cn: '无法打开业主展示' },
+    'config.customerPick': { en: 'Send for customer pick', cn: '发给客户选配' },
+    'config.customerPick.copied': { en: 'Customer pick link copied', cn: '客户选配链接已复制' },
+    'config.customerPick.imported': { en: 'Customer picks imported', cn: '已导入客户选配' },
+    'config.customerPick.fail': { en: 'Could not build link', cn: '无法生成链接' },
+    'config.mpImport': { en: 'Copy mini-program import code', cn: '复制小程序导入码' },
+    'config.mpImport.copied': { en: 'Import code copied — paste in mini-program Projects → Import outdoor quote', cn: '导入码已复制 — 到小程序「项目 → 导入户外报价」粘贴' },
+    'config.mpImport.fail': { en: 'Could not build import code', cn: '无法生成导入码' },
     'config.langSwitch': { en: 'EN / 中文', cn: '中英切换' },
     'config.openOwnerQuote': { en: 'Owner Quote', cn: '业主报价' },
     'lib.title': { en: 'Product Library', cn: '产品库' },
@@ -63,7 +72,7 @@ const i18n = {
     'config.styleSoon':{ en: 'TBD', cn: '待定' },
     'config.equipment':{ en: 'Equipment', cn: '设备配置' },
     'config.productView': { en: 'Product View', cn: '产品效果' },
-    'config.topFlip':  { en: 'Flip Cover', cn: '翻盖' },
+    'config.topFlip':  { en: 'Top-Flip', cn: '翻盖' },
     'config.rolling':  { en: 'Rolling Door', cn: '卷帘门' },
     'config.mini':     { en: 'Mini', cn: '迷你款' },
     'config.width':    { en: 'Cabinet Width', cn: '柜体宽度' },
@@ -71,11 +80,19 @@ const i18n = {
     'config.elevation': { en: 'Elevation View', cn: '立面图' },
     'config.material': { en: 'Material:', cn: '材质：' },
     'config.matVal':   { en: 'Zinc-Aluminum-Magnesium Alloy + Galvanized Steel', cn: '锌铝镁合金 + 镀锌钢' },
-    'config.fob':      { en: 'List price (cost÷0.7)', cn: '网站报价（成本÷0.7）' },
-    'config.exw':      { en: 'Website Price', cn: '网站报价' },
-    'config.tier15':   { en: '1-5 units', cn: '1-5 台' },
-    'config.tier620':  { en: '6-20 units', cn: '6-20 台' },
-    'config.tier20p':  { en: '20+ units', cn: '20+ 台' },
+    'config.fob':      { en: 'Internal · margin sell (print only)', cn: '内部报价 · 毛利价（仅打印外发）' },
+    'config.exw':      { en: 'Internal Price', cn: '内部报价' },
+    'config.exwMp':    { en: 'MP Price (cost × 2.5)', cn: '小程序价（成本×2.5）' },
+    'config.fobMp':    { en: 'Mini-program list = cost × 2.5', cn: '小程序列表价 = 成本 × 2.5' },
+    'config.tier30':   { en: '30% margin', cn: '30% 毛利' },
+    'config.tier25':   { en: '25% margin', cn: '25% 毛利' },
+    'config.tier20':   { en: '20% margin', cn: '20% 毛利' },
+    'config.tier15m':  { en: '15% margin', cn: '15% 毛利' },
+    'config.tier15':   { en: '25% margin', cn: '25% 毛利' },
+    'config.tier620':  { en: '20% margin', cn: '20% 毛利' },
+    'config.tier20p':  { en: '15% margin', cn: '15% 毛利' },
+    'config.internalBanner': { en: 'INTERNAL ONLY — select margin, then Print / Save as JPEG. Do not share this link.', cn: '内部专用 — 选毛利后「打印/存为 JPEG」外发，勿转发本页链接。' },
+    'config.mpBanner': { en: 'Mini-program price = cost × 2.5 (no other markup).', cn: '小程序通道：售价 = 成本 × 2.5（不加其他）。' },
     'config.tierLocked': { en: 'Qty tiers: admin only', cn: '货柜台数阶梯：仅管理员' },
     'config.tierUnlock': { en: 'Unlock tiers', cn: '解锁阶梯价' },
     'config.tierUnlocked': { en: 'Tier pricing unlocked', cn: '已解锁货柜阶梯价' },
@@ -83,7 +100,8 @@ const i18n = {
     'config.tierPinBad': { en: 'Incorrect PIN', cn: 'PIN 不正确' },
     'config.optNotRec': { en: 'Not recommended for this length', cn: '本长度不推荐' },
     'config.optBlocked': { en: 'Not recommended for this length', cn: '本长度不推荐' },
-    'config.total.note': { en: '* Website price = EXW ÷ 0.7 (~30% margin). Shipping quoted separately. FX from master table.', cn: '* 网站价 = EXW÷0.7（约30%毛利）。运费另计。汇率取自总表。' },
+    'config.total.note': { en: '* Internal: prices from master right-table margins. Export via Print → JPEG only.', cn: '* 内部通道：价格取自总表右侧毛利列。请用打印导出 JPEG，勿发链接。' },
+    'config.total.noteMp': { en: '* Mini-program: sell = USD cost × 2.5. Shipping quoted separately.', cn: '* 小程序通道：售价 = 美元成本 × 2.5。运费另计。' },
     'config.dlSpec':   { en: '↓ Download Spec Sheet', cn: '↓ 下载规格书' },
     'config.step2.title': { en: 'Configure Interior Components', cn: '配置内部组件' },
     'config.step2.desc':  { en: 'Standard configuration for this size is pre-selected. Adjust as needed.', cn: '该尺寸标准配置已预选，可按需调整。' },
@@ -129,6 +147,8 @@ const i18n = {
     'config.ssGroup':      { en: 'Stainless Steel — Door Panel Only', cn: '不锈钢 — 仅门板' },
     'config.ssNote':       { en: 'Genuine 304 stainless steel. Premium +¥5,000.', cn: '纯正304不锈钢。升级加价¥5,000。' },
     'config.countertopGroup': { en: 'Countertop Options', cn: '台面选项' },
+    'config.countertop': { en: 'Countertop Finish', cn: '台面饰面' },
+    'config.countertopSelected': { en: 'Top: ', cn: '台面：' },
     'config.countertopNote':  { en: 'Upgrade your countertop with these premium options.', cn: '用以下高端选项升级您的台面。' },
     'config.selected':     { en: 'Selected: ', cn: '已选：' },
     'config.dlColor':      { en: '↓ Download Full Color Catalog', cn: '↓ 下载完整色卡' },
@@ -226,7 +246,7 @@ const i18n = {
     'config.dlSpec':  { en: '↓ Download Spec Sheet', cn: '↓ 下载规格书' },
     'config.included':{ en: 'Included in this model:', cn: '本型号标准配置：' },
     'config.dlColor': { en: '↓ Download Full Color Catalog', cn: '↓ 下载完整色卡' },
-    'config.colorNote':{ en: '🔴 Colors shown above — 30+ finishes available', cn: '🔴 上方已展示全部颜色 — 30+ 种饰面可选' },
+    'config.colorNote':{ en: 'Colors from Color options V3.0 — shell, door & countertop', cn: '颜色来自 Color options V3.0 — 柜体 / 门板 / 台面' },
     'config.incl1':   { en: 'Top-flip cabinet body × 1', cn: '上翻门箱体 × 1' },
     'config.incl2':   { en: 'Single-door sink cabinet × 1', cn: '单门水槽柜 × 1' },
     'config.incl3':   { en: 'BBQ double-door base cabinet × 1', cn: 'BBQ烤炉对开地柜 × 1' },
@@ -238,13 +258,13 @@ const i18n = {
 
     // Config included specs (for different sizes)
     'config.incl.xt.2200': { en: 'Single sink + BBQ base + Fridge frame + 3 sockets + LED + Shelf + BBQ + Fridge + Hood', cn: '单门水槽柜 + BBQ烤炉对开地柜 + 冰箱框架柜 + 3插座 + 灯带 + 层板 + 烧烤炉 + 冰箱 + 烟机' },
-    'config.incl.xt.2900': { en: 'Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + Shelf + BBQ + Fridge + Hood + TV', cn: '单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 层板 + 烧烤炉 + 冰箱 + 烟机 + 电视' },
-    'config.incl.xt.3200': { en: '3-drawer + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood + TV', cn: '三抽地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机 + 电视' },
-    'config.incl.xt.3500': { en: '3-drawer + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood + TV', cn: '三抽地柜 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机 + 电视' },
+    'config.incl.xt.2900': { en: 'Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + Shelf + BBQ + Fridge + Hood', cn: '单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 层板 + 烧烤炉 + 冰箱 + 烟机' },
+    'config.incl.xt.3200': { en: '3-drawer + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood', cn: '三抽地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机' },
+    'config.incl.xt.3500': { en: '3-drawer + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood', cn: '三抽地柜 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机' },
     'config.incl.wm.2200': { en: 'Rolling body + Single sink + BBQ base + Fridge frame + 3 sockets + LED + Shelf + BBQ + Fridge + Hood', cn: '卷帘箱体 + 单门水槽柜 + BBQ烤炉对开地柜 + 冰箱框架柜 + 3插座 + 灯带 + 层板 + 烧烤炉 + 冰箱 + 烟机' },
-    'config.incl.wm.2900': { en: 'Rolling body + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + Shelf + BBQ + Fridge + Hood + TV', cn: '卷帘箱体 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 层板 + 烧烤炉 + 冰箱 + 烟机 + 电视' },
-    'config.incl.wm.3200': { en: 'Rolling body + 3-drawer + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood + TV', cn: '卷帘箱体 + 三抽地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机 + 电视' },
-    'config.incl.wm.3500': { en: 'Rolling body + 3-drawer + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood + TV', cn: '卷帘箱体 + 三抽地柜 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机 + 电视' },
+    'config.incl.wm.2900': { en: 'Rolling body + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + Shelf + BBQ + Fridge + Hood', cn: '卷帘箱体 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 层板 + 烧烤炉 + 冰箱 + 烟机' },
+    'config.incl.wm.3200': { en: 'Rolling body + 3-drawer + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood', cn: '卷帘箱体 + 三抽地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机' },
+    'config.incl.wm.3500': { en: 'Rolling body + 3-drawer + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood', cn: '卷帘箱体 + 三抽地柜 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机' },
 
     // Hot-selling products section
     'hot.label':        { en: 'Hot Sellers',           cn: '热卖款' },
@@ -355,7 +375,16 @@ function applyTranslation() {
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'cn' : 'en';
     applyTranslation();
-    // Re-calculate total to refresh finish label
+    if (window.COLOR_OPTIONS) {
+        renderColorPickers({
+            body: bodyColorState.code,
+            door: colorState.code,
+            countertop: countertopColorState.code,
+        });
+        syncColorExpandUi('body');
+        syncColorExpandUi('door');
+        paintShellPreviewActive();
+    }
     updateTotal();
 }
 
@@ -366,15 +395,20 @@ function toggleLanguage() {
 const FX_USD_CNY = (window.OutdoorQuote && OutdoorQuote.fx()) || 6.7;
 
 /**
- * Website list price = EXW ÷ 0.7 (~30% margin on sell).
- * Qty tiers (1-5 / 6-20 / 20+) change EXW cost base; public is locked to 1-5.
+ * Dual channel:
+ * - internal (classic.html): right-table margins 30/25/20/15 — print JPEG only
+ * - mp (quote-mp.html): usdCost × 2.5 only
  */
-const PUBLIC_COST_RATIO = (window.OutdoorQuote && OutdoorQuote.costRatio()) || 0.7;
+const PUBLIC_COST_RATIO = 1;
+const IS_MP_CHANNEL = !!(window.OutdoorQuote && OutdoorQuote.isMpChannel && OutdoorQuote.isMpChannel());
+const DEFAULT_QTY_TIER = IS_MP_CHANNEL
+  ? 'mp'
+  : (window.OUTDOOR_QUOTE && window.OUTDOOR_QUOTE.defaultTier) || '30%';
 
 const HOT_IMG = (sku) => 'assets/images/products/hot-selling/display/sku-' + sku + '.png';
 /** Thumbs from 箱体报价总表 2.0 Color/Picture column */
 const MASTER_IMG = (slug) =>
-    'assets/images/products/from-master/items/' + slug + '.png?t=20260727socket';
+    'assets/images/products/from-master/items/' + slug + '.png?t=20260728tvBracket';
 
 const ELEV_CACHE = '20260726match1';
 
@@ -472,7 +506,7 @@ function resolveCompImage(comp) {
     return itemImage(key);
 }
 
-/** Card price: ¥ left · $ right from list USD (EXW÷0.7) */
+/** Card price: ¥ left · $ right from master-table list USD */
 function formatDualPriceFromUsd(listUsd, opts) {
     const prefix = (opts && opts.prefix) || '';
     const usd = Math.round(Number(listUsd) || 0);
@@ -633,13 +667,19 @@ function renderStdLineCard(comp) {
           (comp.icon || '') + '</span></div>';
     const qtyHtml = renderItemQtyControls(key);
 
+    const detailHtml =
+        '<div class="std-line-details-panel">' +
+            (dim ? '<div class="std-line-dim">' + dim + '</div>' : '') +
+            (detail ? '<div class="std-line-desc">' + detail + '</div>' : '') +
+        '</div>';
+
     return (
         '<div class="std-line-card" data-comp-key="' + key + '">' +
             removeBtn +
             '<div class="std-line-media-wrap">' + media + '</div>' +
             '<div class="std-line-body">' +
                 '<strong class="std-line-name">' + name + (qty > 1 ? ' ×' + qty : '') + '</strong>' +
-                '<div class="std-line-details-panel">' + dim + (detail ? ' · ' + detail : '') + '</div>' +
+                detailHtml +
                 renderLineFooter(listUsd, null, qtyHtml) +
             '</div>' +
         '</div>'
@@ -660,8 +700,8 @@ let state = {
     width: 2200,
     /** Sticky total only after user picks a width */
     sizeSelected: false,
-    /** Qty tier on EXW table: public locked to 1-5; admin may unlock */
-    qtyTier: '1-5',
+    /** Internal: margin 30/25/20/15. MP channel ignores (always cost×2.5). */
+    qtyTier: DEFAULT_QTY_TIER,
     accessories: {},
     extraItems: [],
     /** Per-item quantity (e.g. roundLamp / 筒灯) */
@@ -671,17 +711,31 @@ let state = {
 };
 
 let colorState = {
-    series: 'texture',
-    code: 'DP-W3',
-    name: 'Natural Oak',
+    series: 'xuanli',
+    code: 'CK03F',
+    name: 'Moonlight Grey, Sand Grain',
     premium: 0
 };
 
 let bodyColorState = {
     code: 'CK02F',
-    name: 'CK02F',
+    name: 'Khaki Grey, Sand Texture',
     premium: 0
 };
+
+let countertopColorState = {
+    code: '',
+    name: '',
+    premium: 0
+};
+
+/** Featured colors shown first; rest behind “Show more”. */
+const SHELL_FEATURED_CODES = ['CK10G', 'CK02F', 'CK01S', 'CK01X'];
+const DOOR_FEATURED_CODES = [
+    'CK01G-L', 'CK03G-Y', 'CK04G-Y', 'CK09G-L', 'CK03F',
+    'CM29-Y', 'CM17-Y', 'CM27-Y', 'CM22-Y', 'CM25-Y',
+];
+let colorExpandState = { body: false, door: false };
 
 // =============================================
 // DOM REFS
@@ -690,7 +744,7 @@ const doorTypeBtns = document.querySelectorAll('#doorTypeGroup .config-btn');
 const sizeBtns = document.querySelectorAll('#sizeGroup .size-btn');
 const accessoriesGrid = document.getElementById('accessoriesGrid');
 const accessoriesCheckboxes = () => document.querySelectorAll('#accessoriesGrid input[type="checkbox"]');
-const colorSwatches = () => document.querySelectorAll('#doorSeriesList .color-swatch');
+const colorSwatches = () => document.querySelectorAll('#doorColorGrid .color-swatch');
 const selectedColorCode = document.getElementById('selectedColorCode');
 const selectedColorName = document.getElementById('selectedColorName');
 // (previewModel is used in buildSummaryString, kept under same ID)
@@ -719,7 +773,7 @@ function getModelName() {
     return base + '-' + seriesNum + suffix + custom;
 }
 
-/** Standard package list CNY (website = EXW÷0.7) */
+/** Standard package list CNY (master-table website USD × FX) */
 function getBasePrice() {
     return Math.round(getBaseListUsd() * FX_USD_CNY);
 }
@@ -866,7 +920,7 @@ function initElevPreview() {
     loadElevationPreview(nearestStdWidth(state.width));
 }
 
-/** Hot-seller cards: apply same ÷0.7 list markup on stored EXW base */
+/** Hot-seller cards: show stored USD as website list (no extra ratio) */
 function syncHotCardPrices() {
     document.querySelectorAll('.hot-card-price').forEach((el) => {
         let base = Number(el.dataset.baseUsd);
@@ -876,7 +930,7 @@ function syncHotCardPrices() {
             if (Number.isFinite(base) && base > 0) el.dataset.baseUsd = String(base);
         }
         if (!Number.isFinite(base) || base <= 0) return;
-        const usd = Math.round((window.OutdoorQuote ? OutdoorQuote.exwToList(base) : base / PUBLIC_COST_RATIO));
+        const usd = Math.round(window.OutdoorQuote ? OutdoorQuote.exwToList(base) : base);
         const cny = Math.round(usd * FX_USD_CNY);
         el.innerHTML =
             '<span class="price-cny">' + formatCny(cny) + '</span>' +
@@ -1028,20 +1082,136 @@ function initElevationPan() {
     if (img) img.addEventListener('load', () => requestAnimationFrame(syncElevNavButtons));
 }
 
+function focusAddAccessories() {
+    const sec = document.getElementById('accSection');
+    if (sec) {
+        sec.classList.add('is-expanded');
+        if (typeof syncAccSectionToggleLabel === 'function') syncAccSectionToggleLabel();
+    }
+    accListExpanded = true;
+    if (typeof syncAccListCollapse === 'function') syncAccListCollapse();
+    const target = document.getElementById('accSection') || document.getElementById('accessoriesGrid');
+    if (target) {
+        try {
+            target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (_) {}
+    }
+}
+
+function selectedAccessoryKeys() {
+    const std = new Set(activeStdKeys());
+    return Object.keys(state.accessories || {}).filter((k) => {
+        if (!state.accessories[k]) return false;
+        if (std.has(k)) return false;
+        if (isRemovedFromStd(k)) return false;
+        return true;
+    });
+}
+
+/** Selected optional accessory shown inside Equipment list (with ×). */
+function renderListAccessoryCard(key) {
+    const m = itemMeta(key);
+    const name = t('acc.' + key) || t('item.' + key) || m.cn || m.en || key;
+    const detail = t('acc.' + key + '.detail') || t('item.' + key + '.detail') ||
+        (currentLang === 'cn' ? m.detailCn : m.detailEn) || '';
+    const dim = resolveItemDim(key);
+    const unitUsd = accessoryListUsd(key);
+    const qty = getItemQty(key);
+    const listUsd = unitUsd * qty;
+    const src = itemImage(key);
+    const icon = m.icon || '➕';
+    const removeBtn =
+        '<button type="button" class="std-line-remove" data-remove-acc="' +
+        key +
+        '" aria-label="' +
+        t('comp.remove') +
+        '" title="' +
+        t('comp.remove') +
+        '">×</button>';
+    const media = src
+        ? '<div class="std-line-media"><img src="' + src + '" alt="' + name + '" loading="lazy" ' +
+          'onerror="this.parentElement.classList.add(\'is-placeholder\');this.remove();">' +
+          '<span class="item-ph-icon" aria-hidden="true">' + icon + '</span></div>'
+        : '<div class="std-line-media is-placeholder"><span class="item-ph-icon" aria-hidden="true">' +
+          icon + '</span></div>';
+    const qtyHtml = renderItemQtyControls(key);
+    const detailHtml =
+        '<div class="std-line-details-panel">' +
+            (dim ? '<div class="std-line-dim">' + dim + '</div>' : '') +
+            (detail ? '<div class="std-line-desc">' + detail + '</div>' : '') +
+        '</div>';
+    return (
+        '<div class="std-line-card is-acc-in-list" data-comp-key="' + key + '" data-acc-key="' + key + '">' +
+            removeBtn +
+            '<div class="std-line-media-wrap">' + media + '</div>' +
+            '<div class="std-line-body">' +
+                '<strong class="std-line-name">' + name + (qty > 1 ? ' ×' + qty : '') + '</strong>' +
+                detailHtml +
+                renderLineFooter(listUsd, { prefix: '+' }, qtyHtml) +
+            '</div>' +
+        '</div>'
+    );
+}
+
 function renderStdConfig() {
     const specList = document.getElementById('previewSpecsList');
     if (!specList) return;
     const configs = activeStdConfigs();
-    specList.innerHTML = configs.map(renderStdLineCard).join('');
+    let html = configs.map(renderStdLineCard).join('');
+    html += selectedAccessoryKeys().map(renderListAccessoryCard).join('');
+    specList.innerHTML = html;
     syncStdListToggleLabel();
 }
 
 function removeStdComponent(key) {
     if (!key || key === 'shedStd' || key === 'shedMini' || key === 'woodenBox') return;
     removedStdSet().add(key);
+    state.accessories[key] = false;
     renderStdConfig();
     if (typeof renderAccessories === 'function') renderAccessories();
     if (typeof updateTotal === 'function') updateTotal();
+    focusAddAccessories();
+}
+
+/** Put a removed package item back into Equipment (standard). */
+function restoreStdComponent(key) {
+    if (!key) return;
+    removedStdSet().delete(key);
+    state.accessories[key] = false;
+    renderStdConfig();
+    if (typeof renderAccessories === 'function') renderAccessories();
+    if (typeof updateTotal === 'function') updateTotal();
+}
+
+function removeAccessoryFromList(key) {
+    if (!key) return;
+    state.accessories[key] = false;
+    renderStdConfig();
+    if (typeof renderAccessories === 'function') renderAccessories();
+    if (typeof updateTotal === 'function') updateTotal();
+    focusAddAccessories();
+}
+
+function addAccessoryToList(key) {
+    if (!key) return;
+    if (isRemovedFromStd(key)) {
+        restoreStdComponent(key);
+        return;
+    }
+    state.accessories[key] = true;
+    if (supportsItemQty(key)) setItemQty(key, Math.max(1, getItemQty(key)));
+    renderStdConfig();
+    if (typeof renderAccessories === 'function') renderAccessories();
+    if (typeof updateTotal === 'function') updateTotal();
+}
+
+function isPackageStdKey(key) {
+    if (!key || !window.OutdoorQuote) return false;
+    return OutdoorQuote.stdKeys(state.width, state.doorType).indexOf(key) !== -1;
+}
+
+function isRemovedFromStd(key) {
+    return isPackageStdKey(key) && removedStdSet().has(key);
 }
 
 function initStdRemoveButtons() {
@@ -1053,6 +1223,10 @@ function initStdRemoveButtons() {
         if (!btn) return;
         e.preventDefault();
         e.stopPropagation();
+        if (btn.dataset.removeAcc) {
+            removeAccessoryFromList(btn.dataset.removeAcc);
+            return;
+        }
         removeStdComponent(btn.dataset.removeKey);
     });
 }
@@ -1072,10 +1246,10 @@ function initItemQtyControls() {
         if (btn.classList.contains('qty-plus')) setItemQty(key, cur + 1);
         else setItemQty(key, cur - 1);
 
-        const inStd = !!document.querySelector('#previewSpecsList [data-comp-key="' + key + '"]');
-        const inAcc = !!document.querySelector('#accessoriesGrid .acc-check[data-accessory="' + key + '"]');
-        if (inStd) renderStdConfig();
-        if (inAcc) renderAccessories();
+        const inList = !!document.querySelector('#previewSpecsList [data-comp-key="' + key + '"]');
+        const inAccPool = !!document.querySelector('#accessoriesGrid .acc-check[data-accessory="' + key + '"]');
+        if (inList) renderStdConfig();
+        if (inAccPool) renderAccessories();
         updateTotal();
     });
 }
@@ -1236,7 +1410,7 @@ function renderComponents() {
 
 function libPriceCny(key) {
     if (!window.OutdoorQuote) return 0;
-    return Math.round(OutdoorQuote.listUsd(key, 2200, '1-5') * FX_USD_CNY);
+    return Math.round(OutdoorQuote.listUsd(key, 2200, DEFAULT_QTY_TIER) * FX_USD_CNY);
 }
 
 const productLibrary = [
@@ -1247,7 +1421,8 @@ const productLibrary = [
     { id: 'lib-sink', cat: 'sink', sku: 'SINK', name: { en: 'Sink', cn: '水槽' }, dim: '560×420×215 mm', priceCny: libPriceCny('sink'), icon: '🚰', img: MASTER_IMG('sink'), itemKey: 'sink' },
     { id: 'lib-keg', cat: 'appliance', sku: 'KEG', name: { en: 'Kegerator', cn: '啤酒机' }, dim: '606×900×633 mm', priceCny: libPriceCny('kegerator'), icon: '🍺', img: MASTER_IMG('kegerator'), itemKey: 'kegerator' },
     { id: 'lib-kamado', cat: 'appliance', sku: 'KAMADO', name: { en: 'Kamado', cn: '陶瓷炭烤炉' }, dim: '18"', priceCny: libPriceCny('kamado'), icon: '🍕', img: MASTER_IMG('kamado'), itemKey: 'kamado' },
-    { id: 'lib-tv', cat: 'appliance', sku: 'TV', name: { en: 'TV', cn: '电视' }, dim: '—', priceCny: libPriceCny('tv'), icon: '📺', img: MASTER_IMG('tv'), itemKey: 'tv' }
+    { id: 'lib-tv', cat: 'appliance', sku: 'TV', name: { en: 'TV', cn: '电视' }, dim: '—', priceCny: libPriceCny('tv'), icon: '📺', img: MASTER_IMG('tv'), itemKey: 'tv' },
+    { id: 'lib-tv-bracket', cat: 'appliance', sku: 'TV-BRACKET', name: { en: 'TV Bracket', cn: '电视支架' }, dim: '645×420 mm', priceCny: libPriceCny('tvBracket'), icon: '📐', img: MASTER_IMG('tv-bracket'), itemKey: 'tvBracket' }
 ];
 
 const libCats = [
@@ -1284,32 +1459,37 @@ function renderAccLineCard(item) {
     const fit = checkFitsCabinet(dim);
     const blocked = !!(item.incompatible || (!fit.ok && !fit.unknown));
     const caution = !blocked && !!item.notRecommended;
+    const restoreStd = !blocked && !!item.restoreStd;
     const warn = (blocked || caution)
         ? '<span class="acc-warn">' + t(blocked ? 'config.optBlocked' : 'config.optNotRec') + '</span>'
         : '';
     const media = src
         ? '<div class="std-line-media"><img src="' + src + '" alt="' + name + '" loading="lazy" onerror="this.parentElement.classList.add(\'is-placeholder\');this.remove();"><span class="item-ph-icon" aria-hidden="true">' + icon + '</span></div>'
         : '<div class="std-line-media is-placeholder"><span class="item-ph-icon" aria-hidden="true">' + icon + '</span></div>';
+    // Pending pool: always gray 待选 (never is-checked here)
     const stateClass = blocked ? ' is-disabled' : (caution ? ' is-not-rec' : '');
-    const checked = !blocked && item.checked ? 'is-checked' : '';
     const detailHtml =
         '<div class="std-line-details-panel">' +
             (dim ? '<div class="std-line-dim">' + dim + '</div>' : '') +
-            (detail ? '<div class="std-line-desc">• ' + detail + '</div>' : '') +
+            (detail ? '<div class="std-line-desc">' + detail + '</div>' : '') +
             warn +
         '</div>';
-    const qtyHtml = renderItemQtyControls(key, { disabled: blocked || !item.checked });
+    const qtyHtml = renderItemQtyControls(key, { disabled: true });
+    const pricePrefix = restoreStd ? '' : '+';
 
     return (
-        '<label class="std-line-card acc-line-card ' + checked + stateClass + '"' +
-            (blocked ? ' aria-disabled="true"' : '') + '>' +
+        '<label class="std-line-card acc-line-card is-pending ' + stateClass + '"' +
+            (blocked ? ' aria-disabled="true"' : '') +
+            (restoreStd ? ' data-restore-std="1"' : '') +
+            ' data-acc-key="' + key + '">' +
             '<input type="checkbox" class="acc-check" data-accessory="' + key + '" data-price="' + price + '" ' +
-                (checked ? 'checked' : '') + (blocked ? ' disabled' : '') + '>' +
+                (restoreStd ? 'data-restore-std="1" ' : '') +
+                (blocked ? ' disabled' : '') + '>' +
             '<div class="std-line-media-wrap">' + media + '</div>' +
             '<div class="std-line-body">' +
-                '<strong class="std-line-name">' + name + (checked && qty > 1 ? ' ×' + qty : '') + '</strong>' +
+                '<strong class="std-line-name">' + name + '</strong>' +
                 detailHtml +
-                renderLineFooter(listUsd, { prefix: '+' }, qtyHtml) +
+                renderLineFooter(listUsd, { prefix: pricePrefix }, qtyHtml) +
             '</div>' +
         '</label>'
     );
@@ -1413,7 +1593,7 @@ function renderAccessories() {
     const opts = window.OutdoorQuote
         ? OutdoorQuote.optionalKeys(state.width, state.doorType)
         : [];
-    // Items removed from standard package reappear as optional add-ons
+    // Items removed from standard package reappear as gray pending add-ons
     if (window.OutdoorQuote) {
         const active = new Set(activeStdKeys());
         const L = String(nearestStdWidth(state.width));
@@ -1428,27 +1608,40 @@ function renderAccessories() {
                 opts.push({
                     key: k,
                     notRecommended: notRec.has(k) && !blocked.has(k),
-                    incompatible: blocked.has(k)
+                    incompatible: blocked.has(k),
+                    restoreStd: true
                 });
+            } else {
+                const hit = opts.find((o) => o.key === k);
+                if (hit) hit.restoreStd = true;
             }
         });
     }
     const allowed = new Set(opts.map((o) => o.key));
     Object.keys(state.accessories).forEach((k) => {
-        if (!allowed.has(k)) state.accessories[k] = false;
+        if (!allowed.has(k) && !isRemovedFromStd(k)) state.accessories[k] = false;
     });
 
+    // Add Accessories = gray 待选 only (selected ones live in Equipment list)
     const accData = opts.map((o) => {
         const dim = resolveItemDim(o.key);
         const fit = checkFitsCabinet(dim);
         const incompatible = !!(o.incompatible || (!fit.ok && !fit.unknown));
+        const restoreStd = !incompatible && (!!o.restoreStd || isRemovedFromStd(o.key));
         if (incompatible && state.accessories[o.key]) state.accessories[o.key] = false;
+        if (restoreStd) state.accessories[o.key] = false;
+        const selected = !incompatible && !restoreStd && !!state.accessories[o.key];
         return {
             key: o.key,
             notRecommended: o.notRecommended,
             incompatible,
-            checked: !incompatible && !!state.accessories[o.key]
+            restoreStd,
+            selected
         };
+    }).filter((o) => {
+        if (o.incompatible) return true;
+        if (o.restoreStd) return true;
+        return !o.selected;
     });
 
     let html = accData.map(renderAccLineCard).join('');
@@ -1456,25 +1649,22 @@ function renderAccessories() {
     html += renderAddCard();
     accessoriesGrid.innerHTML = html;
 
-    accessoriesGrid.querySelectorAll('.acc-check').forEach(cb => {
-        cb.addEventListener('change', function() {
-            const key = this.dataset.accessory;
-            state.accessories[key] = this.checked;
-            if (supportsItemQty(key)) {
-                if (this.checked) setItemQty(key, Math.max(1, getItemQty(key)));
-                renderAccessories();
-            } else {
-                this.closest('.acc-line-card')?.classList.toggle('is-checked', this.checked);
+    accessoriesGrid.querySelectorAll('.acc-check').forEach((cb) => {
+        cb.addEventListener('change', function () {
+            if (!this.checked) {
+                this.checked = false;
+                return;
             }
-            updateTotal();
+            const key = this.dataset.accessory;
+            addAccessoryToList(key);
         });
     });
 
-    accessoriesGrid.querySelectorAll('[data-remove-extra]').forEach(btn => {
+    accessoriesGrid.querySelectorAll('[data-remove-extra]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const id = btn.getAttribute('data-remove-extra');
-            state.extraItems = (state.extraItems || []).filter(x => x.id !== id);
+            state.extraItems = (state.extraItems || []).filter((x) => x.id !== id);
             renderAccessories();
             updateTotal();
         });
@@ -1569,8 +1759,10 @@ function renderProductLibrary() {
                     '<span class="item-ph-icon" aria-hidden="true">' + p.icon + '</span></div></div>' +
                 '<div class="std-line-body">' +
                     '<strong class="std-line-name">' + name + '</strong>' +
-                    '<div class="std-line-details-panel">' + p.dim + ' · ' + p.sku +
-                        (fitText ? '<br><span class="lib-fit-badge ' + fitClass + '">' + fitText + '</span>' : '') +
+                    '<div class="std-line-details-panel">' +
+                        (p.dim ? '<div class="std-line-dim">' + p.dim + '</div>' : '') +
+                        (p.sku ? '<div class="std-line-desc">' + p.sku + '</div>' : '') +
+                        (fitText ? '<span class="lib-fit-badge ' + fitClass + '">' + fitText + '</span>' : '') +
                     '</div>' +
                     '<div class="std-line-footer">' +
                         '<span class="std-line-price">' + formatDualPrice(p.priceCny) + '</span>' +
@@ -1640,14 +1832,17 @@ function updateTotal() {
     const finish = Math.round(finishCny);
     const total = base + accessories + finish;
     const model = getModelName();
-    const fxText = '1 USD = ' + FX_USD_CNY + ' CNY · ÷' + PUBLIC_COST_RATIO;
+    const fxText = '1 USD = ' + FX_USD_CNY + ' CNY';
 
-    totalModel.textContent = model;
-    totalBasePrice.textContent = formatCny(base);
-    document.getElementById('totalAccessoriesRow').style.display = accessories > 0 ? 'flex' : 'none';
-    totalAccessoriesPrice.textContent = accessories > 0 ? '+' + formatCny(accessories) : formatCny(0);
-    totalFinishPrice.textContent = finish > 0 ? '+' + formatCny(finish) : formatCny(0);
-    totalFinalPrice.textContent = formatCny(total);
+    if (totalModel) totalModel.textContent = model;
+    if (totalBasePrice) totalBasePrice.textContent = formatCny(base);
+    const accRow = document.getElementById('totalAccessoriesRow');
+    if (accRow) accRow.style.display = accessories > 0 ? 'flex' : 'none';
+    if (totalAccessoriesPrice) {
+        totalAccessoriesPrice.textContent = accessories > 0 ? '+' + formatCny(accessories) : formatCny(0);
+    }
+    if (totalFinishPrice) totalFinishPrice.textContent = finish > 0 ? '+' + formatCny(finish) : formatCny(0);
+    if (totalFinalPrice) totalFinalPrice.textContent = formatCny(total);
 
     const totalFx = document.getElementById('totalFxRate');
     const totalUsd = document.getElementById('totalFinalUsd');
@@ -1669,12 +1864,7 @@ function updateTotal() {
     if (stickyCny) stickyCny.textContent = formatCny(total);
     if (stickyUsd) stickyUsd.textContent = formatUsd(usd);
     if (stickyMaterial) stickyMaterial.textContent = t('config.matVal');
-    if (stickyFob) {
-        const unlocked = window.OutdoorQuote && OutdoorQuote.isTierUnlocked();
-        stickyFob.textContent = unlocked
-            ? t('config.tierUnlocked') + ' · ' + state.qtyTier
-            : t('config.fob');
-    }
+    if (stickyFob) stickyFob.textContent = t('config.fob');
 }
 
 let quoteStickyInView = false;
@@ -1780,92 +1970,69 @@ sizeBtns.forEach(btn => {
     });
 });
 
-// Qty tiers on sticky — public locked to 1-5; admin / approved PIN unlocks
+// Internal: margin chips. MP: no margin UI (price fixed at cost×2.5).
 (function initQtyTiers() {
-    const group = document.getElementById('qtyTierGroup');
-    if (!group) return;
-    const btns = group.querySelectorAll('.quote-qty-btn');
-    const unlockBtn = document.getElementById('tierUnlockBtn');
-    const lockHint = document.getElementById('tierLockHint');
-
-    // URL approve: ?tierUnlock=ddadmin or ?tierUnlock=1 after prior unlock
-    try {
-        const params = new URLSearchParams(location.search);
-        const pin = params.get('tierUnlock');
-        if (pin && window.OutdoorQuote) OutdoorQuote.tryUnlockTier(pin);
-    } catch (_) {}
-
-    const syncTierUi = () => {
-        const unlocked = window.OutdoorQuote && OutdoorQuote.isTierUnlocked();
-        state.qtyTier = window.OutdoorQuote
-            ? OutdoorQuote.resolveTier(state.qtyTier)
-            : '1-5';
-        group.classList.toggle('is-locked', !unlocked);
-        group.classList.toggle('is-unlocked', !!unlocked);
-        btns.forEach((b) => {
-            b.classList.toggle('active', b.dataset.tier === state.qtyTier);
-            b.disabled = !unlocked && b.dataset.tier !== '1-5';
+    state.qtyTier = DEFAULT_QTY_TIER;
+    const host = document.getElementById('marginTierBar');
+    window.syncQtyTiersUi = function () {
+        if (IS_MP_CHANNEL) {
+            state.qtyTier = 'mp';
+            if (host) host.hidden = true;
+            return;
+        }
+        if (!host) return;
+        host.hidden = false;
+        host.querySelectorAll('[data-margin]').forEach((btn) => {
+            btn.classList.toggle('is-active', btn.getAttribute('data-margin') === state.qtyTier);
         });
-        if (unlockBtn) {
-            unlockBtn.hidden = !!unlocked;
-            unlockBtn.textContent = t('config.tierUnlock');
-        }
-        if (lockHint) {
-            lockHint.hidden = !!unlocked;
-            lockHint.textContent = t('config.tierLocked');
-        }
     };
-
-    syncTierUi();
-    btns.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const unlocked = window.OutdoorQuote && OutdoorQuote.isTierUnlocked();
-            if (!unlocked) {
-                if (unlockBtn) unlockBtn.focus();
-                return;
-            }
-            const tier = btn.dataset.tier;
-            if (!tier || tier === state.qtyTier) return;
-            state.qtyTier = tier;
-            syncTierUi();
-            updateAll();
-        });
-    });
-
-    if (unlockBtn) {
-        unlockBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const pin = window.prompt(t('config.tierPinPrompt'), '');
-            if (pin == null) return;
-            if (window.OutdoorQuote && OutdoorQuote.tryUnlockTier(pin)) {
-                syncTierUi();
-                updateAll();
-            } else {
-                window.alert(t('config.tierPinBad'));
+    if (host && !IS_MP_CHANNEL) {
+        host.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-margin]');
+            if (!btn) return;
+            state.qtyTier = btn.getAttribute('data-margin') || '30%';
+            window.syncQtyTiersUi();
+            if (typeof updateAll === 'function') updateAll();
+            else {
+                if (typeof renderStdConfig === 'function') renderStdConfig();
+                if (typeof renderAccessories === 'function') renderAccessories();
+                if (typeof updateTotal === 'function') updateTotal();
+                if (typeof syncQuoteSticky === 'function') syncQuoteSticky();
             }
         });
     }
-
-    // Triple-click price label also opens unlock
-    const exwLabel = group.closest('.quote-sticky-inner')?.querySelector('.quote-sticky-exw');
-    if (exwLabel) {
-        let clicks = 0;
-        let timer = null;
-        exwLabel.addEventListener('click', (e) => {
-            e.preventDefault();
-            clicks += 1;
-            clearTimeout(timer);
-            timer = setTimeout(() => { clicks = 0; }, 700);
-            if (clicks >= 3 && unlockBtn && !OutdoorQuote.isTierUnlocked()) unlockBtn.click();
-        });
-    }
-
-    window.syncQtyTierUi = syncTierUi;
+    window.syncQtyTiersUi();
 })();
 
+function applyChannelChrome() {
+    const banner = document.getElementById('channelBanner');
+    const stickyExw = document.querySelector('.quote-sticky-exw');
+    const stickyFob = document.getElementById('stickyFob');
+    const totalNote = document.querySelector('[data-i18n="config.total.note"]');
+    if (IS_MP_CHANNEL) {
+        document.documentElement.setAttribute('data-quote-channel', 'mp');
+        document.body.classList.add('quote-channel-mp');
+        document.body.classList.remove('quote-channel-internal');
+        if (banner) banner.textContent = t('config.mpBanner');
+        if (stickyExw) stickyExw.textContent = t('config.exwMp');
+        if (stickyFob) stickyFob.textContent = t('config.fobMp');
+        if (totalNote) totalNote.textContent = t('config.total.noteMp');
+        document.querySelectorAll('.internal-only').forEach((el) => {
+            el.hidden = true;
+        });
+    } else {
+        document.documentElement.setAttribute('data-quote-channel', 'internal');
+        document.body.classList.add('quote-channel-internal');
+        document.body.classList.remove('quote-channel-mp');
+        if (banner) banner.textContent = t('config.internalBanner');
+        if (stickyExw) stickyExw.textContent = t('config.exw');
+        if (stickyFob) stickyFob.textContent = t('config.fob');
+        if (totalNote) totalNote.textContent = t('config.total.note');
+        document.querySelectorAll('.mp-only').forEach((el) => {
+            el.hidden = true;
+        });
+    }
+}
 
 // Shell preview: recolor black cabinet photo to selected shell swatch
 const shellPreview = {
@@ -1993,7 +2160,7 @@ function renderShellPreview(hex, doorHex, doorTexture) {
 async function paintShellPreviewActive() {
     const active = document.querySelector('#bodyColorGrid .body-swatch.color-active');
     const hex = (active && (active.dataset.bar || parseSwatchColor(active))) || '#8f8b84';
-    const doorSwatch = document.querySelector('#doorSeriesList .color-swatch.color-active');
+    const doorSwatch = document.querySelector('#doorColorGrid .color-swatch.color-active');
     const doorHex = doorSwatch?.dataset.bar || parseSwatchColor(doorSwatch) || '#a07848';
     const textureUrl = doorSwatch?.dataset.texture || '';
     const texture = textureUrl ? await loadDoorTexture(textureUrl) : null;
@@ -2047,6 +2214,150 @@ function initShellPreview() {
     }
 }
 
+function getColorOptions() {
+    return window.COLOR_OPTIONS || null;
+}
+
+function colorItemName(item) {
+    if (!item) return '';
+    return (currentLang === 'cn' ? item.cn : item.en) || item.en || item.code;
+}
+
+function colorSeriesLabel(key, meta) {
+    if (!meta) return key;
+    const i18nKey = 'config.' + key;
+    if (i18n[i18nKey]) return t(i18nKey);
+    return currentLang === 'cn' ? meta.cn : meta.en;
+}
+
+function buildColorSwatchHtml(item, { body = false, active = false, more = false } = {}) {
+    const name = colorItemName(item);
+    const bar = item.bar || '#9ca3af';
+    const img = item.img || '';
+    const previewStyle = img
+        ? `background-image:url('${img}');background-size:cover;background-position:center`
+        : `background:${bar}`;
+    const cls = [
+        'color-swatch',
+        'color-card',
+        body ? 'body-swatch' : '',
+        more ? 'color-swatch-more' : '',
+        active ? 'color-active' : '',
+    ].filter(Boolean).join(' ');
+    const textureAttr = img ? ` data-texture="${img}"` : '';
+    return (
+        `<button type="button" class="${cls}" data-code="${item.code}" data-premium="${item.premium || 0}" ` +
+        `data-bar="${bar}" data-series="${item.series}" title="${name.replace(/"/g, '&quot;')}"${textureAttr}>` +
+        `<span class="sw-preview sw-card-preview" style="${previewStyle}"></span>` +
+        `<span class="sw-meta"><strong class="sw-code">${item.code}</strong><small class="sw-name">${name}</small></span>` +
+        `</button>`
+    );
+}
+
+function orderColorItems(items, featuredCodes) {
+    const byCode = new Map(items.map((it) => [it.code, it]));
+    const featured = [];
+    featuredCodes.forEach((code) => {
+        const it = byCode.get(code);
+        if (it) featured.push(it);
+    });
+    const featuredSet = new Set(featuredCodes);
+    const rest = items
+        .filter((it) => !featuredSet.has(it.code))
+        .sort((a, b) => a.code.localeCompare(b.code));
+    return { featured, rest };
+}
+
+function syncColorExpandUi(kind) {
+    const gridId = kind === 'body' ? 'bodyColorGrid' : 'doorColorGrid';
+    const btnId = kind === 'body' ? 'bodyColorExpand' : 'doorColorExpand';
+    const grid = document.getElementById(gridId);
+    const btn = document.getElementById(btnId);
+    if (!grid || !btn) return;
+    const moreCount = grid.querySelectorAll('.color-swatch-more').length;
+    const expanded = !!colorExpandState[kind];
+    grid.classList.toggle('is-collapsed', !expanded);
+    btn.hidden = moreCount === 0;
+    btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    btn.textContent = expanded ? t('config.accCollapse') : t('config.accExpand');
+}
+
+function fillColorGrid(grid, items, featuredCodes, activeCode, { body = false, kind = 'body' } = {}) {
+    const { featured, rest } = orderColorItems(items, featuredCodes);
+    const html =
+        featured.map((it) => buildColorSwatchHtml(it, { body, active: it.code === activeCode, more: false })).join('') +
+        rest.map((it) => buildColorSwatchHtml(it, { body, active: it.code === activeCode, more: true })).join('');
+    grid.innerHTML = html;
+    // Auto-expand if current selection is in the “more” pool
+    if (rest.some((it) => it.code === activeCode)) {
+        colorExpandState[kind] = true;
+    }
+    syncColorExpandUi(kind);
+}
+
+/** Fill shell / door / countertop pickers from COLOR_OPTIONS (Color options V3.0). */
+function renderColorPickers(active) {
+    const data = getColorOptions();
+    const bodyGrid = document.getElementById('bodyColorGrid');
+    const doorGrid = document.getElementById('doorColorGrid');
+    if (!data || !bodyGrid || !doorGrid) return;
+
+    const defs = data.defaults || {};
+    const bodyDef = (active && active.body) || bodyColorState.code || defs.body || 'CK02F';
+    const doorDef = (active && active.door) || colorState.code || 'CK03F';
+    const topDef = (active && active.countertop) || countertopColorState.code || defs.countertop || '';
+
+    const bodyItems = data.items.filter(
+        (it) => it.scope === 'body_door' || it.series === 'xuanli'
+    );
+    fillColorGrid(bodyGrid, bodyItems, SHELL_FEATURED_CODES, bodyDef, { body: true, kind: 'body' });
+
+    const doorItems = data.items.filter((it) => it.series !== 'countertop');
+    fillColorGrid(doorGrid, doorItems, DOOR_FEATURED_CODES, doorDef, { body: true, kind: 'door' });
+
+    const topBlock = document.getElementById('countertopColorBlock');
+    const topGrid = document.getElementById('countertopColorGrid');
+    const topItems = data.items.filter((it) => it.series === 'countertop');
+    if (topBlock && topGrid && topItems.length) {
+        topBlock.hidden = false;
+        topGrid.innerHTML = topItems
+            .map((it) => buildColorSwatchHtml(it, { body: true, active: it.code === topDef }))
+            .join('');
+        const topItem = topItems.find((it) => it.code === topDef) || topItems[0];
+        countertopColorState.code = topItem.code;
+        countertopColorState.name = colorItemName(topItem);
+        countertopColorState.premium = topItem.premium || 0;
+        const codeEl = document.getElementById('selectedCountertopCode');
+        const nameEl = document.getElementById('selectedCountertopName');
+        if (codeEl) codeEl.textContent = countertopColorState.code;
+        if (nameEl) nameEl.textContent = '— ' + countertopColorState.name;
+    }
+
+    const bodyItem = bodyItems.find((it) => it.code === bodyDef) || bodyItems[0];
+    if (bodyItem) {
+        bodyColorState.code = bodyItem.code;
+        bodyColorState.name = colorItemName(bodyItem);
+        bodyColorState.premium = bodyItem.premium || 0;
+        const codeEl = document.getElementById('selectedBodyColorCode');
+        const nameEl = document.getElementById('selectedBodyColorName');
+        if (codeEl) codeEl.textContent = bodyColorState.code;
+        if (nameEl) nameEl.textContent = '— ' + bodyColorState.name;
+    }
+
+    const doorItem =
+        doorItems.find((it) => it.code === doorDef) ||
+        doorItems.find((it) => it.code === 'CK03F') ||
+        doorItems[0];
+    if (doorItem) {
+        colorState.series = doorItem.series;
+        colorState.code = doorItem.code;
+        colorState.name = colorItemName(doorItem);
+        colorState.premium = doorItem.premium || 0;
+        if (selectedColorCode) selectedColorCode.textContent = colorState.code;
+        if (selectedColorName) selectedColorName.textContent = '— ' + colorState.name;
+    }
+}
+
 // Cabinet body color selection
 document.addEventListener('click', function(e) {
     const swatch = e.target.closest('#bodyColorGrid .body-swatch');
@@ -2062,6 +2373,23 @@ document.addEventListener('click', function(e) {
     if (nameEl) nameEl.textContent = '— ' + bodyColorState.name;
     syncColorSelectedBar(swatch, 'bodyColorSelectedInfo');
     paintShellPreviewActive();
+    updateTotal();
+});
+
+// Countertop finish selection
+document.addEventListener('click', function(e) {
+    const swatch = e.target.closest('#countertopColorGrid .color-swatch');
+    if (!swatch) return;
+    document.querySelectorAll('#countertopColorGrid .color-swatch').forEach(s => s.classList.remove('color-active'));
+    swatch.classList.add('color-active');
+    countertopColorState.code = swatch.dataset.code;
+    countertopColorState.premium = parseInt(swatch.dataset.premium) || 0;
+    countertopColorState.name = swatch.title || swatch.querySelector('small')?.textContent || swatch.dataset.code;
+    const codeEl = document.getElementById('selectedCountertopCode');
+    const nameEl = document.getElementById('selectedCountertopName');
+    if (codeEl) codeEl.textContent = countertopColorState.code;
+    if (nameEl) nameEl.textContent = '— ' + countertopColorState.name;
+    syncColorSelectedBar(swatch, 'countertopSelectedInfo');
     updateTotal();
 });
 
@@ -2095,7 +2423,7 @@ function loadDoorTexture(url) {
 
 async function paintDoorPreviewFromSwatch(swatch) {
     if (!swatch) {
-        swatch = document.querySelector('#doorSeriesList .color-swatch.color-active');
+        swatch = document.querySelector('#doorColorGrid .color-swatch.color-active');
     }
     if (!swatch) return;
     const hex = swatch.dataset.bar || parseSwatchColor(swatch) || '#2c2e31';
@@ -2109,12 +2437,11 @@ function initDoorPreview() {
     // Legacy no-op: shell + door colors share #shellPreviewCanvas
 }
 
-// Door panel color selection (delegated across 4 series)
+// Door panel color selection (same container as shell)
 document.addEventListener('click', function(e) {
-    const swatch = e.target.closest('#doorSeriesList .color-swatch');
+    const swatch = e.target.closest('#doorColorGrid .color-swatch');
     if (!swatch) return;
-    const block = swatch.closest('.door-series-block');
-    if (block && block.dataset.series) colorState.series = block.dataset.series;
+    if (swatch.dataset.series) colorState.series = swatch.dataset.series;
     colorSwatches().forEach(s => s.classList.remove('color-active'));
     swatch.classList.add('color-active');
     colorState.code = swatch.dataset.code;
@@ -2127,26 +2454,44 @@ document.addEventListener('click', function(e) {
     updateTotal();
 });
 
+// Shell / door color “Show more”
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('#bodyColorExpand, #doorColorExpand');
+    if (!btn) return;
+    const kind = btn.id === 'bodyColorExpand' ? 'body' : 'door';
+    colorExpandState[kind] = !colorExpandState[kind];
+    syncColorExpandUi(kind);
+});
+
 // =============================================
 // INIT
 // =============================================
-updateAll();
-applyTranslation();
-initShellDoorTabs();
-initElevPreview();
-initShellPreview();
-initDoorPreview();
-const initialBodySwatch = document.querySelector('#bodyColorGrid .body-swatch.color-active');
-if (initialBodySwatch) syncColorSelectedBar(initialBodySwatch, 'bodyColorSelectedInfo');
-const initialSwatch = document.querySelector('#doorSeriesList .color-swatch.color-active');
-if (initialSwatch) syncColorSelectedBar(initialSwatch, 'colorSelectedInfo');
+try {
+    renderColorPickers();
+    updateAll();
+    applyTranslation();
+    initShellDoorTabs();
+    initElevPreview();
+    initShellPreview();
+    initDoorPreview();
+    const initialBodySwatch = document.querySelector('#bodyColorGrid .body-swatch.color-active');
+    if (initialBodySwatch) syncColorSelectedBar(initialBodySwatch, 'bodyColorSelectedInfo');
+    const initialSwatch = document.querySelector('#doorColorGrid .color-swatch.color-active');
+    if (initialSwatch) syncColorSelectedBar(initialSwatch, 'colorSelectedInfo');
+    const initialTopSwatch = document.querySelector('#countertopColorGrid .color-swatch.color-active');
+    if (initialTopSwatch) syncColorSelectedBar(initialTopSwatch, 'countertopSelectedInfo');
+    syncColorExpandUi('body');
+    syncColorExpandUi('door');
+} catch (err) {
+    console.error('DD quote init failed', err);
+}
 
 // =============================================
 // NAVBAR & SCROLL
 // =============================================
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 50);
 });
 
 const navToggle = document.getElementById('navToggle');
@@ -2222,21 +2567,29 @@ if (contactForm) {
     });
 }
 
-// Fade-in observer
+// Fade-in observer — threshold 0 so tall sections (color grids) still reveal
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
         }
     });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+}, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
 
 document.querySelectorAll('.section, .config-step, .config-total, .case-card, .hot-card, .specs-table, .step1-panel').forEach(el => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
     observer.observe(el);
+    // Reveal immediately if already in / near viewport (avoids white screen on tall pages)
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+        observer.unobserve(el);
+    }
 });
 
 // =============================================
@@ -2250,6 +2603,8 @@ function buildSummaryString() {
         const bodyName = document.getElementById('selectedBodyColorName')?.textContent?.replace('— ', '') || '';
         const colorCode = document.getElementById('selectedColorCode')?.textContent || '';
         const colorName = document.getElementById('selectedColorName')?.textContent?.replace('— ', '') || '';
+        const topCode = document.getElementById('selectedCountertopCode')?.textContent || '';
+        const topName = document.getElementById('selectedCountertopName')?.textContent?.replace('— ', '') || '';
         const totalPrice = document.getElementById('totalFinalPrice')?.textContent || '';
 
         const accItems = [];
@@ -2265,13 +2620,24 @@ function buildSummaryString() {
             return q > 1 ? label + ' ×' + q : label;
         });
 
-        const tierKey = { '1-5': 'config.tier15', '6-20': 'config.tier620', '20+': 'config.tier20p' }[state.qtyTier];
+        const tierKey = {
+            '30%': 'config.tier30',
+            '25%': 'config.tier25',
+            '20%': 'config.tier20',
+            '15%': 'config.tier15m',
+            '1-5': 'config.tier25',
+            '6-20': 'config.tier20',
+            '20+': 'config.tier15m',
+            mp: 'config.exwMp'
+        }[state.qtyTier];
         const tierLabel = tierKey ? t(tierKey) : state.qtyTier;
         const dims = `${width} × 900 × 2200 mm`;
         const usdTotal = document.getElementById('totalFinalUsd')?.textContent || '';
+        const topLineEn = topCode && topCode !== '—' ? `Countertop: ${topCode} — ${topName}` : null;
+        const topLineCn = topCode && topCode !== '—' ? `台面颜色：${topCode} — ${topName}` : null;
         const lines = currentLang === 'en'
-            ? [`Model: ${model}`, `Size: ${dims}`, `List price (EXW÷0.7) · ${tierLabel}`, `Package: ${stdNames.join(', ')}`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, `Options: ${accItems.length ? accItems.join(', ') : 'none'}`, `Estimated Total: ${totalPrice} / ${usdTotal}`]
-            : [`型号：${model}`, `尺寸：${dims}`, `网站报价（EXW÷0.7）· ${tierLabel}`, `标配：${stdNames.join('、')}`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, `选配：${accItems.length ? accItems.join('、') : '无'}`, `预估总价：${totalPrice} / ${usdTotal}`];
+            ? [`Model: ${model}`, `Size: ${dims}`, `Website price · ${tierLabel}`, `Package: ${stdNames.join(', ')}`, `Body Color: ${bodyCode} — ${bodyName}`, `Door Color: ${colorCode} — ${colorName}`, topLineEn, `Options: ${accItems.length ? accItems.join(', ') : 'none'}`, `Estimated Total: ${totalPrice} / ${usdTotal}`].filter(Boolean)
+            : [`型号：${model}`, `尺寸：${dims}`, `网站报价 · ${tierLabel}`, `标配：${stdNames.join('、')}`, `箱体颜色：${bodyCode} — ${bodyName}`, `门板颜色：${colorCode} — ${colorName}`, topLineCn, `选配：${accItems.length ? accItems.join('、') : '无'}`, `预估总价：${totalPrice} / ${usdTotal}`].filter(Boolean);
         return lines.join('\n');
     } catch(e) {
         return currentLang === 'en' ? 'Configuration: see selections above' : '配置：请参考上方选择';
@@ -2300,7 +2666,171 @@ function initHotCardExpand() {
     });
 }
 
+function buildCurrentOwnerPack() {
+    if (!window.CustomerPick || !window.OutdoorQuote) return null;
+    const selected = Object.keys(state.accessories || {}).filter((k) => state.accessories[k]);
+    return CustomerPick.attachMp({
+        v: 1,
+        kind: CustomerPick.KIND,
+        role: 'owner',
+        doorType: state.doorType,
+        width: state.width,
+        qtyTier: state.qtyTier || DEFAULT_QTY_TIER,
+        stdKeys: activeStdKeys(),
+        itemQty: state.itemQty || {},
+        offerKeys: [],
+        selected: selected,
+        createdAt: new Date().toISOString().slice(0, 10)
+    });
+}
+
+function shareOwnerShow() {
+    if (!window.CustomerPick || !window.OutdoorQuote) {
+        alert(t('config.openOwnerShow.fail'));
+        return;
+    }
+    const pack = buildCurrentOwnerPack();
+    if (!pack) {
+        alert(t('config.openOwnerShow.fail'));
+        return;
+    }
+    const url = CustomerPick.ownerUrl(pack);
+    if (!url) {
+        alert(t('config.openOwnerShow.fail'));
+        return;
+    }
+    CustomerPick.copyText(url)
+        .then(() => {
+            alert(t('config.openOwnerShow.copied') + '\n' + url);
+            window.open(url, '_blank', 'noopener');
+        })
+        .catch(() => {
+            prompt(t('config.openOwnerShow.copied'), url);
+            window.open(url, '_blank', 'noopener');
+        });
+}
+
+function shareCustomerPickLink() {
+    if (!window.CustomerPick || !window.OutdoorQuote) {
+        alert(t('config.customerPick.fail'));
+        return;
+    }
+    const pack = CustomerPick.buildOutboundPack({
+        width: state.width,
+        doorType: state.doorType,
+        qtyTier: state.qtyTier || DEFAULT_QTY_TIER,
+        stdKeys: activeStdKeys(),
+        accessories: state.accessories || {},
+        itemQty: state.itemQty || {}
+    });
+    if (!pack) {
+        alert(t('config.customerPick.fail'));
+        return;
+    }
+    const url = CustomerPick.pickUrl(pack, 'customer-pick.html');
+    CustomerPick.copyText(url)
+        .then(() => {
+            alert(t('config.customerPick.copied') + '\n' + url);
+        })
+        .catch(() => {
+            prompt(t('config.customerPick.copied'), url);
+        });
+}
+
+function shareMpImportCode() {
+    if (!window.CustomerPick || !window.OutdoorQuote) {
+        alert(t('config.mpImport.fail'));
+        return;
+    }
+    const pack = buildCurrentOwnerPack();
+    const text = pack ? CustomerPick.mpImportText(pack) : '';
+    if (!text) {
+        alert(t('config.mpImport.fail'));
+        return;
+    }
+    CustomerPick.copyText(text)
+        .then(() => alert(t('config.mpImport.copied')))
+        .catch(() => prompt(t('config.mpImport.copied'), text));
+}
+
+function applyCustomerPickReturn(pack) {
+    if (!pack || pack.kind !== CustomerPick.KIND) return false;
+    const width = Number(pack.width) || state.width;
+    if ([2200, 2900, 3200, 3500].indexOf(width) !== -1) state.width = width;
+    if (pack.doorType === 'xt' || pack.doorType === 'wm') state.doorType = pack.doorType;
+    if (pack.qtyTier) state.qtyTier = pack.qtyTier;
+
+    // Align package: restore all std from pack, clear removals not in return intent
+    if (Array.isArray(pack.stdKeys)) {
+        const want = new Set(pack.stdKeys);
+        const allStd = OutdoorQuote.stdKeys(state.width, state.doorType);
+        const removed = removedStdSet();
+        removed.clear();
+        allStd.forEach((k) => {
+            if (!want.has(k) && k !== 'shedStd' && k !== 'shedMini' && k !== 'woodenBox') {
+                removed.add(k);
+            }
+        });
+    }
+
+    state.accessories = state.accessories || {};
+    Object.keys(state.accessories).forEach((k) => {
+        state.accessories[k] = false;
+    });
+    (pack.selected || []).forEach((k) => {
+        state.accessories[k] = true;
+    });
+    if (pack.itemQty && typeof pack.itemQty === 'object') {
+        state.itemQty = Object.assign({}, state.itemQty || {}, pack.itemQty);
+    }
+
+    // Sync size / door UI
+    document.querySelectorAll('#sizeGroup .size-btn').forEach((btn) => {
+        btn.classList.toggle('active', Number(btn.dataset.width) === state.width);
+    });
+    document.querySelectorAll('.shell-door-tab').forEach((btn) => {
+        btn.classList.toggle('is-active', btn.dataset.door === state.doorType);
+    });
+
+    if (typeof renderStdConfig === 'function') renderStdConfig();
+    if (typeof renderAccessories === 'function') renderAccessories();
+    if (typeof updatePreview === 'function') updatePreview();
+    if (typeof updateTotal === 'function') updateTotal();
+    if (typeof syncDoorTypeCards === 'function') syncDoorTypeCards();
+    return true;
+}
+
+function initCustomerPickShare() {
+    ['btnCustomerPick', 'btnCustomerPickTop'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', shareCustomerPickLink);
+    });
+    const ownerBtn = document.getElementById('btnOwnerShow');
+    if (ownerBtn) ownerBtn.addEventListener('click', shareOwnerShow);
+    const mpBtn = document.getElementById('btnMpImport');
+    if (mpBtn) mpBtn.addEventListener('click', shareMpImportCode);
+}
+
+function consumeCustomerPickReturnHash() {
+    if (!window.CustomerPick) return;
+    const raw = String(location.hash || '').replace(/^#/, '');
+    if (!raw || raw.indexOf('pickreturn=') !== 0) return;
+    const pack = CustomerPick.decodePack(raw);
+    if (!pack || pack.role !== 'return') return;
+    if (applyCustomerPickReturn(pack)) {
+        history.replaceState(null, '', location.pathname + location.search);
+        setTimeout(() => {
+            alert(t('config.customerPick.imported'));
+            const total = document.getElementById('configTotal');
+            if (total) total.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    applyChannelChrome();
+    if (typeof window.syncQtyTiersUi === 'function') window.syncQtyTiersUi();
+
     const tabs = document.querySelectorAll('.hot-tab');
     const grids = document.querySelectorAll('.hot-grid');
     
@@ -2334,6 +2864,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initQuoteSticky();
     initShellDoorTabs();
     syncDoorTypeCards();
+    initCustomerPickShare();
+    consumeCustomerPickReturnHash();
     updateTotal();
     syncHotCardPrices();
 });

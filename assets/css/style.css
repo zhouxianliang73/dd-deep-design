@@ -1077,15 +1077,41 @@
 }
 
 .std-line-details-panel {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
     font-size: 10px;
     color: #777;
-    line-height: 1.3;
-    margin: 0;
+    line-height: 1.35;
+    margin: 0 0 2px;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .std-line-card.is-details-open .std-line-details-panel {
+    display: flex;
+}
+
+.std-line-dim,
+.std-line-desc {
     display: block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.std-line-dim {
+    color: #777;
+    font-variant-numeric: tabular-nums;
+}
+
+.std-line-desc {
+    color: #888;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
 }
 
 .std-line-qty {
@@ -1276,15 +1302,6 @@
     font-weight: 600;
     line-height: 1.25;
     max-width: 100%;
-}
-
-.std-line-dim {
-    color: #777;
-}
-
-.std-line-desc {
-    color: #888;
-    margin-top: 1px;
 }
 
 /* Caution badge only — do not look selected */
@@ -1610,22 +1627,108 @@
     color: var(--clr-dark);
     margin-bottom: 8px;
 }
-.body-color-block .color-grid,
-.door-series-block.body-color-block .color-grid,
-.body-shell-grid {
+.color-pick-area .color-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
+    gap: 10px;
 }
-.body-color-block .color-swatch {
+/* Shell: 1 row × 4 featured */
+#bodyColorGrid,
+.color-grid-shell {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+/* Door: 2 rows × 5 featured */
+#doorColorGrid,
+.color-grid-door {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+#countertopColorGrid,
+.color-grid-countertop {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.countertop-color-block {
+    margin-top: 14px;
+}
+.color-pick-block + .color-pick-block {
+    margin-top: 14px;
+}
+.color-expand-toggle {
+    margin-top: 8px;
+}
+
+/* Color card UI — large swatch + code + name (Color options V3) */
+.color-pick-area .color-swatch.color-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
     min-width: 0;
     width: 100%;
-    padding: 6px 2px;
-    font-size: 0.62rem;
+    padding: 10px;
+    border: 1.5px solid #d6c49a;
+    border-radius: 14px;
+    background: #fff;
+    color: #222;
+    box-shadow: none;
+    text-align: center;
+    line-height: 1.2;
 }
-.body-color-block .sw-preview {
-    width: 22px;
-    height: 22px;
+/* Must beat .color-card { display:flex } so “more” colors stay folded */
+.color-pick-area .color-grid.is-collapsed .color-swatch.color-swatch-more {
+    display: none !important;
+}
+.color-pick-area .color-swatch.color-card:hover {
+    border-color: #c4a35a;
+}
+.color-pick-area .color-swatch.color-card.color-active {
+    border-color: #b8954a;
+    background: #fff;
+    color: #222;
+    box-shadow: 0 0 0 1px #b8954a;
+}
+.color-pick-area .color-swatch.color-card .sw-card-preview {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 96px;
+    aspect-ratio: 1 / 1.05;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    margin: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.color-pick-area .color-swatch.color-card .sw-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 2px 2px;
+}
+.color-pick-area .color-swatch.color-card .sw-code {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.01em;
+}
+.color-pick-area .color-swatch.color-card .sw-name {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 400;
+    color: #8a8a8a;
+    line-height: 1.25;
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+}
+.color-pick-area .color-swatch.color-card.color-active .sw-code {
+    color: #1a1a1a;
+}
+.color-pick-area .color-swatch.color-card.color-active .sw-name,
+.color-pick-area .color-swatch.color-card.color-active small {
+    color: #8a8a8a;
 }
 .body-selected-info {
     margin-top: 8px;
@@ -1762,14 +1865,34 @@
     height: 100%;
 }
 @media (max-width: 640px) {
-    .body-shell-grid,
-    .door-series-block.body-color-block .color-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 4px;
+    #bodyColorGrid,
+    .color-grid-shell {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
     }
-    .body-color-block .color-swatch {
-        padding: 5px 1px;
-        font-size: 0.55rem;
+    #doorColorGrid,
+    .color-grid-door {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+    }
+    #countertopColorGrid,
+    .color-grid-countertop {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+    }
+    .color-pick-area .color-swatch.color-card {
+        padding: 7px;
+    }
+    .color-pick-area .color-swatch.color-card .sw-card-preview,
+    .color-pick-area .color-swatch.color-card .sw-preview.sw-card-preview {
+        min-height: 72px;
+        aspect-ratio: 1 / 1.05;
+    }
+    .color-pick-area .color-swatch.color-card .sw-code {
+        font-size: 0.72rem;
+    }
+    .color-pick-area .color-swatch.color-card .sw-name {
+        font-size: 0.58rem;
     }
 }
 
@@ -3183,6 +3306,15 @@ ul { list-style: none; }
     width: 36px;
     height: 36px;
 }
+/* Color cards: override tiny .sw-preview circle so tiles are not squashed */
+.color-pick-area .color-swatch.color-card .sw-preview.sw-card-preview {
+    width: 100%;
+    height: auto;
+    min-height: 96px;
+    aspect-ratio: 1 / 1.05;
+    border-radius: 10px;
+    margin-bottom: 0;
+}
 .door-panel-grid,
 .door-texture-grid {
     display: grid;
@@ -4070,9 +4202,9 @@ ul { list-style: none; }
 }
 
 .quote-sticky-row-tier {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr;
     align-items: center;
-    gap: 10px;
+    gap: 0;
 }
 
 .quote-sticky-exw {

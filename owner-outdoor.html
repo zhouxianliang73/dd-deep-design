@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>户外厨房报价 | DD Deep Design</title>
+  <meta name="description" content="Owner outdoor kitchen quotation — same list shell as mini-program projects." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="assets/css/mp-project-shell.css?t=20260728dual" />
+</head>
+<body>
+  <div class="mp-page" id="root">
+    <article class="mp-shell card is-open" id="sheet">
+      <p class="mp-empty">加载中…</p>
+    </article>
+    <p class="mp-note no-print" id="note" hidden></p>
+  </div>
+
+  <div class="mp-bar no-print" id="bar" hidden>
+    <div class="sum">
+      <span id="barLabel">报价合计</span>
+      <strong id="barTotal">—</strong>
+    </div>
+    <div class="btns">
+      <button type="button" class="mp-btn mp-btn-sec" id="btnLang">中 / EN</button>
+      <button type="button" class="mp-btn mp-btn-sec" id="btnPrint">打印</button>
+      <button type="button" class="mp-btn" id="btnMp">复制小程序导入码</button>
+    </div>
+  </div>
+
+    <script>
+    (function () {
+      var ch = /[?&]channel=mp\b/.test(location.search) ? 'mp' : 'internal';
+      window.DD_QUOTE_CHANNEL = ch;
+      document.documentElement.setAttribute('data-quote-channel', ch);
+    })();
+  </script>
+<script src="assets/js/outdoor-quote-data.js?t=20260728dual"></script>
+  <script src="assets/js/outdoor-quote.js?t=20260728dual"></script>
+  <script src="assets/js/customer-pick.js?t=20260728dual"></script>
+  <script>
+    (function () {
+      var CP = window.CustomerPick;
+      var OQ = window.OutdoorQuote;
+      var lang = /[?&]lang=en\b/.test(location.search) || /^en\b/i.test(navigator.language || '') ? 'en' : 'cn';
+      var pack = CP && CP.decodePack(location.hash);
+
+      function t(cn, en) { return lang === 'cn' ? cn : en; }
+      function moneyUsd(n) {
+        return '$' + Math.round(Number(n) || 0).toLocaleString('en-US');
+      }
+      function moneyCny(usd) {
+        var fx = (OQ && OQ.fx()) || 6.7;
+        return '¥' + Math.round((Number(usd) || 0) * fx).toLocaleString('zh-CN');
+      }
+      function meta(key) { return OQ.meta(key); }
+      function nameOf(key) {
+        var m = meta(key);
+        return lang === 'cn' ? (m.cn || m.en || key) : (m.en || m.cn || key);
+      }
+      function detailOf(key) {
+        var m = meta(key);
+        var dim = m.dim || '';
+        var d = lang === 'cn' ? (m.detailCn || m.detailEn || '') : (m.detailEn || m.detailCn || '');
+        if (dim && d) return dim + ' · ' + d;
+        return dim || d || '';
+      }
+      function imgOf(key) {
+        var m = meta(key);
+        return m.img ? ('assets/images/products/from-master/items/' + m.img + '.png') : '';
+      }
+      function qtyOf(key) {
+        var q = Number(pack.itemQty && pack.itemQty[key]);
+        if (!isFinite(q) || q < 1) return 1;
+        return Math.min(24, Math.floor(q));
+      }
+      function unitList(key) {
+        return OQ.listUsd(key, pack.width, pack.qtyTier || '30%');
+      }
+
+      function fail(msg) {
+        document.getElementById('sheet').innerHTML = '<div class="mp-empty">' + msg + '</div>';
+      }
+
+      if (!pack || !OQ || !CP) {
+        fail(t('链接无效或已过期，请让顾问重新发送业主报价。', 'Invalid link. Ask your advisor to resend the owner quote.'));
+        return;
+      }
+
+      pack = CP.attachMp(pack);
+
+      function lineRow(key) {
+        var qty = qtyOf(key);
+        var usd = unitList(key) * qty;
+        var src = imgOf(key);
+        var media = src
+          ? '<img class="mp-line-thumb" src="' + src + '" alt="" loading="lazy" onerror="this.outerHTML=\'<div class=mp-line-thumb-ph>' + (meta(key).icon || '📦') + '</div>\'">'
+          : '<div class="mp-line-thumb-ph">' + (meta(key).icon || '📦') + '</div>';
+        return (
+          '<div class="mp-quote-row">' +
+            '<div class="mp-col-name">' + media +
+              '<div class="mp-line-text">' +
+                '<span class="mp-line-name">' + nameOf(key) + '</span>' +
+                '<span class="mp-line-spec">' + (detailOf(key) || '—') + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="mp-col-qty">' + qty + t('件', 'pc') + '</div>' +
+            '<div class="mp-col-price">' + moneyCny(usd) + '</div>' +
+          '</div>'
+        );
+      }
+
+      function sectionHtml(id, label, keys, open) {
+        if (!keys.length) return '';
+        var sum = keys.reduce(function (s, k) { return s + unitList(k) * qtyOf(k); }, 0);
+        return (
+          '<div class="mp-section' + (open ? ' is-open' : '') + '" data-sec="' + id + '">' +
+            '<div class="mp-section-hd" data-toggle="' + id + '">' +
+              '<div class="mp-section-hd-main">' +
+                '<span class="mp-section-label">' + label + '</span>' +
+                '<span class="mp-chevron">' + (open ? '▾' : '▸') + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="mp-section-bd">' +
+              '<div class="mp-quote-head">' +
+                '<span>' + t('产品', 'Product') + '</span>' +
+                '<span class="mp-col-qty">' + t('数量', 'Qty') + '</span>' +
+                '<span class="mp-col-price">' + t('小计', 'Subtotal') + '</span>' +
+              '</div>' +
+              keys.map(lineRow).join('') +
+              '<div class="mp-quote-cat-total">' + t('本类合计', 'Category total') + ' ' + moneyCny(sum) + '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function render() {
+        var door = pack.doorType === 'wm' ? t('卷帘', 'Rolling') : t('翻盖', 'Top-Flip');
+        var title = t('户外厨房', 'Outdoor kitchen') + ' ' + door + ' ' + pack.width + 'mm';
+        var stdKeys = pack.stdKeys || [];
+        var optKeys = (pack.selected || []).filter(function (k) {
+          return stdKeys.indexOf(k) === -1;
+        });
+        var stdSum = stdKeys.reduce(function (s, k) { return s + unitList(k) * qtyOf(k); }, 0);
+        var optSum = optKeys.reduce(function (s, k) { return s + unitList(k) * qtyOf(k); }, 0);
+        var total = stdSum + optSum;
+        var metaLine =
+          t('网站价档', 'Tier') + ' ' + (pack.qtyTier || '30%') +
+          ' · EXW · FX ' + ((OQ.fx && OQ.fx()) || 6.7) +
+          (pack.createdAt ? (' · ' + pack.createdAt) : '');
+
+        document.getElementById('sheet').innerHTML =
+          '<div class="mp-shell-hd">' +
+            '<div class="mp-shell-hd-main">' +
+              '<div class="mp-shell-title-row">' +
+                '<div class="mp-shell-name">' + title + '</div>' +
+                '<span class="mp-badge mp-badge-owner">' + t('业主确认', 'Owner') + '</span>' +
+              '</div>' +
+              '<div class="mp-shell-meta">' + metaLine + '</div>' +
+              '<div class="mp-shell-info-row">' +
+                '<span class="mp-shell-price">' + moneyCny(total) + '</span>' +
+                '<span class="mp-shell-date muted">' + moneyUsd(total) + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mp-shell-body">' +
+            sectionHtml('std', t('标准配置', 'Standard package'), stdKeys, true) +
+            sectionHtml('opt', t('选配清单', 'Selected options'), optKeys, true) +
+            (stdKeys.length || optKeys.length
+              ? '<div class="mp-quote-total">' + t('合计', 'Total') + ' ' + moneyCny(total) + ' · ' + moneyUsd(total) + '</div>'
+              : '<div class="mp-empty">' + t('暂无明细', 'No line items') + '</div>') +
+          '</div>';
+
+        var note = document.getElementById('note');
+        note.hidden = false;
+        note.textContent = t(
+          '清单样式与小程序「项目」一致。确认后点下方复制导入码，到小程序项目页导入即可。',
+          'Same list shell as the mini-program Projects page. Copy the import code below after confirmation.'
+        );
+
+        document.getElementById('barLabel').textContent = t('报价合计', 'Total');
+        document.getElementById('barTotal').textContent = moneyCny(total) + ' / ' + moneyUsd(total);
+        document.getElementById('btnLang').textContent = lang === 'cn' ? 'EN' : '中文';
+        document.getElementById('btnPrint').textContent = t('打印', 'Print');
+        document.getElementById('btnMp').textContent = t('复制小程序导入码', 'Copy mini-program import');
+        document.getElementById('bar').hidden = false;
+
+        document.querySelectorAll('[data-toggle]').forEach(function (hd) {
+          hd.addEventListener('click', function () {
+            var sec = hd.closest('.mp-section');
+            if (!sec) return;
+            sec.classList.toggle('is-open');
+            var ch = hd.querySelector('.mp-chevron');
+            if (ch) ch.textContent = sec.classList.contains('is-open') ? '▾' : '▸';
+          });
+        });
+      }
+
+      document.getElementById('btnLang').addEventListener('click', function () {
+        lang = lang === 'cn' ? 'en' : 'cn';
+        render();
+      });
+      document.getElementById('btnPrint').addEventListener('click', function () {
+        window.print();
+      });
+      document.getElementById('btnMp').addEventListener('click', function () {
+        var text = CP.mpImportText(pack);
+        if (!text) {
+          alert(t('无法生成导入码', 'Could not build import code'));
+          return;
+        }
+        CP.copyText(text).then(function () {
+          alert(t(
+            '导入码已复制。打开小程序「项目」→「导入」即可落成项目清单。',
+            'Import code copied. Open mini-program Projects → Import.'
+          ));
+        }).catch(function () {
+          prompt(t('请手动复制', 'Copy manually'), text);
+        });
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

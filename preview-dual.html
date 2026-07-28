@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>双通道预览 · DD Outdoor</title>
+  <style>
+    html, body { height: 100%; margin: 0; background: #111; color: #eee; font-family: system-ui, sans-serif; }
+    .bar {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      padding: 10px 14px; background: #1f2937; border-bottom: 1px solid #374151;
+      font-size: 13px;
+    }
+    .bar a { color: #93c5fd; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; height: calc(100% - 44px); }
+    .pane { display: flex; flex-direction: column; min-width: 0; border-right: 1px solid #374151; }
+    .pane:last-child { border-right: 0; }
+    .pane h2 { margin: 0; padding: 8px 12px; font-size: 13px; background: #111827; border-bottom: 1px solid #374151; }
+    .pane.mp h2 { color: #6ee7b7; }
+    .pane.internal h2 { color: #fcd34d; }
+    iframe { flex: 1; border: 0; width: 100%; background: #fff; }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <strong>本地双通道</strong>
+    <a href="quote-mp.html" target="_blank">小程序价（成本×2.5）单独开</a>
+    <a href="classic.html" target="_blank">内部毛利价单独开</a>
+    <span style="opacity:.7">服务：http://127.0.0.1:8765/</span>
+  </div>
+  <div class="grid">
+    <section class="pane mp">
+      <h2>① quote-mp.html · 小程序通道（成本 × 2.5）</h2>
+      <iframe src="quote-mp.html#products" title="Mini-program quote"></iframe>
+    </section>
+    <section class="pane internal">
+      <h2>② classic.html · 内部通道（30/25/20/15% · 打印 JPEG）</h2>
+      <iframe src="classic.html#products" title="Internal quote"></iframe>
+    </section>
+  </div>
+</body>
+</html>

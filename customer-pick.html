@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>选配回传 | DD Deep Design</title>
+  <meta name="description" content="Outdoor kitchen accessory pick — same list shell as mini-program projects." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="assets/css/mp-project-shell.css?t=20260728dual" />
+  <style>
+    .mp-quote-row.is-pick { grid-template-columns: 18px 1fr 72px 64px; }
+    #optSec .mp-quote-head { grid-template-columns: 18px 1fr 72px 64px; }
+    .mp-warn {
+      display: inline-block; margin-top: 2px; font-size: 10px; font-weight: 600;
+      color: #9a3412; background: #fff7ed; padding: 1px 5px; border-radius: 3px;
+    }
+    .mp-std-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 0 4px; }
+    .mp-chip {
+      font-size: 11px; padding: 4px 8px; border-radius: 999px;
+      background: #fff; color: #555; border: 1px solid #e5e7eb;
+    }
+    .mp-done { display: none; margin-top: 12px; }
+    .mp-done.is-show { display: block; }
+    .mp-linkbox {
+      word-break: break-all; font-size: 11px; background: #f3f4f6; border-radius: 6px;
+      padding: 10px; color: #444; max-height: 120px; overflow: auto; margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="mp-page">
+    <article class="mp-shell card is-open" id="headShell">
+      <div class="mp-shell-hd">
+        <div class="mp-shell-hd-main">
+          <div class="mp-shell-title-row">
+            <div class="mp-shell-name" id="title">选择配件</div>
+            <span class="mp-badge" id="kicker">Customer pick</span>
+          </div>
+          <div class="mp-shell-meta" id="meta">加载中…</div>
+          <div class="mp-shell-info-row">
+            <span class="mp-shell-price" id="headPrice">—</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <div style="height:10px"></div>
+
+    <article class="mp-shell card is-open" id="listShell">
+      <div class="mp-shell-body" id="listBody">
+        <div class="mp-section is-open" id="stdSec">
+          <div class="mp-section-hd" id="stdHd">
+            <div class="mp-section-hd-main">
+              <span class="mp-section-label" id="stdLabel">已含标配</span>
+              <span class="mp-chevron">▾</span>
+            </div>
+          </div>
+          <div class="mp-section-bd">
+            <div class="mp-std-chips" id="stdList"></div>
+          </div>
+        </div>
+        <div class="mp-section is-open" id="optSec">
+          <div class="mp-section-hd" id="optHd">
+            <div class="mp-section-hd-main">
+              <span class="mp-section-label" id="optLabel">可选配件</span>
+              <span class="mp-chevron">▾</span>
+            </div>
+          </div>
+          <div class="mp-section-bd">
+            <div class="mp-quote-head">
+              <span></span>
+              <span>产品</span>
+              <span class="mp-col-qty">数量</span>
+              <span class="mp-col-price">加价</span>
+            </div>
+            <div id="optList"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="mp-shell card mp-done" id="doneCard" style="margin-top:10px;padding:12px">
+      <div class="mp-shell-name" id="doneTitle" style="margin-bottom:4px">已生成回传链接</div>
+      <p class="mp-shell-meta" id="doneHint">请复制发给顾问。</p>
+      <div class="mp-linkbox" id="doneLink"></div>
+      <p style="margin:12px 0 0">
+        <button type="button" class="mp-btn" id="btnCopyAgain" style="width:100%">再复制一次</button>
+      </p>
+    </article>
+
+    <div class="mp-empty" id="errBox" hidden></div>
+  </div>
+
+  <div class="mp-bar" id="bar">
+    <div class="sum">
+      <span id="barSub">选配合计</span>
+      <strong id="barTotal">—</strong>
+    </div>
+    <div class="btns">
+      <button type="button" class="mp-btn" id="btnReturn">回传选择</button>
+    </div>
+  </div>
+
+    <script>
+    (function () {
+      var ch = /[?&]channel=mp\b/.test(location.search) ? 'mp' : 'internal';
+      window.DD_QUOTE_CHANNEL = ch;
+      document.documentElement.setAttribute('data-quote-channel', ch);
+    })();
+  </script>
+<script src="assets/js/outdoor-quote-data.js?t=20260728dual"></script>
+  <script src="assets/js/outdoor-quote.js?t=20260728dual"></script>
+  <script src="assets/js/customer-pick.js?t=20260728dual"></script>
+  <script>
+    (function () {
+      var CP = window.CustomerPick;
+      var OQ = window.OutdoorQuote;
+      var lang = /[?&]lang=en\b/.test(location.search) || /^en\b/i.test(navigator.language || '') ? 'en' : 'cn';
+      var pack = CP.decodePack(location.hash);
+      var selected = new Set();
+      var itemQty = {};
+      var lastReturnUrl = '';
+
+      function t(cn, en) { return lang === 'cn' ? cn : en; }
+      function moneyUsd(n) {
+        return '$' + Math.round(Number(n) || 0).toLocaleString('en-US');
+      }
+      function moneyCny(usd) {
+        var fx = (OQ && OQ.fx()) || 6.7;
+        return '¥' + Math.round((Number(usd) || 0) * fx).toLocaleString('zh-CN');
+      }
+      function meta(key) { return OQ.meta(key); }
+      function nameOf(key) {
+        var m = meta(key);
+        return lang === 'cn' ? (m.cn || m.en || key) : (m.en || m.cn || key);
+      }
+      function detailOf(key) {
+        var m = meta(key);
+        var dim = m.dim || '';
+        var d = lang === 'cn' ? (m.detailCn || m.detailEn || '') : (m.detailEn || m.detailCn || '');
+        if (dim && d) return dim + ' · ' + d;
+        return dim || d || '';
+      }
+      function imgOf(key) {
+        var m = meta(key);
+        return m.img ? ('assets/images/products/from-master/items/' + m.img + '.png') : '';
+      }
+      function qtyOf(key) {
+        var q = Number(itemQty[key]);
+        return !isFinite(q) || q < 1 ? 1 : Math.min(24, Math.floor(q));
+      }
+      function unitList(key) {
+        return OQ.listUsd(key, pack.width, pack.qtyTier || '30%');
+      }
+
+      function fail(msg) {
+        document.getElementById('errBox').hidden = false;
+        document.getElementById('errBox').textContent = msg;
+        document.getElementById('listShell').hidden = true;
+        document.getElementById('headShell').hidden = true;
+        document.getElementById('bar').style.display = 'none';
+      }
+
+      if (!pack || !OQ) {
+        fail(t('链接无效或已过期，请让顾问重新发送。', 'Invalid or expired link. Ask your advisor to resend.'));
+        return;
+      }
+
+      if (pack.role === 'return') {
+        document.getElementById('kicker').textContent = t('客户回传', 'Return');
+        document.getElementById('title').textContent = t('客户已选配件', 'Customer selections');
+        document.getElementById('btnReturn').textContent = t('复制到配置页链接', 'Copy classic link');
+      } else {
+        document.getElementById('kicker').textContent = t('客户选配', 'Pick');
+        document.getElementById('title').textContent = t('选择你需要的配件', 'Pick accessories');
+      }
+
+      itemQty = Object.assign({}, pack.itemQty || {});
+      (pack.selected || []).forEach(function (k) { selected.add(k); });
+
+      var door = pack.doorType === 'wm' ? t('卷帘', 'Rolling') : t('翻盖', 'Top-Flip');
+      document.getElementById('meta').textContent =
+        pack.width + ' mm · ' + door + ' · ' +
+        t('网站价档', 'Tier') + ' ' + (pack.qtyTier || '30%') +
+        (pack.createdAt ? (' · ' + pack.createdAt) : '');
+
+      document.getElementById('stdLabel').textContent = t('已含标配（不可改）', 'Included package (locked)');
+      document.getElementById('optLabel').textContent = t('可选配件（点选）', 'Optional accessories');
+      document.getElementById('barSub').textContent = t('选配加价', 'Options add-on');
+      document.getElementById('doneTitle').textContent = t('已生成回传链接', 'Return link ready');
+      document.getElementById('doneHint').textContent = t(
+        '请复制发给顾问；对方打开 classic 后会导入你的选配。',
+        'Copy and send to your advisor; they import it on classic.'
+      );
+
+      document.getElementById('stdList').innerHTML =
+        (pack.stdKeys || []).map(function (k) {
+          return '<span class="mp-chip">' + nameOf(k) + '</span>';
+        }).join('') || '<span class="mp-chip">—</span>';
+
+      var notRec = new Set(pack.notRecommended || []);
+      var offer = pack.offerKeys || [];
+      var list = document.getElementById('optList');
+
+      function rowHtml(key) {
+        var on = selected.has(key);
+        var usd = unitList(key) * qtyOf(key);
+        var warn = notRec.has(key)
+          ? '<span class="mp-warn">' + t('本长度不推荐', 'Not recommended') + '</span>'
+          : '';
+        var src = imgOf(key);
+        var media = src
+          ? '<img class="mp-line-thumb" src="' + src + '" alt="" loading="lazy">'
+          : '<div class="mp-line-thumb-ph">' + (meta(key).icon || '➕') + '</div>';
+        return (
+          '<div class="mp-quote-row is-pick' + (on ? ' is-on' : '') + '" data-key="' + key + '">' +
+            '<div class="mp-col-check">' + (on ? '✓' : '') + '</div>' +
+            '<div class="mp-col-name">' + media +
+              '<div class="mp-line-text">' +
+                '<span class="mp-line-name">' + nameOf(key) + (qtyOf(key) > 1 ? (' ×' + qtyOf(key)) : '') + '</span>' +
+                '<span class="mp-line-spec">' + (detailOf(key) || '—') + '</span>' + warn +
+              '</div>' +
+            '</div>' +
+            '<div class="mp-col-qty">' + qtyOf(key) + t('件', 'pc') + '</div>' +
+            '<div class="mp-col-price">+' + moneyCny(usd) + '</div>' +
+          '</div>'
+        );
+      }
+
+      if (!offer.length) {
+        list.innerHTML = '<p class="muted" style="padding:8px 0">' + t('当前尺寸暂无可选自配件。', 'No optional accessories for this size.') + '</p>';
+      } else {
+        list.innerHTML = offer.map(rowHtml).join('');
+      }
+
+      function refreshTotals() {
+        var sum = 0;
+        selected.forEach(function (k) { sum += unitList(k) * qtyOf(k); });
+        var stdSum = (pack.stdKeys || []).reduce(function (s, k) {
+          return s + unitList(k) * qtyOf(k);
+        }, 0);
+        document.getElementById('barTotal').textContent = moneyCny(sum) + ' / ' + moneyUsd(sum);
+        document.getElementById('headPrice').textContent =
+          t('整单约', 'Package ≈') + ' ' + moneyCny(stdSum + sum);
+        document.getElementById('barSub').textContent =
+          t('选配加价', 'Options add-on') + ' · ' + t('整单约', '≈') + ' ' + moneyUsd(stdSum + sum);
+      }
+
+      function syncChecks() {
+        list.querySelectorAll('.mp-quote-row.is-pick').forEach(function (el) {
+          var key = el.getAttribute('data-key');
+          var on = selected.has(key);
+          el.classList.toggle('is-on', on);
+          var ck = el.querySelector('.mp-col-check');
+          if (ck) ck.textContent = on ? '✓' : '';
+        });
+        refreshTotals();
+      }
+
+      if (pack.role !== 'return') {
+        list.addEventListener('click', function (e) {
+          var item = e.target.closest('.mp-quote-row.is-pick');
+          if (!item) return;
+          e.preventDefault();
+          var key = item.getAttribute('data-key');
+          if (selected.has(key)) selected.delete(key);
+          else selected.add(key);
+          syncChecks();
+        });
+      }
+
+      function bindToggle(hdId) {
+        var hd = document.getElementById(hdId);
+        if (!hd) return;
+        hd.addEventListener('click', function () {
+          var sec = hd.closest('.mp-section');
+          if (!sec) return;
+          sec.classList.toggle('is-open');
+          var ch = hd.querySelector('.mp-chevron');
+          if (ch) ch.textContent = sec.classList.contains('is-open') ? '▾' : '▸';
+        });
+      }
+      bindToggle('stdHd');
+      bindToggle('optHd');
+
+      function buildReturn() {
+        return CP.buildReturnPack(pack, Array.from(selected), itemQty);
+      }
+
+      document.getElementById('btnReturn').addEventListener('click', function () {
+        var ret = buildReturn();
+        var classicUrl = CP.classicReturnUrl(ret);
+        var mpText = CP.mpImportText(ret);
+        lastReturnUrl = mpText || classicUrl;
+        var blob = (mpText ? mpText + '\n\n---\n' : '') + (classicUrl || '');
+        CP.copyText(blob).then(function () {
+          document.getElementById('doneCard').classList.add('is-show');
+          document.getElementById('doneLink').textContent = blob;
+          document.getElementById('doneHint').textContent = t(
+            '已复制：小程序导入码 + 顾问回传链接。顾问可在小程序「项目 → 导入」落成项目。',
+            'Copied: mini-program import code + advisor return link.'
+          );
+        }).catch(function () {
+          document.getElementById('doneCard').classList.add('is-show');
+          document.getElementById('doneLink').textContent = blob;
+          document.getElementById('doneHint').textContent = t(
+            '自动复制失败，请长按下方内容复制。',
+            'Copy failed — long-press the text below.'
+          );
+        });
+      });
+
+      document.getElementById('btnCopyAgain').addEventListener('click', function () {
+        if (!lastReturnUrl) lastReturnUrl = CP.classicReturnUrl(buildReturn());
+        CP.copyText(lastReturnUrl).then(function () {
+          alert(t('已复制', 'Copied'));
+        });
+      });
+
+      syncChecks();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+/* Dual-channel quote chrome: internal (margins + print) vs mp (cost×2.5) */
+.channel-banner {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.quote-channel-internal .channel-banner {
+  background: #111827;
+  color: #f9fafb;
+}
+
+.quote-channel-mp .channel-banner {
+  background: #ecfdf5;
+  color: #065f46;
+  border-bottom: 1px solid #a7f3d0;
+}
+
+.margin-tier-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.margin-tier-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7280;
+  margin-right: 4px;
+}
+
+.margin-tier-btn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #111827;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.margin-tier-btn.is-active {
+  background: #111827;
+  border-color: #111827;
+  color: #fff;
+}
+
+.quote-channel-mp .internal-only {
+  display: none !important;
+}
+
+.quote-channel-internal .mp-only {
+  display: none !important;
+}
+
+@media print {
+  .channel-banner,
+  .config-mode-tabs,
+  .margin-tier-bar,
+  .navbar,
+  .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,362 @@
+/* Mini-program project quote shell — shared H5 mirror (rpx≈px/2 @375) */
+:root {
+  --mp-page-bg: #ececec;
+  --mp-text: #444;
+  --mp-muted: #9ca3af;
+  --mp-border: #e5e7eb;
+  --mp-border-soft: #f3f4f6;
+  --mp-section-bd: #f3f4f6;
+  --mp-primary: #333;
+  --mp-secondary-bg: #f3f4f6;
+}
+
+.mp-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 14px 14px calc(88px + env(safe-area-inset-bottom));
+  background: var(--mp-page-bg);
+  color: var(--mp-text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue",
+    Inter, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.mp-page .muted {
+  color: var(--mp-muted);
+}
+
+.mp-shell.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.mp-shell.is-open {
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.1);
+}
+
+.mp-shell-hd {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 12px 10px;
+  background: linear-gradient(90deg, #f9fafb, #fff);
+  border-bottom: 1px solid var(--mp-border-soft);
+}
+
+.mp-shell-hd-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.mp-shell-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.mp-shell-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.mp-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.mp-badge-owner {
+  color: #065f46;
+  background: #ecfdf5;
+}
+
+.mp-shell-meta {
+  font-size: 12px;
+  color: var(--mp-muted);
+  line-height: 1.45;
+}
+
+.mp-shell-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.mp-shell-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.mp-shell-date {
+  font-size: 11px;
+}
+
+.mp-shell-body {
+  background: #fff;
+  border-top: 1px solid var(--mp-border);
+}
+
+.mp-section {
+  background: #fff;
+  border-bottom: 1px solid var(--mp-border);
+}
+
+.mp-section:last-child {
+  border-bottom: none;
+}
+
+.mp-section-hd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mp-section-hd-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-section-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.mp-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--mp-muted);
+}
+
+.mp-section-bd {
+  display: none;
+  padding: 0 10px 10px;
+  border-top: 1px solid var(--mp-border);
+  background: var(--mp-section-bd);
+}
+
+.mp-section.is-open .mp-section-bd {
+  display: block;
+}
+
+.mp-quote-head,
+.mp-quote-row {
+  display: grid;
+  grid-template-columns: 1fr 72px 54px;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--mp-border-soft);
+}
+
+.mp-quote-head {
+  font-size: 11px;
+  color: var(--mp-muted);
+}
+
+.mp-quote-row:last-of-type {
+  border-bottom: none;
+}
+
+.mp-col-name {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mp-line-thumb,
+.mp-line-thumb-ph {
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background: #e5e7eb;
+  object-fit: cover;
+}
+
+.mp-line-thumb-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: #f3f4f6;
+}
+
+.mp-line-text {
+  min-width: 0;
+}
+
+.mp-line-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.mp-line-spec {
+  display: block;
+  font-size: 11px;
+  margin-top: 2px;
+  color: var(--mp-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-col-qty {
+  text-align: right;
+  font-size: 11px;
+  color: #374151;
+}
+
+.mp-col-price {
+  font-size: 12px;
+  text-align: right;
+  font-weight: 600;
+  color: #111827;
+}
+
+.mp-quote-cat-total {
+  font-size: 11px;
+  text-align: right;
+  padding: 4px 0 2px;
+  color: var(--mp-muted);
+}
+
+.mp-quote-total {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-top: 1px solid var(--mp-border);
+  color: #111827;
+  background: #fff;
+}
+
+.mp-note {
+  margin-top: 10px;
+  padding: 0 2px;
+  font-size: 12px;
+  color: var(--mp-muted);
+  line-height: 1.55;
+}
+
+.mp-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 1px solid var(--mp-border);
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.mp-bar .sum {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--mp-muted);
+}
+
+.mp-bar .sum strong {
+  display: block;
+  font-size: 16px;
+  color: #111827;
+}
+
+.mp-bar .btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mp-btn {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--mp-primary);
+  color: #fff;
+}
+
+.mp-btn-sec {
+  background: var(--mp-secondary-bg);
+  color: var(--mp-primary);
+}
+
+.mp-empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--mp-muted);
+  background: #fff;
+  border-radius: 6px;
+}
+
+/* Selectable row (customer-pick) */
+.mp-quote-row.is-pick {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px 6px;
+  margin-bottom: 4px;
+  border: 1.5px solid transparent;
+  background: #fff;
+  border-bottom: 1.5px solid transparent;
+}
+
+.mp-quote-row.is-pick.is-on {
+  border-color: #c9a227;
+  background: #fffdf6;
+}
+
+.mp-quote-row.is-pick .mp-col-check {
+  width: 18px;
+  flex-shrink: 0;
+}
+
+@media print {
+  .mp-bar,
+  .no-print {
+    display: none !important;
+  }
+  .mp-page {
+    background: #fff;
+    padding: 0;
+  }
+  .mp-shell.card {
+    box-shadow: none;
+  }
+  .mp-section-bd {
+    display: block !important;
+  }
+}

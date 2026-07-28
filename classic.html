@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260728lang3">
-    <link rel="stylesheet" href="assets/css/quote-channels.css?t=20260728xt3500">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260728compact">
+    <link rel="stylesheet" href="assets/css/quote-channels.css?t=20260728compact">
     <script>window.DD_QUOTE_CHANNEL = 'internal';</script>
 </head>
 <body class="quote-channel-internal">
@@ -50,24 +50,28 @@
             <h2 class="section-title" data-i18n="config.title">Build Your <em>Outdoor Kitchen</em></h2>
             <p class="section-desc" data-i18n="config.desc">Style → size → equipment → color — see the price instantly.</p>
 
-            <div class="config-mode-tabs" id="configModeTabs" role="toolbar" aria-label="Quick actions">
-                <a class="config-mode-tab config-mode-link internal-only" href="margin-console.html#costControl" data-i18n="config.openCost">成本控制</a>
-                <button type="button" class="config-mode-tab config-mode-link" id="btnOwnerShow" data-i18n="config.openOwnerShow">业主展示</button>
-                <button type="button" class="config-mode-tab config-mode-link internal-only" id="btnPrintJpeg" onclick="window.print()">打印 / JPEG</button>
-                <button type="button" class="config-mode-tab config-mode-link" id="btnCustomerPickTop" data-i18n="config.customerPick">发给客户选配</button>
-                <div class="lang-switch" id="langSwitchBar" role="group" aria-label="Language">
-                    <button type="button" class="config-mode-tab lang-opt" data-set-lang="fr">Française</button>
-                    <button type="button" class="config-mode-tab lang-opt is-active" data-set-lang="en">English</button>
-                    <button type="button" class="config-mode-tab lang-opt" data-set-lang="cn">Chinese</button>
+            <div class="config-meta-row">
+                <div class="lang-text" id="langSwitchBar" role="group" aria-label="Language">
+                    <button type="button" class="lang-opt" data-set-lang="fr">Française</button>
+                    <span class="lang-sep" aria-hidden="true">·</span>
+                    <button type="button" class="lang-opt is-active" data-set-lang="en">English</button>
+                    <span class="lang-sep" aria-hidden="true">·</span>
+                    <button type="button" class="lang-opt" data-set-lang="cn">Chinese</button>
+                </div>
+                <div class="margin-tier-bar internal-only" id="marginTierBar" role="group" aria-label="Margin">
+                    <span class="margin-tier-label">毛利</span>
+                    <button type="button" class="margin-tier-btn is-active" data-margin="30%">30%</button>
+                    <button type="button" class="margin-tier-btn" data-margin="25%">25%</button>
+                    <button type="button" class="margin-tier-btn" data-margin="20%">20%</button>
+                    <button type="button" class="margin-tier-btn" data-margin="15%">15%</button>
                 </div>
             </div>
 
-            <div class="margin-tier-bar internal-only" id="marginTierBar" role="group" aria-label="Margin">
-                <span class="margin-tier-label">毛利</span>
-                <button type="button" class="margin-tier-btn is-active" data-margin="30%">30%</button>
-                <button type="button" class="margin-tier-btn" data-margin="25%">25%</button>
-                <button type="button" class="margin-tier-btn" data-margin="20%">20%</button>
-                <button type="button" class="margin-tier-btn" data-margin="15%">15%</button>
+            <div class="config-mode-tabs" id="configModeTabs" role="toolbar" aria-label="Quick actions">
+                <button type="button" class="config-mode-tab config-mode-link config-mode-primary" id="btnCustomerPickTop" data-i18n="config.customerPick">发给客户选配</button>
+                <button type="button" class="config-mode-tab config-mode-link" id="btnOwnerShow" data-i18n="config.openOwnerShow">业主展示</button>
+                <button type="button" class="config-mode-tab config-mode-link internal-only" id="btnPrintJpeg" onclick="window.print()">打印</button>
+                <a class="config-text-link internal-only" href="margin-console.html#costControl" data-i18n="config.openCost">成本控制</a>
             </div>
 
             <div class="configurator">

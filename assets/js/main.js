@@ -180,18 +180,11 @@ const i18n = {
     'contact.label':   { en: 'Contact Us',     cn: '联系我们' },
     'contact.title':   { en: "Let's Build Something <em>Great</em>", cn: '一起打造<em>非凡之作</em>' },
     'contact.desc':    { en: "Interested in a quote, have a custom project, or want to become a distributor? We'd love to hear from you.", cn: '需要报价、有定制项目、或想成为经销商？期待您的来信。' },
-    'contact.emailLabel':   { en: 'Email', cn: '邮箱' },
-    'contact.phoneLabel':   { en: 'Phone / WhatsApp', cn: '电话 / WhatsApp' },
-    'contact.officeLabel':  { en: 'Office', cn: '办公地址' },
-    'contact.officeAddr':   { en: 'Guangdong, China', cn: '中国广东' },
-    'contact.officeSvc':    { en: 'Serving clients worldwide', cn: '服务全球客户' },
-    'contact.tradeLabel':   { en: 'Trade Terms', cn: '贸易条款' },
-    'contact.tradeTerms':   { en: 'FOB / CIF / DDP available', cn: '可做FOB / CIF / DDP' },
-    'contact.moq':          { en: 'MOQ: 1 unit', cn: '起订量：1台' },
     'contact.namePh':       { en: 'Your Name *', cn: '您的姓名 *' },
     'contact.emailPh':      { en: 'Email Address *', cn: '邮箱地址 *' },
     'contact.companyPh':    { en: 'Company Name', cn: '公司名称' },
     'contact.countryPh':    { en: 'Country', cn: '国家' },
+    'contact.socialPh':     { en: 'Social Media Account', cn: '社媒账号' },
     'contact.msgPh':        { en: 'Tell us about your project... *', cn: '请描述您的项目... *' },
     'contact.sendBtn':      { en: 'Send Message →', cn: '发送消息 →' },
     'contact.note':         { en: "We'll respond within 24 hours.", cn: '我们将在24小时内回复。' },
@@ -408,22 +401,22 @@ const DEFAULT_QTY_TIER = IS_MP_CHANNEL
 const HOT_IMG = (sku) => 'assets/images/products/hot-selling/display/sku-' + sku + '.png';
 /** Thumbs from 箱体报价总表 2.0 Color/Picture column */
 const MASTER_IMG = (slug) =>
-    'assets/images/products/from-master/items/' + slug + '.png?t=20260728tvBracket';
+    'assets/images/products/from-master/items/' + slug + '.png?t=20260728mat';
 
-const ELEV_CACHE = '20260726match1';
+const ELEV_CACHE = '20260728w2900';
 
 /**
- * Size-specific elevation art from 0000箱体报价总表 2.0 (front elevations).
+ * Door type × width — Rolling Door from 销售单 R5; top-flip from user refs.
  */
 const productImages = {
-    'xt-2200': 'assets/images/products/suoer/2200.png',
-    'xt-2900': 'assets/images/products/suoer/2900.png',
-    'xt-3200': 'assets/images/products/suoer/3200.png',
-    'xt-3500': 'assets/images/products/suoer/3500.png',
-    'wm-2200': 'assets/images/products/suoer/2200.png',
-    'wm-2900': 'assets/images/products/suoer/2900.png',
-    'wm-3200': 'assets/images/products/suoer/3200.png',
-    'wm-3500': 'assets/images/products/suoer/3500.png',
+    'xt-2200': 'assets/images/products/suoer/xt-2200.png',
+    'xt-2900': 'assets/images/products/suoer/xt-2900.png',
+    'xt-3200': 'assets/images/products/suoer/xt-3200.png',
+    'xt-3500': 'assets/images/products/suoer/xt-3500.png',
+    'wm-2200': 'assets/images/products/suoer/wm-2200.png',
+    'wm-2900': 'assets/images/products/suoer/wm-2900.png',
+    'wm-3200': 'assets/images/products/suoer/wm-3200.png',
+    'wm-3500': 'assets/images/products/suoer/wm-3500.png',
     'mini-2200': 'assets/images/products/suoer/mini-2200.png',
     'mini-2900': 'assets/images/products/suoer/mini-2900.png',
     'mini-3200': 'assets/images/products/suoer/mini-3200.png',
@@ -491,6 +484,10 @@ function metaText(field) {
 
 function resolveItemDim(key) {
     const m = itemMeta(key);
+    if (key === 'woodenBox' && m.dimsByLength) {
+        const w = nearestStdWidth(state.width);
+        return m.dimsByLength[w] || m.dimsByLength[String(w)] || m.dim || '—';
+    }
     const dim = m.dim || '—';
     if (key === 'shedStd' || key === 'shedMini' || key === 'cabinets' || key === 'counter' || key === 'led') {
         return dim.replace(/^L\b/, String(state.width)).replace('net length', String(Math.max(0, state.width - 100)));
@@ -787,7 +784,10 @@ function getBaseListUsd() {
 
 function getElevationSrc(modelW) {
     const w = modelW || nearestStdWidth(state.width);
-    return 'assets/images/products/suoer/' + w + '.png?t=' + ELEV_CACHE;
+    const door = state.doorType === 'wm' ? 'wm' : 'xt';
+    const key = door + '-' + w;
+    const base = productImages[key] || ('assets/images/products/suoer/' + door + '-' + w + '.png');
+    return base + (base.includes('?') ? '&' : '?') + 't=' + ELEV_CACHE;
 }
 
 function getElevationMaskSrc(modelW) {
@@ -807,6 +807,19 @@ const elevPreview = {
     loadToken: 0
 };
 
+function elevMaskCompatible(img, mask) {
+    if (!img || !mask) return false;
+    const iw = img.naturalWidth || img.width;
+    const ih = img.naturalHeight || img.height;
+    const mw = mask.naturalWidth || mask.width;
+    const mh = mask.naturalHeight || mask.height;
+    if (!iw || !ih || !mw || !mh) return false;
+    // Old CAD masks (≈1.7) must not stretch onto photo elevations (≈1.2–1.3)
+    const ir = iw / ih;
+    const mr = mw / mh;
+    return Math.abs(ir - mr) < 0.12;
+}
+
 function cacheElevPreviewBase() {
     if (!elevPreview.source || !elevPreview.ctx) return false;
     const img = elevPreview.source;
@@ -819,7 +832,7 @@ function cacheElevPreviewBase() {
     elevPreview.baseData = elevPreview.ctx.getImageData(0, 0, w, h);
     elevPreview.maskData = null;
     const mask = elevPreview.maskImg;
-    if (mask && mask.naturalWidth) {
+    if (mask && mask.naturalWidth && elevMaskCompatible(img, mask)) {
         elevPreview.ctx.drawImage(mask, 0, 0, w, h);
         elevPreview.maskData = elevPreview.ctx.getImageData(0, 0, w, h);
         elevPreview.ctx.putImageData(elevPreview.baseData, 0, 0);
@@ -1082,7 +1095,8 @@ function initElevationPan() {
     if (img) img.addEventListener('load', () => requestAnimationFrame(syncElevNavButtons));
 }
 
-function focusAddAccessories() {
+function focusAddAccessories(opts) {
+    const scroll = !opts || opts.scroll !== false;
     const sec = document.getElementById('accSection');
     if (sec) {
         sec.classList.add('is-expanded');
@@ -1090,12 +1104,26 @@ function focusAddAccessories() {
     }
     accListExpanded = true;
     if (typeof syncAccListCollapse === 'function') syncAccListCollapse();
+    if (!scroll) return;
     const target = document.getElementById('accSection') || document.getElementById('accessoriesGrid');
     if (target) {
         try {
             target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } catch (_) {}
     }
+}
+
+/** Remove one equipment card in place — remaining cards shift up; images stay put (no list rebuild / scroll). */
+function removeEquipmentCardEl(key) {
+    if (!key) return;
+    const list = document.getElementById('previewSpecsList');
+    if (!list) return;
+    const card =
+        list.querySelector('.std-line-card[data-comp-key="' + key + '"]') ||
+        list.querySelector('.std-line-card[data-acc-key="' + key + '"]') ||
+        list.querySelector('.std-line-card[data-remove-key="' + key + '"]');
+    if (card) card.remove();
+    if (typeof syncStdListToggleLabel === 'function') syncStdListToggleLabel();
 }
 
 function selectedAccessoryKeys() {
@@ -1167,10 +1195,10 @@ function removeStdComponent(key) {
     if (!key || key === 'shedStd' || key === 'shedMini' || key === 'woodenBox') return;
     removedStdSet().add(key);
     state.accessories[key] = false;
-    renderStdConfig();
+    removeEquipmentCardEl(key);
     if (typeof renderAccessories === 'function') renderAccessories();
     if (typeof updateTotal === 'function') updateTotal();
-    focusAddAccessories();
+    focusAddAccessories({ scroll: false });
 }
 
 /** Put a removed package item back into Equipment (standard). */
@@ -1186,10 +1214,10 @@ function restoreStdComponent(key) {
 function removeAccessoryFromList(key) {
     if (!key) return;
     state.accessories[key] = false;
-    renderStdConfig();
+    removeEquipmentCardEl(key);
     if (typeof renderAccessories === 'function') renderAccessories();
     if (typeof updateTotal === 'function') updateTotal();
-    focusAddAccessories();
+    focusAddAccessories({ scroll: false });
 }
 
 function addAccessoryToList(key) {
@@ -2245,11 +2273,12 @@ function buildColorSwatchHtml(item, { body = false, active = false, more = false
         active ? 'color-active' : '',
     ].filter(Boolean).join(' ');
     const textureAttr = img ? ` data-texture="${img}"` : '';
+    const title = (name ? item.code + ' — ' + name : item.code).replace(/"/g, '&quot;');
     return (
         `<button type="button" class="${cls}" data-code="${item.code}" data-premium="${item.premium || 0}" ` +
-        `data-bar="${bar}" data-series="${item.series}" title="${name.replace(/"/g, '&quot;')}"${textureAttr}>` +
+        `data-bar="${bar}" data-series="${item.series}" title="${title}"${textureAttr}>` +
         `<span class="sw-preview sw-card-preview" style="${previewStyle}"></span>` +
-        `<span class="sw-meta"><strong class="sw-code">${item.code}</strong><small class="sw-name">${name}</small></span>` +
+        `<span class="sw-meta"><strong class="sw-code">${item.code}</strong></span>` +
         `</button>`
     );
 }
@@ -2669,6 +2698,7 @@ function initHotCardExpand() {
 function buildCurrentOwnerPack() {
     if (!window.CustomerPick || !window.OutdoorQuote) return null;
     const selected = Object.keys(state.accessories || {}).filter((k) => state.accessories[k]);
+    const materials = collectSelectedMaterials();
     return CustomerPick.attachMp({
         v: 1,
         kind: CustomerPick.KIND,
@@ -2680,8 +2710,34 @@ function buildCurrentOwnerPack() {
         itemQty: state.itemQty || {},
         offerKeys: [],
         selected: selected,
+        materials: materials,
         createdAt: new Date().toISOString().slice(0, 10)
     });
+}
+
+/** Snapshot shell / door / countertop picks for owner quote + mini-program import */
+function collectSelectedMaterials() {
+    const CO = window.COLOR_OPTIONS;
+    const findItem = (code) => {
+        if (!CO || !code || !Array.isArray(CO.items)) return null;
+        return CO.items.find((it) => it.code === code) || null;
+    };
+    const bodyItem = findItem(bodyColorState.code);
+    const doorItem = findItem(colorState.code);
+    const topItem = findItem(countertopColorState.code);
+    const pick = (kind, stateObj, item) => ({
+        kind: kind,
+        code: stateObj.code || (item && item.code) || '',
+        name: stateObj.name || (item && (item.cn || item.en)) || '',
+        bar: (item && item.bar) || '',
+        img: (item && item.img) || '',
+        premium: Number(stateObj.premium) || (item && item.premium) || 0
+    });
+    return {
+        body: pick('body', bodyColorState, bodyItem),
+        door: pick('door', colorState, doorItem),
+        countertop: pick('countertop', countertopColorState, topItem)
+    };
 }
 
 function shareOwnerShow() {
@@ -2721,7 +2777,8 @@ function shareCustomerPickLink() {
         qtyTier: state.qtyTier || DEFAULT_QTY_TIER,
         stdKeys: activeStdKeys(),
         accessories: state.accessories || {},
-        itemQty: state.itemQty || {}
+        itemQty: state.itemQty || {},
+        materials: collectSelectedMaterials()
     });
     if (!pack) {
         alert(t('config.customerPick.fail'));

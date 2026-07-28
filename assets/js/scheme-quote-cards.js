@@ -9,7 +9,11 @@ window.SchemeQuoteCards = (() => {
   /** Images from 箱体报价总表 2.0 (xl/media DISPIMG) */
   const MASTER = (slug) =>
     `assets/images/products/from-master/items/${slug}.png`;
-  const ELEV = (w) => `assets/images/products/suoer/${w || 3200}.png`;
+  const ELEV = (w, door) => {
+    const width = w || 3200;
+    const d = door === 'wm' ? 'wm' : 'xt';
+    return `assets/images/products/suoer/${d}-${width}.png`;
+  };
 
   /** Item name → master Excel Color/Picture */
   const MASTER_BY_ITEM = {

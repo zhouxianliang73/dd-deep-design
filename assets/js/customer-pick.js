@@ -97,6 +97,7 @@
         fx: (global.OutdoorQuote && global.OutdoorQuote.fx()) || 6.7,
         totalCny: totalCny,
         role: pack.role || 'outbound',
+        materials: pack.materials || null,
         importedAt: new Date().toISOString()
       }
     };
@@ -122,6 +123,7 @@
       stdKeys: withMp.stdKeys,
       selected: withMp.selected,
       itemQty: withMp.itemQty,
+      materials: withMp.materials || null,
       createdAt: withMp.createdAt,
       mp: withMp.mp
     };
@@ -163,6 +165,7 @@
       itemQty: opts.itemQty || {},
       offerKeys: offerKeys,
       selected: suggested.slice(),
+      materials: opts.materials || null,
       notRecommended: optionals
         .filter(function (o) {
           return o.notRecommended;
@@ -188,6 +191,7 @@
       itemQty: itemQty || outbound.itemQty || {},
       offerKeys: (outbound.offerKeys || []).slice(),
       selected: (selectedKeys || []).slice(),
+      materials: outbound.materials || null,
       notRecommended: (outbound.notRecommended || []).slice(),
       createdAt: new Date().toISOString().slice(0, 10),
       sourceDate: outbound.createdAt || '',

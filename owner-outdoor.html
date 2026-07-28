@@ -6,7 +6,7 @@
   <title>户外厨房报价 | DD Deep Design</title>
   <meta name="description" content="Owner outdoor kitchen quotation — same list shell as mini-program projects." />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="assets/css/mp-project-shell.css?t=20260728dual" />
+  <link rel="stylesheet" href="assets/css/mp-project-shell.css?t=20260728mat" />
 </head>
 <body>
   <div class="mp-page" id="root">
@@ -35,9 +35,9 @@
       document.documentElement.setAttribute('data-quote-channel', ch);
     })();
   </script>
-<script src="assets/js/outdoor-quote-data.js?t=20260728dual"></script>
-  <script src="assets/js/outdoor-quote.js?t=20260728dual"></script>
-  <script src="assets/js/customer-pick.js?t=20260728dual"></script>
+<script src="assets/js/outdoor-quote-data.js?t=20260728ct2"></script>
+  <script src="assets/js/outdoor-quote.js?t=20260728ct2"></script>
+  <script src="assets/js/customer-pick.js?t=20260728mat"></script>
   <script>
     (function () {
       var CP = window.CustomerPick;
@@ -134,6 +134,45 @@
         );
       }
 
+      function materialsHtml(materials) {
+        if (!materials) return '';
+        var rows = [
+          { key: 'body', label: t('外框', 'Shell'), item: materials.body },
+          { key: 'door', label: t('门板', 'Door'), item: materials.door },
+          { key: 'countertop', label: t('台面', 'Countertop'), item: materials.countertop }
+        ].filter(function (r) { return r.item && (r.item.code || r.item.img || r.item.bar); });
+        if (!rows.length) return '';
+        var cards = rows.map(function (r) {
+          var it = r.item || {};
+          var media = it.img
+            ? '<img class="mp-mat-swatch" src="' + it.img + '" alt="" loading="lazy" onerror="this.style.background=\'' + (it.bar || '#ddd') + '\';this.removeAttribute(\'src\')">'
+            : '<div class="mp-mat-swatch" style="background:' + (it.bar || '#e5e7eb') + '"></div>';
+          return (
+            '<div class="mp-mat-card">' +
+              media +
+              '<div class="mp-mat-text">' +
+                '<span class="mp-mat-label">' + r.label + '</span>' +
+                '<span class="mp-mat-code">' + (it.code || '—') + '</span>' +
+                '<span class="mp-mat-name">' + (it.name || '') + '</span>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+        return (
+          '<div class="mp-section is-open" data-sec="mat">' +
+            '<div class="mp-section-hd" data-toggle="mat">' +
+              '<div class="mp-section-hd-main">' +
+                '<span class="mp-section-label">' + t('材料选择', 'Materials') + '</span>' +
+                '<span class="mp-chevron">▾</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="mp-section-bd">' +
+              '<div class="mp-mat-grid">' + cards + '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
       function render() {
         var door = pack.doorType === 'wm' ? t('卷帘', 'Rolling') : t('翻盖', 'Top-Flip');
         var title = t('户外厨房', 'Outdoor kitchen') + ' ' + door + ' ' + pack.width + 'mm';
@@ -166,6 +205,7 @@
           '<div class="mp-shell-body">' +
             sectionHtml('std', t('标准配置', 'Standard package'), stdKeys, true) +
             sectionHtml('opt', t('选配清单', 'Selected options'), optKeys, true) +
+            materialsHtml(pack.materials) +
             (stdKeys.length || optKeys.length
               ? '<div class="mp-quote-total">' + t('合计', 'Total') + ' ' + moneyCny(total) + ' · ' + moneyUsd(total) + '</div>'
               : '<div class="mp-empty">' + t('暂无明细', 'No line items') + '</div>') +

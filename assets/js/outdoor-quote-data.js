@@ -17,8 +17,8 @@ window.OUTDOOR_QUOTE = {
   "stdPackage": {
     "2200": [
       "shedStd",
-      "cabinets",
       "counter",
+      "cabinets",
       "bbq",
       "sink",
       "fridge",
@@ -30,8 +30,8 @@ window.OUTDOOR_QUOTE = {
     ],
     "2900": [
       "shedStd",
-      "cabinets",
       "counter",
+      "cabinets",
       "bbq",
       "sink",
       "fridge",
@@ -43,8 +43,8 @@ window.OUTDOOR_QUOTE = {
     ],
     "3200": [
       "shedStd",
-      "cabinets",
       "counter",
+      "cabinets",
       "bbq",
       "sink",
       "fridge",
@@ -58,8 +58,8 @@ window.OUTDOOR_QUOTE = {
     ],
     "3500": [
       "shedStd",
-      "cabinets",
       "counter",
+      "cabinets",
       "bbq",
       "sink",
       "fridge",
@@ -838,7 +838,13 @@ window.OUTDOOR_QUOTE = {
     "woodenBox": {
       "row": 25,
       "name": "Wooden Box",
-      "dim": "2230 × 2450 × 1000 mm",
+      "dim": "H×L×D mm（随尺寸）",
+      "dimsByLength": {
+        "2200": "2230 × 2450 × 1000 mm",
+        "2900": "2230 × 3150 × 1000 mm",
+        "3200": "2230 × 3450 × 1000 mm",
+        "3500": "2230 × 3750 × 1000 mm"
+      },
       "exw": {
         "2200": {
           "30%": 481.88,

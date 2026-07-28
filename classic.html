@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260728topRow">
-    <link rel="stylesheet" href="assets/css/quote-channels.css?t=20260728topRow">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260728xt3500">
+    <link rel="stylesheet" href="assets/css/quote-channels.css?t=20260728xt3500">
     <script>window.DD_QUOTE_CHANNEL = 'internal';</script>
 </head>
 <body class="quote-channel-internal">
@@ -126,8 +126,8 @@
                                 <div class="elevation-preview">
                                     <button type="button" class="elev-nav elev-nav-prev" id="elevNavPrev" aria-label="Pan left">‹</button>
                                     <div class="elevation-scroll" id="elevationScroll" tabindex="0" aria-label="Elevation pan">
-                                        <img src="assets/images/products/suoer/2200.png?t=20260726match1" alt="" id="elevationImg" class="elevation-img elevation-img-source" draggable="false" hidden>
-                                        <img src="assets/images/products/suoer/2200-door-mask.png?t=20260726match1" alt="" id="elevationDoorMask" class="elevation-img-source" hidden>
+                                        <img src="assets/images/products/suoer/xt-2200.png?t=20260728xt3500" alt="" id="elevationImg" class="elevation-img elevation-img-source" draggable="false" hidden>
+                                        <img src="assets/images/products/suoer/2200-door-mask.png?t=20260728xt3500" alt="" id="elevationDoorMask" class="elevation-img-source" hidden>
                                         <canvas id="elevationCanvas" class="elevation-img elevation-canvas" width="1008" height="585" aria-label="Product preview"></canvas>
                                     </div>
                                     <button type="button" class="elev-nav elev-nav-next" id="elevNavNext" aria-label="Pan right">›</button>
@@ -223,8 +223,8 @@
                     <div class="shell-preview-card color-preview-card" id="shellPreviewCard">
                         <div class="door-preview-label" data-i18n="config.colorPreview">Color Preview</div>
                         <div class="shell-preview-stage">
-                            <img src="assets/img/shell-preview.png?t=20260726match1" alt="" id="shellPreviewSource" class="shell-preview-source" width="1002" height="818" decoding="async" data-src-xt="assets/img/shell-preview.png?t=20260726match1" data-src-wm="assets/img/shell-preview-roll.png?t=20260725v1">
-                            <img src="assets/img/door-preview-mask.png?t=20260726match1" alt="" id="shellDoorMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
+                            <img src="assets/img/shell-preview.png?t=20260728xt3500" alt="" id="shellPreviewSource" class="shell-preview-source" width="1002" height="818" decoding="async" data-src-xt="assets/img/shell-preview.png?t=20260728xt3500" data-src-wm="assets/img/shell-preview-roll.png?t=20260725v1">
+                            <img src="assets/img/door-preview-mask.png?t=20260728xt3500" alt="" id="shellDoorMask" class="door-preview-hidden" width="1002" height="818" decoding="async">
                             <canvas id="shellPreviewCanvas" class="shell-preview-canvas" width="1002" height="818" aria-label="Color preview"></canvas>
                         </div>
                     </div>
@@ -886,48 +886,18 @@
             <h2 class="section-title" data-i18n="contact.title">Let's Build Something <em>Great</em></h2>
             <p class="section-desc" data-i18n="contact.desc">Interested in a quote, have a custom project, or want to become a distributor? We'd love to hear from you.</p>
 
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <div class="ci-item">
-                        <span class="ci-icon">&#128231;</span>
-                        <div>
-                            <h4 data-i18n="contact.emailLabel">Email</h4>
-                            <a href="mailto:info@deepdesign.solutions">info@deepdesign.solutions</a>
-                        </div>
-                    </div>
-                    <div class="ci-item">
-                        <span class="ci-icon">&#128222;</span>
-                        <div>
-                            <h4 data-i18n="contact.phoneLabel">Phone / WhatsApp</h4>
-                            <a href="tel:+861234567890">+86 123 4567 890</a>
-                        </div>
-                    </div>
-                    <div class="ci-item">
-                        <span class="ci-icon">&#127758;</span>
-                        <div>
-                            <h4 data-i18n="contact.officeLabel">Office</h4>
-                            <p><span data-i18n="contact.officeAddr">Guangdong, China</span><br><span data-i18n="contact.officeSvc">Serving clients worldwide</span></p>
-                        </div>
-                    </div>
-                    <div class="ci-item">
-                        <span class="ci-icon">&#128179;</span>
-                        <div>
-                            <h4 data-i18n="contact.tradeLabel">Trade Terms</h4>
-                            <p><span data-i18n="contact.tradeTerms">FOB / CIF / DDP available</span><br><span data-i18n="contact.moq">MOQ: 1 unit</span></p>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="contact-grid contact-grid--form-only">
                 <form class="contact-form" id="contactForm">
                     <div class="form-row">
-                        <input type="text" placeholder="Your Name *" required class="form-input" data-i18n-placeholder="contact.namePh">
-                        <input type="email" placeholder="Email Address *" required class="form-input" data-i18n-placeholder="contact.emailPh">
+                        <input type="text" name="name" placeholder="Your Name *" required class="form-input" data-i18n-placeholder="contact.namePh">
+                        <input type="email" name="email" placeholder="Email Address *" required class="form-input" data-i18n-placeholder="contact.emailPh">
                     </div>
                     <div class="form-row">
-                        <input type="text" placeholder="Company Name" class="form-input" data-i18n-placeholder="contact.companyPh">
-                        <input type="text" placeholder="Country" class="form-input" data-i18n-placeholder="contact.countryPh">
+                        <input type="text" name="company" placeholder="Company Name" class="form-input" data-i18n-placeholder="contact.companyPh">
+                        <input type="text" name="country" placeholder="Country" class="form-input" data-i18n-placeholder="contact.countryPh">
                     </div>
-                    <textarea placeholder="Tell us about your project... *" required rows="5" class="form-input" data-i18n-placeholder="contact.msgPh"></textarea>
+                    <input type="text" name="social" placeholder="Social Media Account" class="form-input" data-i18n-placeholder="contact.socialPh">
+                    <textarea name="message" placeholder="Tell us about your project... *" required rows="5" class="form-input" data-i18n-placeholder="contact.msgPh"></textarea>
                     <button type="submit" class="btn btn-primary btn-submit" data-i18n="contact.sendBtn">Send Message &#10140;</button>
                     <p class="form-note" data-i18n="contact.note">We'll respond within 24 hours.</p>
                 </form>
@@ -1046,11 +1016,11 @@
         </div>
     </div>
 
-    <script src="assets/js/outdoor-quote-data.js?t=20260728topRow"></script>
-    <script src="assets/js/outdoor-quote.js?t=20260728topRow"></script>
-    <script src="assets/js/color-options-data.js?t=20260728topRow"></script>
-    <script src="assets/js/customer-pick.js?t=20260728topRow"></script>
-    <script src="assets/js/main.js?t=20260728topRow"></script>
+    <script src="assets/js/outdoor-quote-data.js?t=20260728ct2"></script>
+    <script src="assets/js/outdoor-quote.js?t=20260728ct2"></script>
+    <script src="assets/js/color-options-data.js?t=20260728xt3500"></script>
+    <script src="assets/js/customer-pick.js?t=20260728mat"></script>
+    <script src="assets/js/main.js?t=20260728w2900"></script>
 </body>
 </html>
 

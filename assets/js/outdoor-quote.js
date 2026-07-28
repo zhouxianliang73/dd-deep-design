@@ -192,7 +192,14 @@
       detailEn: 'Pods install & weld · water/electrical piping · wooden crate + pallet',
       detailCn: '含舱体安装焊接 · 水电管线 · 木箱+栈板一体包装',
       img: 'wooden-box',
-      dim: '2230 × 2450 × 1000 mm'
+      dim: '2230 × 2450 × 1000 mm',
+      /** H×L×D（箱体木箱）随柜体长度 */
+      dimsByLength: {
+        2200: '2230 × 2450 × 1000 mm',
+        2900: '2230 × 3150 × 1000 mm',
+        3200: '2230 × 3450 × 1000 mm',
+        3500: '2230 × 3750 × 1000 mm'
+      }
     }
   };
 
@@ -307,6 +314,12 @@
       const i = keys.indexOf('shedStd');
       if (i >= 0) keys[i] = 'shedMini';
       else if (!keys.includes('shedMini')) keys.unshift('shedMini');
+    }
+    // Counter Top always 2nd in the standard list
+    const ci = keys.indexOf('counter');
+    if (ci >= 0 && ci !== 1) {
+      keys.splice(ci, 1);
+      keys.splice(Math.min(1, keys.length), 0, 'counter');
     }
     return keys;
   }

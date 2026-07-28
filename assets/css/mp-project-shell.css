@@ -257,6 +257,67 @@
   background: #fff;
 }
 
+.mp-mat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px 12px 12px;
+}
+
+.mp-mat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--mp-border-soft);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mp-mat-swatch {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.6 / 1;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.mp-mat-text {
+  padding: 0 8px 8px;
+  min-width: 0;
+}
+
+.mp-mat-label {
+  display: block;
+  font-size: 10px;
+  color: var(--mp-muted);
+  margin-bottom: 2px;
+}
+
+.mp-mat-code {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: 0.02em;
+}
+
+.mp-mat-name {
+  display: block;
+  font-size: 10px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 420px) {
+  .mp-mat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .mp-note {
   margin-top: 10px;
   padding: 0 2px;

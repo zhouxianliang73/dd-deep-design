@@ -1035,11 +1035,13 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    object-position: center center;
     display: block;
     position: relative;
     z-index: 1;
-    padding: 12px;
+    padding: 6px;
     box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .std-line-media .item-ph-icon {
@@ -1381,11 +1383,11 @@
 
 #previewSpecsList:not(.is-grid):not(.is-large) .std-line-media-wrap {
     width: 96px;
-    height: auto;
+    height: 96px;
     min-height: 96px;
-    max-height: none;
-    aspect-ratio: auto;
-    align-self: stretch;
+    max-height: 96px;
+    aspect-ratio: 1 / 1;
+    align-self: start;
 }
 
 #previewSpecsList:not(.is-grid):not(.is-large) .std-line-media img {
@@ -1655,22 +1657,23 @@
     margin-top: 8px;
 }
 
-/* Color card UI — large swatch + code + name (Color options V3) */
+/* Color card UI — flat wide swatch fills card, code only */
 .color-pick-area .color-swatch.color-card {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
+    gap: 4px;
     min-width: 0;
     width: 100%;
-    padding: 10px;
+    padding: 0 0 6px;
     border: 1.5px solid #d6c49a;
-    border-radius: 14px;
+    border-radius: 12px;
     background: #fff;
     color: #222;
     box-shadow: none;
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.15;
+    overflow: hidden;
 }
 /* Must beat .color-card { display:flex } so “more” colors stay folded */
 .color-pick-area .color-grid.is-collapsed .color-swatch.color-swatch-more {
@@ -1689,10 +1692,10 @@
     display: block;
     width: 100%;
     height: auto;
-    min-height: 96px;
-    aspect-ratio: 1 / 1.05;
-    border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    min-height: 40px;
+    aspect-ratio: 2.4 / 1;
+    border-radius: 0;
+    border: 0;
     margin: 0;
     background-size: cover;
     background-position: center;
@@ -1702,26 +1705,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    padding: 0 2px 2px;
+    gap: 0;
+    padding: 0 2px 1px;
 }
 .color-pick-area .color-swatch.color-card .sw-code {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: #1a1a1a;
     letter-spacing: 0.01em;
 }
 .color-pick-area .color-swatch.color-card .sw-name {
-    display: block;
-    font-size: 0.62rem;
-    font-weight: 400;
-    color: #8a8a8a;
-    line-height: 1.25;
-    max-width: 100%;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
+    display: none;
 }
 .color-pick-area .color-swatch.color-card.color-active .sw-code {
     color: #1a1a1a;
@@ -1883,16 +1878,20 @@
     .color-pick-area .color-swatch.color-card {
         padding: 7px;
     }
+    .color-pick-area .color-swatch.color-card {
+        padding: 0 0 5px;
+    }
     .color-pick-area .color-swatch.color-card .sw-card-preview,
     .color-pick-area .color-swatch.color-card .sw-preview.sw-card-preview {
-        min-height: 72px;
-        aspect-ratio: 1 / 1.05;
+        min-height: 32px;
+        aspect-ratio: 2.4 / 1;
+        border-radius: 0;
     }
     .color-pick-area .color-swatch.color-card .sw-code {
-        font-size: 0.72rem;
+        font-size: 0.68rem;
     }
     .color-pick-area .color-swatch.color-card .sw-name {
-        font-size: 0.58rem;
+        display: none;
     }
 }
 
@@ -2263,11 +2262,11 @@
 
     #previewSpecsList:not(.is-grid):not(.is-large) .std-line-media-wrap {
         width: 80px;
-        height: auto;
+        height: 80px;
         min-height: 80px;
-        max-height: none;
-        aspect-ratio: auto;
-        align-self: stretch;
+        max-height: 80px;
+        aspect-ratio: 1 / 1;
+        align-self: start;
     }
 
     .std-line-name { font-size: 13px; }
@@ -3306,13 +3305,14 @@ ul { list-style: none; }
     width: 36px;
     height: 36px;
 }
-/* Color cards: override tiny .sw-preview circle so tiles are not squashed */
+/* Color cards: override tiny .sw-preview — fill card edge-to-edge */
 .color-pick-area .color-swatch.color-card .sw-preview.sw-card-preview {
     width: 100%;
     height: auto;
-    min-height: 96px;
-    aspect-ratio: 1 / 1.05;
-    border-radius: 10px;
+    min-height: 40px;
+    aspect-ratio: 2.4 / 1;
+    border-radius: 0;
+    border: 0;
     margin-bottom: 0;
 }
 .door-panel-grid,
@@ -4557,6 +4557,12 @@ ul { list-style: none; }
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     gap: 48px;
+}
+
+.contact-grid--form-only {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+    margin-inline: auto;
 }
 
 .contact-info {

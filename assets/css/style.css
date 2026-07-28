@@ -3534,6 +3534,7 @@ ul { list-style: none; }
     padding: 6px 10px;
     cursor: pointer;
     border-right: 1px solid var(--clr-border);
+    white-space: nowrap;
 }
 
 .nav-lang .lang-opt:last-child {

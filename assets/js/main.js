@@ -10,6 +10,14 @@ const i18n = {
     'tab.pick':       { en: 'Select',         cn: '选品' },
     'tab.projects':   { en: 'Projects',       cn: '项目' },
     'tab.company':    { en: 'Company',        cn: '公司介绍' },
+    'projects.saveCurrent': { en: 'Save as project', cn: '存为项目' },
+    'projects.hint': { en: 'Saved configs stay on this device — like scheme-center project list', cn: '做好的配置可保存在本机，与 scheme-center 项目列表用法类似' },
+    'projects.saved': { en: 'Project saved', cn: '项目已保存' },
+    'projects.empty': { en: 'No projects yet', cn: '暂无项目' },
+    'projects.open': { en: 'Open', cn: '打开' },
+    'projects.delete': { en: 'Delete', cn: '删除' },
+    'projects.savedBadge': { en: 'Saved', cn: '已保存' },
+    'nav.company': { en: 'Company', cn: '公司介绍' },
     'nav.brand':      { en: 'Brand',          cn: '品牌' },
     'nav.configure':  { en: 'Configure',       cn: '配置方案' },
     'nav.quote':      { en: 'Quote',           cn: '业主报价' },
@@ -328,6 +336,14 @@ const i18n = {
         'tab.pick': 'Sélection',
         'tab.projects': 'Projets',
         'tab.company': 'Entreprise',
+        'projects.saveCurrent': 'Enregistrer le projet',
+        'projects.hint': 'Les configs enregistrées restent sur cet appareil',
+        'projects.saved': 'Projet enregistré',
+        'projects.empty': 'Aucun projet',
+        'projects.open': 'Ouvrir',
+        'projects.delete': 'Supprimer',
+        'projects.savedBadge': 'Enregistré',
+        'nav.company': 'Entreprise',
         'nav.brand': 'Marque',
         'nav.configure': 'Configurer',
         'nav.quote': 'Devis',
@@ -471,6 +487,7 @@ function applyTranslation() {
     syncStdListToggleLabel();
     syncHotCardPrices();
     if (typeof window.syncQtyTierUi === 'function') window.syncQtyTierUi();
+    if (typeof renderProjectsGrid === 'function') renderProjectsGrid();
 }
 
 function setLanguage(lang) {
@@ -3010,6 +3027,160 @@ function consumeCustomerPickReturnHash() {
     }
 }
 
+function projectTitle(p) {
+    if (!p) return '';
+    if (currentLang === 'cn') return p.name || p.nameEn || '';
+    if (currentLang === 'fr') return p.nameFr || p.nameEn || p.name || '';
+    return p.nameEn || p.name || '';
+}
+
+function projectSummary(p) {
+    if (!p) return '';
+    if (currentLang === 'cn') return p.summary || p.summaryEn || '';
+    if (currentLang === 'fr') return p.summaryFr || p.summaryEn || p.summary || '';
+    return p.summaryEn || p.summary || '';
+}
+
+function projectStatus(p) {
+    if (!p) return '';
+    if (p.source === 'saved') return t('projects.savedBadge');
+    return isChineseLang() ? (p.statusLabel || '') : (p.statusLabelEn || p.statusLabel || '');
+}
+
+function renderProjectsGrid() {
+    const grid = document.getElementById('projectsGrid');
+    if (!grid || !window.DDProjects) return;
+    const list = DDProjects.list();
+    if (!list.length) {
+        grid.innerHTML = '<p class="projects-empty">' + t('projects.empty') + '</p>';
+        return;
+    }
+    grid.innerHTML = list
+        .map((p, i) => {
+            const title = projectTitle(p);
+            const desc = projectSummary(p);
+            const tag = (p.region ? p.region + ' · ' : '') + projectStatus(p);
+            const cover = p.cover
+                ? '<img src="' + p.cover + '" alt="" loading="lazy">'
+                : '<div class="project-card-ph" aria-hidden="true">DD</div>';
+            const featured = i === 0 ? ' case-card-featured' : '';
+            const actions =
+                p.source === 'saved'
+                    ? '<div class="project-card-actions no-print">' +
+                      '<button type="button" class="project-open-btn" data-project-id="' +
+                      p.id +
+                      '">' +
+                      t('projects.open') +
+                      '</button>' +
+                      '<button type="button" class="project-del-btn" data-project-id="' +
+                      p.id +
+                      '">' +
+                      t('projects.delete') +
+                      '</button></div>'
+                    : p.cover
+                      ? '<a class="project-open-link no-print" href="' +
+                        p.cover +
+                        '" target="_blank" rel="noopener">' +
+                        t('projects.open') +
+                        '</a>'
+                      : '';
+            return (
+                '<article class="case-card project-card' +
+                featured +
+                '" data-project-id="' +
+                p.id +
+                '">' +
+                cover +
+                '<div class="case-overlay">' +
+                '<div class="case-tag">' +
+                tag +
+                '</div>' +
+                '<h3>' +
+                title +
+                '</h3>' +
+                '<p>' +
+                desc +
+                '</p>' +
+                actions +
+                '</div></article>'
+            );
+        })
+        .join('');
+}
+
+function saveCurrentAsProject() {
+    if (!window.DDProjects) {
+        alert(t('projects.empty'));
+        return;
+    }
+    const pack = typeof buildCurrentOwnerPack === 'function' ? buildCurrentOwnerPack() : null;
+    let ownerUrl = '';
+    try {
+        if (pack && window.CustomerPick) ownerUrl = CustomerPick.ownerUrl(pack) || '';
+    } catch (_) {}
+    const elev = document.getElementById('elevationCanvas');
+    let cover = '';
+    try {
+        if (elev && elev.toDataURL) cover = elev.toDataURL('image/jpeg', 0.72);
+    } catch (_) {}
+    const cnyText = document.getElementById('totalFinalPrice')?.textContent || '';
+    const usdText = document.getElementById('totalFinalUsd')?.textContent || '';
+    const project = DDProjects.fromQuoteSnapshot({
+        doorType: state.doorType,
+        width: state.width,
+        tier: state.qtyTier || '',
+        channel: window.DD_QUOTE_CHANNEL || 'internal',
+        materials: typeof collectSelectedMaterials === 'function' ? collectSelectedMaterials() : null,
+        totalCny: Number(String(cnyText).replace(/[^\d.]/g, '')) || 0,
+        totalUsd: Number(String(usdText).replace(/[^\d.]/g, '')) || 0,
+        pack: pack,
+        ownerUrl: ownerUrl,
+        cover: cover
+    });
+    DDProjects.save(project);
+    renderProjectsGrid();
+    alert(t('projects.saved'));
+    const section = document.getElementById('projects');
+    if (section) {
+        const navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 56;
+        window.scrollTo({
+            top: Math.max(0, section.getBoundingClientRect().top + window.scrollY - navH - 8),
+            behavior: 'smooth'
+        });
+    }
+}
+
+function initProjectsUi() {
+    renderProjectsGrid();
+    const saveBtn = document.getElementById('btnSaveProject');
+    if (saveBtn) saveBtn.addEventListener('click', saveCurrentAsProject);
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+    grid.addEventListener('click', (e) => {
+        const del = e.target.closest('.project-del-btn');
+        if (del) {
+            const id = del.getAttribute('data-project-id');
+            if (id && window.DDProjects) {
+                DDProjects.remove(id);
+                renderProjectsGrid();
+            }
+            return;
+        }
+        const open = e.target.closest('.project-open-btn');
+        if (open) {
+            const id = open.getAttribute('data-project-id');
+            const p = id && window.DDProjects ? DDProjects.get(id) : null;
+            if (p && p.ownerUrl) {
+                window.open(p.ownerUrl, '_blank', 'noopener');
+            } else if (p && p.pack && window.CustomerPick) {
+                try {
+                    window.open(CustomerPick.ownerUrl(p.pack), '_blank', 'noopener');
+                } catch (_) {}
+            }
+        }
+    });
+}
+
 function initH5Tabbar() {
     const bar = document.getElementById('h5Tabbar');
     if (!bar) return;
@@ -3097,4 +3268,5 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTotal();
     syncHotCardPrices();
     initH5Tabbar();
+    initProjectsUi();
 });

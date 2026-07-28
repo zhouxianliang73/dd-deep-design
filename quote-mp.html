@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260728tabs">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260728proj">
     <link rel="stylesheet" href="assets/css/quote-channels.css?t=20260728cc">
     <script>window.DD_QUOTE_CHANNEL = 'mp';</script>
 </head>
@@ -30,9 +30,9 @@
                 <li><a href="#products" class="nav-link" data-i18n="nav.configure">Configure</a></li>
                 <li><a href="margin-console.html" class="nav-link" data-i18n="nav.margin">Margin</a></li>
                 <li><a href="#hot-products" class="nav-link" data-i18n="nav.hot">Hot Sellers</a></li>
-                <li><a href="#cases" class="nav-link" data-i18n="nav.projects">Projects</a></li>
+                <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
                 <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
-                <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
+                <li><a href="#company" class="nav-link" data-i18n="nav.company">公司介绍</a></li>
                 <li><a href="#hero" class="nav-link" data-i18n="nav.brand">Brand</a></li>
                 <li class="nav-lang" role="group" aria-label="Language">
                     <button type="button" class="lang-opt" data-set-lang="fr" title="Française">F</button>
@@ -847,43 +847,17 @@
                 </div>
 </div></section>
 
-    <!-- Cases -->
-    <section class="section cases" id="cases">
+    <!-- Projects (seed + locally saved configs) -->
+    <section class="section cases" id="projects">
         <div class="container">
             <div class="section-label" data-i18n="cases.label">Our Projects</div>
             <h2 class="section-title" data-i18n="cases.title">Trusted <em>Worldwide</em></h2>
             <p class="section-desc" data-i18n="cases.desc">From luxury villas in Los Angeles to waterfront properties in Spain — our outdoor kitchens are installed across the globe.</p>
-
-            <div class="cases-grid">
-                <div class="case-card case-card-featured">
-                    <img src="assets/images/products/from-alibaba/alibaba-11.jpg" alt="Los Angeles Wine Bar & Outdoor Kitchen" loading="lazy">
-                    <div class="case-overlay">
-                        <div class="case-tag" data-i18n="cases.tag1">&#127758; USA</div>
-                        <h3 data-i18n="cases.c1title">L.A. Wine Bar &amp; Outdoor Kitchen</h3>
-                        <p data-i18n="cases.c1desc">Custom Earth Tone outdoor kitchen with wine bar for S.D. Daniels Construction.</p>
-                    </div>
-                </div>
-
-                <div class="case-card">
-                    <a href="assets/images/cases/project-usa.jpg" target="_blank" title="Click to view full image"><img src="assets/images/cases/project-usa.jpg" alt="USA Project" loading="lazy"></a>
-                    <div class="case-overlay">
-                        <div class="case-tag" data-i18n="cases.tag1">&#127758; USA</div>
-                        <h3 data-i18n="cases.c2title">Beverly Hills Outdoor Suite</h3>
-                        <p data-i18n="cases.c2desc">Complete outdoor kitchen with stainless steel cabinets.</p>
-                    </div>
-                </div>
-
-                <div class="case-card">
-                    <a href="assets/images/cases/project-spain.jpg" target="_blank" title="Click to view full image"><img src="assets/images/cases/project-spain.jpg" alt="Spain Project" loading="lazy"></a>
-                    <div class="case-overlay">
-                        <div class="case-tag" data-i18n="cases.tag3">&#127758; Spain</div>
-                        <h3 data-i18n="cases.c3title">Valencia Coastal Kitchen</h3>
-                        <p data-i18n="cases.c3desc">304 stainless steel outdoor kitchen for a Mediterranean residence.</p>
-                    </div>
-                </div>
-
-                
+            <div class="projects-toolbar no-print">
+                <button type="button" class="config-mode-tab config-mode-link" id="btnSaveProject" data-i18n="projects.saveCurrent">存为项目</button>
+                <span class="projects-hint" data-i18n="projects.hint">做好的配置可保存在本机，与 scheme-center 项目列表用法类似</span>
             </div>
+            <div class="cases-grid" id="projectsGrid" aria-live="polite"></div>
         </div>
     </section>
 
@@ -913,8 +887,8 @@
         </div>
     </section>
 
-    <!-- About (page end) -->
-    <section class="section about" id="about">
+    <!-- Company -->
+    <section class="section about" id="company">
         <div class="container">
             <div class="section-label" data-i18n="about.label">About Us</div>
             <h2 class="section-title" data-i18n="about.title">Your Partner in <em>Premium</em> Outdoor Kitchens</h2>
@@ -982,7 +956,7 @@
                     <ul>
                         <li><a href="#products" data-i18n="nav.configure">Configure</a></li>
                         <li><a href="margin-console.html" data-i18n="nav.margin">Margin</a></li>
-                        <li><a href="#cases" data-i18n="nav.projects">Projects</a></li>
+                        <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
@@ -1029,11 +1003,11 @@
             <span class="h5-tab-icon" aria-hidden="true">▣</span>
             <span class="h5-tab-label" data-i18n="tab.pick">选品</span>
         </a>
-        <a href="#cases" class="h5-tab" data-tab-target="cases">
+        <a href="#projects" class="h5-tab" data-tab-target="projects">
             <span class="h5-tab-icon" aria-hidden="true">⌂</span>
             <span class="h5-tab-label" data-i18n="tab.projects">项目</span>
         </a>
-        <a href="#about" class="h5-tab" data-tab-target="about">
+        <a href="#company" class="h5-tab" data-tab-target="company">
             <span class="h5-tab-icon" aria-hidden="true">◎</span>
             <span class="h5-tab-label" data-i18n="tab.company">公司介绍</span>
         </a>
@@ -1043,7 +1017,9 @@
     <script src="assets/js/outdoor-quote.js?t=20260728lang3"></script>
     <script src="assets/js/color-options-data.js?t=20260728xt3500"></script>
     <script src="assets/js/customer-pick.js?t=20260728mat"></script>
-    <script src="assets/js/main.js?t=20260728tabs"></script>
+    <script src="assets/js/projects-data.js?t=20260728proj"></script>
+    <script src="assets/js/dd-projects.js?t=20260728proj"></script>
+    <script src="assets/js/main.js?t=20260728proj"></script>
 </body>
 </html>
 

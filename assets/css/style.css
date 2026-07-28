@@ -418,21 +418,63 @@
 .elev-size-block .size-picker {
     min-width: 100%;
     justify-content: stretch;
-    gap: 8px;
+    gap: 0;
 }
 
 .elev-size-block .size-btn {
     flex: 1 1 0;
     min-width: 0;
-    padding: 10px 8px;
+    padding: 8px 4px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    position: relative;
+}
+
+.elev-size-block .size-btn + .size-btn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 22%;
+    bottom: 22%;
+    width: 1px;
+    background: #d1d5db;
 }
 
 .elev-size-block .size-btn .size-val {
     font-size: 18px;
 }
 
+.elev-size-block .size-btn:hover {
+    border: 0;
+    transform: none;
+    background: transparent;
+}
+
+.elev-size-block .size-btn.active {
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.elev-size-block .size-btn.active .size-val {
+    color: var(--clr-dark);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+}
+
+.elev-size-block .size-btn.active .size-unit {
+    color: var(--clr-text-light);
+}
+
 .elev-size-block .elevation-preview {
     margin-top: 2px;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    border-radius: 10px;
 }
 
 .sr-only {
@@ -2012,8 +2054,9 @@
     }
 
     #standardSizeStep .elevation-preview {
-        margin-left: 12px;
-        margin-right: 12px;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
     }
 
     #standardSizeStep #previewSpecsList,
@@ -2082,28 +2125,37 @@
     }
 
     .elev-size-block .size-picker {
-        gap: 6px;
+        gap: 0;
         min-width: 100%;
     }
 
     .elev-size-block .size-btn {
         flex: 1 1 0;
         min-width: 0 !important;
-        padding: 8px 4px !important;
-        border-width: 1.5px;
-        border-radius: 8px;
+        padding: 6px 2px !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
     }
 
     .size-btn:hover { transform: none; }
 
     .elev-size-block .size-btn .size-val {
-        font-size: 13px !important;
+        font-size: 15px !important;
         line-height: 1.1;
     }
 
     .elev-size-block .size-btn .size-unit {
         font-size: 9px;
         margin-top: 1px;
+    }
+
+    .elev-size-block .size-btn.active .size-val {
+        color: var(--clr-dark) !important;
+    }
+
+    .elev-size-block .size-btn.active .size-unit {
+        color: var(--clr-text-light) !important;
     }
 
     .step1-images {
@@ -3949,10 +4001,12 @@ ul { list-style: none; }
     box-sizing: border-box;
 }
 
+/* Image flush with style/size row (same side inset as elev-size-block padding) */
 #standardSizeStep .elevation-preview {
-    margin-left: 16px;
-    margin-right: 16px;
-    width: auto;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #standardSizeStep #previewSpecsList,

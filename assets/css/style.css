@@ -4397,7 +4397,7 @@ ul { list-style: none; }
 }
 
 .quote-sticky-row-tier {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 8px;
 }
@@ -4407,6 +4407,31 @@ ul { list-style: none; }
     font-weight: 800;
     color: var(--clr-dark);
     letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.quote-sticky-margin {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    justify-self: center;
+    text-align: center;
+}
+
+.quote-sticky-margin-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #b91c1c;
+    white-space: nowrap;
+}
+
+.quote-sticky-margin-pct {
+    font-size: 14px;
+    font-weight: 800;
+    color: #b91c1c;
+    letter-spacing: 0.01em;
     white-space: nowrap;
 }
 
@@ -4606,7 +4631,9 @@ ul { list-style: none; }
 
 @media (max-width: 480px) {
     .quote-sticky-inner { padding: 7px 10px; gap: 4px; }
-    .quote-sticky-row-tier { grid-template-columns: 1fr auto; gap: 6px; }
+    .quote-sticky-row-tier { grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px; }
+    .quote-sticky-margin-label { font-size: 10px; }
+    .quote-sticky-margin-pct { font-size: 13px; }
     .quote-sticky-owner { font-size: 10px; padding: 4px 8px; }
     .quote-qty-tiers { justify-content: flex-start; }
     .quote-sticky-row-meta { font-size: 11px; gap: 6px; }
@@ -5157,7 +5184,7 @@ textarea.form-input { resize: vertical; }
 @media (max-width: 768px) {
     .h5-tabbar {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         position: fixed;
         left: 0;
         right: 0;

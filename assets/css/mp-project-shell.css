@@ -165,7 +165,7 @@
 .mp-quote-head,
 .mp-quote-row {
   display: grid;
-  grid-template-columns: 1fr 72px 54px;
+  grid-template-columns: 1fr 56px 64px 28px;
   gap: 4px;
   align-items: center;
   padding: 10px 0;
@@ -238,6 +238,37 @@
   text-align: right;
   font-weight: 600;
   color: #111827;
+}
+
+.mp-col-remove {
+  width: 28px;
+}
+
+.mp-line-remove {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mp-line-remove:hover,
+.mp-line-remove:focus-visible {
+  color: #b91c1c;
+  background: #fef2f2;
+  outline: none;
 }
 
 .mp-quote-cat-total {
@@ -405,19 +436,507 @@
   flex-shrink: 0;
 }
 
+/* —— Owner outdoor: wider sheet + clear totals —— */
+.owner-outdoor .mp-page {
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.owner-outdoor .mp-shell-price {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.owner-outdoor .mp-shell-date {
+  font-size: 13px;
+}
+
+.owner-outdoor .mp-shell-info-row {
+  margin-top: 8px;
+  align-items: baseline;
+}
+
+.owner-outdoor .mp-section-hd {
+  padding: 10px 12px;
+}
+
+.owner-outdoor .mp-section-bd {
+  padding: 0 12px 10px;
+}
+
+.owner-outdoor .mp-quote-head,
+.owner-outdoor .mp-quote-row {
+  grid-template-columns: minmax(0, 1fr) 56px 72px 28px;
+  padding: 8px 0;
+  gap: 6px;
+}
+
+.owner-outdoor .mp-col-name {
+  gap: 10px;
+}
+
+.owner-outdoor .mp-line-thumb,
+.owner-outdoor .mp-line-thumb-ph {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+}
+
+.owner-outdoor .mp-line-thumb-ph {
+  font-size: 22px;
+}
+
+.owner-outdoor .mp-line-name {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.owner-outdoor .mp-line-spec {
+  font-size: 11px;
+  margin-top: 2px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.owner-outdoor .mp-col-qty {
+  font-size: 12px;
+}
+
+.owner-outdoor .mp-col-price {
+  font-size: 13px;
+}
+
+.owner-outdoor .mp-quote-cat-total {
+  padding: 4px 0 2px;
+}
+
+.owner-outdoor .mp-quote-total {
+  font-size: 15px;
+  padding: 10px 12px;
+}
+
+.owner-outdoor .mp-total-main {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.owner-outdoor .mp-total-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mp-muted);
+}
+
+/* Materials: normal cards, readable on wider sheet */
+.owner-outdoor .mp-mat-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px 12px 12px;
+}
+
+.owner-outdoor .mp-mat-card {
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+}
+
+.owner-outdoor .mp-mat-swatch {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: 1.6 / 1 !important;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.owner-outdoor .mp-mat-text {
+  padding: 0 8px 8px;
+}
+
+.owner-outdoor .mp-mat-label {
+  margin-bottom: 2px;
+  font-size: 10px;
+}
+
+.owner-outdoor .mp-mat-code {
+  font-size: 12px;
+}
+
+.owner-outdoor .mp-mat-name {
+  font-size: 10px;
+}
+
+.owner-outdoor .mp-bar .btns {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.owner-outdoor .mp-btn-save {
+  background: #111827;
+  color: #fff;
+}
+
+.owner-outdoor .mp-btn-share {
+  background: #dc2626;
+  color: #fff;
+}
+
+.owner-outdoor .mp-btn-share:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+/* Save-to-project dialog */
+.mp-save-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+}
+
+.mp-save-mask[hidden] {
+  display: none !important;
+}
+
+.mp-save-dialog {
+  width: min(360px, 100%);
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px 16px 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.mp-save-title {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.mp-save-label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.mp-save-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: #111827;
+  outline: none;
+}
+
+.mp-save-input:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.mp-save-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* Share JPEG preview overlay */
+.mp-share-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(17, 24, 39, 0.72);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 12px calc(24px + env(safe-area-inset-bottom));
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mp-share-mask[hidden] {
+  display: none !important;
+}
+
+.mp-share-hint {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.mp-share-preview {
+  width: min(390px, 100%);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.mp-share-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Owner quote — A4 one-page print */
+@page {
+  size: A4 portrait;
+  margin: 7mm 9mm;
+}
+
+/* Applied before print so measure height matches print layout */
+body.mp-a4-print .mp-bar,
+body.mp-a4-print .no-print,
+body.mp-a4-print .mp-chevron {
+  display: none !important;
+}
+
+body.mp-a4-print {
+  background: #fff !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body.mp-a4-print .mp-page {
+  background: #fff !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  font-size: 10px;
+  line-height: 1.2;
+  width: var(--mp-a4-w, 192mm);
+  max-width: var(--mp-a4-w, 192mm);
+  margin: 0;
+}
+
+body.mp-a4-print .mp-shell.card,
+body.mp-a4-print .mp-shell.is-open {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  border: 1px solid #d1d5db;
+  overflow: visible;
+}
+
+body.mp-a4-print .mp-print-fit {
+  transform: scale(var(--mp-print-scale, 1));
+  transform-origin: top left;
+  /* width before scale = A4_w / scale → after scale fills A4 width */
+  width: calc(var(--mp-a4-w, 192mm) / var(--mp-print-scale, 1));
+  max-width: none;
+}
+
+body.mp-a4-print .mp-shell-hd {
+  padding: 5px 8px;
+  background: #f9fafb !important;
+}
+
+body.mp-a4-print .mp-shell-name { font-size: 11px; }
+body.mp-a4-print .mp-badge { font-size: 8px; padding: 0 4px; }
+body.mp-a4-print .mp-shell-meta { font-size: 8px; line-height: 1.25; }
+body.mp-a4-print .mp-shell-info-row { margin-top: 3px; gap: 8px; align-items: baseline; }
+body.mp-a4-print .mp-shell-price {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+body.mp-a4-print .mp-shell-date { font-size: 10px; }
+
+body.mp-a4-print .mp-section-hd {
+  padding: 3px 6px;
+  cursor: default;
+}
+
+body.mp-a4-print .mp-section-label { font-size: 10px; }
+
+body.mp-a4-print .mp-section-bd {
+  display: block !important;
+  padding: 0 5px 2px !important;
+  background: #fff !important;
+}
+
+body.mp-a4-print .mp-quote-head,
+body.mp-a4-print .mp-quote-row {
+  grid-template-columns: 1fr 36px 52px;
+  gap: 2px;
+  padding: 2px 0;
+  border-bottom-color: #eee;
+  box-sizing: border-box;
+  align-items: start;
+}
+
+body.mp-a4-print .mp-line-remove,
+body.mp-a4-print .mp-col-remove {
+  display: none !important;
+}
+
+/* min-height only — never clip 尺寸/规格 */
+body.mp-a4-print .mp-quote-row {
+  height: auto;
+  min-height: var(--mp-row-h, 22px);
+  max-height: none;
+  overflow: visible;
+}
+
+body.mp-a4-print .mp-quote-head {
+  font-size: 8px;
+  height: 16px;
+  align-items: end;
+  padding-bottom: 1px;
+}
+
+body.mp-a4-print .mp-col-name {
+  gap: 5px;
+  align-items: flex-start;
+}
+
+body.mp-a4-print .mp-line-thumb,
+body.mp-a4-print .mp-line-thumb-ph {
+  width: var(--mp-thumb, 22px);
+  height: var(--mp-thumb, 22px);
+  border-radius: 2px;
+  margin-top: 1px;
+}
+
+body.mp-a4-print .mp-line-thumb-ph { font-size: 10px; }
+body.mp-a4-print .mp-line-text {
+  min-width: 0;
+  flex: 1;
+}
+body.mp-a4-print .mp-line-name {
+  font-size: 9px;
+  font-weight: 600;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.25;
+}
+/* 尺寸、规格完整打印，可换行 */
+body.mp-a4-print .mp-line-spec {
+  display: block !important;
+  font-size: 7.5px;
+  line-height: 1.3;
+  margin-top: 1px;
+  color: #6b7280;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  word-break: break-word;
+}
+body.mp-a4-print .mp-col-qty,
+body.mp-a4-print .mp-col-price {
+  font-size: 8px;
+  padding-top: 1px;
+}
+body.mp-a4-print .mp-quote-cat-total { font-size: 8px; padding: 0; height: 14px; }
+body.mp-a4-print .mp-quote-total {
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 6px;
+}
+body.mp-a4-print .mp-total-main {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827;
+}
+body.mp-a4-print .mp-total-sub {
+  font-size: 10px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+body.mp-a4-print .mp-mat-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+  padding: 2px 4px 4px;
+}
+
+body.mp-a4-print .mp-mat-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 3px;
+  border-radius: 2px;
+}
+
+body.mp-a4-print .mp-mat-swatch {
+  width: 28px;
+  height: 14px;
+  max-height: 14px;
+  aspect-ratio: auto;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+body.mp-a4-print .mp-mat-text { padding: 0; }
+body.mp-a4-print .mp-mat-label { font-size: 7px; margin-bottom: 0; }
+body.mp-a4-print .mp-mat-code { font-size: 8px; }
+body.mp-a4-print .mp-mat-name { font-size: 7px; }
+
 @media print {
   .mp-bar,
-  .no-print {
+  .no-print,
+  .mp-chevron {
     display: none !important;
   }
+
+  html,
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   .mp-page {
-    background: #fff;
-    padding: 0;
+    background: #fff !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    width: var(--mp-a4-w, 192mm) !important;
+    max-width: var(--mp-a4-w, 192mm) !important;
   }
-  .mp-shell.card {
-    box-shadow: none;
+
+  .mp-shell.card,
+  .mp-shell.is-open {
+    box-shadow: none !important;
+    border-radius: 0 !important;
   }
+
   .mp-section-bd {
     display: block !important;
+  }
+
+  .mp-print-fit {
+    transform: scale(var(--mp-print-scale, 1));
+    transform-origin: top left;
+    width: calc(var(--mp-a4-w, 192mm) / var(--mp-print-scale, 1)) !important;
+    max-width: none !important;
+  }
+
+  /* Keep header total prominent even after auto-scale */
+  body.mp-a4-print .mp-shell-price,
+  .owner-outdoor .mp-shell-price {
+    font-size: 20px;
+    font-weight: 800;
   }
 }

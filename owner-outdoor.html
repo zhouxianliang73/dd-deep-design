@@ -6,13 +6,15 @@
   <title>户外厨房报价 | DD Deep Design</title>
   <meta name="description" content="Owner outdoor kitchen quotation — same list shell as mini-program projects." />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="assets/css/mp-project-shell.css?t=20260728thumb72" />
+  <link rel="stylesheet" href="assets/css/mp-project-shell.css?t=20260728removeX" />
 </head>
-<body>
+<body class="owner-outdoor">
   <div class="mp-page" id="root">
-    <article class="mp-shell card is-open" id="sheet">
-      <p class="mp-empty">加载中…</p>
-    </article>
+    <div class="mp-print-fit" id="printFit">
+      <article class="mp-shell card is-open" id="sheet">
+        <p class="mp-empty">加载中…</p>
+      </article>
+    </div>
     <p class="mp-note no-print" id="note" hidden></p>
   </div>
 
@@ -24,7 +26,31 @@
     <div class="btns">
       <button type="button" class="mp-btn mp-btn-sec" id="btnLang">中 / EN</button>
       <button type="button" class="mp-btn mp-btn-sec" id="btnPrint">打印</button>
+      <button type="button" class="mp-btn mp-btn-save" id="btnSave">保存</button>
+      <button type="button" class="mp-btn mp-btn-share" id="btnShare">分享</button>
       <button type="button" class="mp-btn" id="btnMp">复制小程序导入码</button>
+    </div>
+  </div>
+
+  <div class="mp-save-mask no-print" id="saveMask" hidden>
+    <div class="mp-save-dialog" role="dialog" aria-modal="true" aria-labelledby="saveTitle">
+      <h3 class="mp-save-title" id="saveTitle">保存到项目</h3>
+      <label class="mp-save-label" for="saveNameInput">项目名称</label>
+      <input class="mp-save-input" id="saveNameInput" type="text" maxlength="80" autocomplete="off" />
+      <div class="mp-save-actions">
+        <button type="button" class="mp-btn mp-btn-sec" id="saveCancel">取消</button>
+        <button type="button" class="mp-btn mp-btn-save" id="saveConfirm">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mp-share-mask no-print" id="shareMask" hidden>
+    <p class="mp-share-hint" id="shareHint">可直接分享，无需先保存</p>
+    <img class="mp-share-preview" id="shareImg" alt="quote" />
+    <div class="mp-share-actions">
+      <button type="button" class="mp-btn mp-btn-share" id="shareNow">直接分享</button>
+      <a class="mp-btn mp-btn-sec" id="shareDownload" download="outdoor-quote.jpg" hidden>另存 JPEG</a>
+      <button type="button" class="mp-btn mp-btn-sec" id="shareClose">关闭</button>
     </div>
   </div>
 
@@ -38,6 +64,8 @@
 <script src="assets/js/outdoor-quote-data.js?t=20260728ct2"></script>
   <script src="assets/js/outdoor-quote.js?t=20260728ct2"></script>
   <script src="assets/js/customer-pick.js?t=20260728mat"></script>
+  <script src="assets/js/projects-data.js?t=20260728proj"></script>
+  <script src="assets/js/dd-projects.js?t=20260728proj"></script>
   <script>
     (function () {
       var CP = window.CustomerPick;
@@ -97,7 +125,7 @@
           ? '<img class="mp-line-thumb" src="' + src + '" alt="" loading="lazy" onerror="this.outerHTML=\'<div class=mp-line-thumb-ph>' + (meta(key).icon || '📦') + '</div>\'">'
           : '<div class="mp-line-thumb-ph">' + (meta(key).icon || '📦') + '</div>';
         return (
-          '<div class="mp-quote-row">' +
+          '<div class="mp-quote-row" data-item-key="' + key + '">' +
             '<div class="mp-col-name">' + media +
               '<div class="mp-line-text">' +
                 '<span class="mp-line-name">' + nameOf(key) + '</span>' +
@@ -105,7 +133,9 @@
               '</div>' +
             '</div>' +
             '<div class="mp-col-qty">' + qty + t('件', 'pc') + '</div>' +
-            '<div class="mp-col-price">' + moneyCny(usd) + '</div>' +
+            '<div class="mp-col-price">' + moneyUsd(usd) + '</div>' +
+            '<button type="button" class="mp-line-remove no-print" data-remove="' + key + '" aria-label="' +
+              t('取消此项', 'Remove item') + '" title="' + t('取消此项', 'Remove item') + '">×</button>' +
           '</div>'
         );
       }
@@ -126,12 +156,47 @@
                 '<span>' + t('产品', 'Product') + '</span>' +
                 '<span class="mp-col-qty">' + t('数量', 'Qty') + '</span>' +
                 '<span class="mp-col-price">' + t('小计', 'Subtotal') + '</span>' +
+                '<span class="mp-col-remove no-print" aria-hidden="true"></span>' +
               '</div>' +
               keys.map(lineRow).join('') +
-              '<div class="mp-quote-cat-total">' + t('本类合计', 'Category total') + ' ' + moneyCny(sum) + '</div>' +
+              '<div class="mp-quote-cat-total">' + t('本类合计', 'Category total') + ' ' + moneyUsd(sum) + '</div>' +
             '</div>' +
           '</div>'
         );
+      }
+
+      function removeItem(key) {
+        if (!key || !pack) return;
+        var label = nameOf(key);
+        if (!confirm(t('取消「' + label + '」？', 'Remove “' + label + '”?'))) return;
+        pack.stdKeys = (pack.stdKeys || []).filter(function (k) { return k !== key; });
+        pack.selected = (pack.selected || []).filter(function (k) { return k !== key; });
+        if (pack.itemQty && pack.itemQty[key] != null) delete pack.itemQty[key];
+        try {
+          if (CP && CP.encodePack) {
+            history.replaceState(null, '', location.pathname + location.search + '#' + CP.encodePack(pack));
+          }
+        } catch (_) {}
+        render();
+      }
+
+      function bindSheetActions() {
+        document.querySelectorAll('[data-toggle]').forEach(function (hd) {
+          hd.addEventListener('click', function () {
+            var sec = hd.closest('.mp-section');
+            if (!sec) return;
+            sec.classList.toggle('is-open');
+            var ch = hd.querySelector('.mp-chevron');
+            if (ch) ch.textContent = sec.classList.contains('is-open') ? '▾' : '▸';
+          });
+        });
+        document.querySelectorAll('[data-remove]').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            removeItem(btn.getAttribute('data-remove'));
+          });
+        });
       }
 
       function materialsHtml(materials) {
@@ -183,6 +248,7 @@
         var stdSum = stdKeys.reduce(function (s, k) { return s + unitList(k) * qtyOf(k); }, 0);
         var optSum = optKeys.reduce(function (s, k) { return s + unitList(k) * qtyOf(k); }, 0);
         var total = stdSum + optSum;
+        lastTotalUsd = total;
         var metaLine =
           t('网站价档', 'Tier') + ' ' + (pack.qtyTier || '30%') +
           ' · EXW · FX ' + ((OQ.fx && OQ.fx()) || 6.7) +
@@ -197,8 +263,8 @@
               '</div>' +
               '<div class="mp-shell-meta">' + metaLine + '</div>' +
               '<div class="mp-shell-info-row">' +
-                '<span class="mp-shell-price">' + moneyCny(total) + '</span>' +
-                '<span class="mp-shell-date muted">' + moneyUsd(total) + '</span>' +
+                '<span class="mp-shell-price">' + moneyUsd(total) + '</span>' +
+                '<span class="mp-shell-date muted">' + moneyCny(total) + '</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -207,7 +273,9 @@
             sectionHtml('opt', t('选配清单', 'Selected options'), optKeys, true) +
             materialsHtml(pack.materials) +
             (stdKeys.length || optKeys.length
-              ? '<div class="mp-quote-total">' + t('合计', 'Total') + ' ' + moneyCny(total) + ' · ' + moneyUsd(total) + '</div>'
+              ? '<div class="mp-quote-total">' + t('合计', 'Total') +
+                ' <span class="mp-total-main">' + moneyUsd(total) + '</span>' +
+                ' <span class="mp-total-sub">· ' + moneyCny(total) + '</span></div>'
               : '<div class="mp-empty">' + t('暂无明细', 'No line items') + '</div>') +
           '</div>';
 
@@ -219,29 +287,158 @@
         );
 
         document.getElementById('barLabel').textContent = t('报价合计', 'Total');
-        document.getElementById('barTotal').textContent = moneyCny(total) + ' / ' + moneyUsd(total);
+        document.getElementById('barTotal').textContent = moneyUsd(total) + ' / ' + moneyCny(total);
         document.getElementById('btnLang').textContent = lang === 'cn' ? 'EN' : '中文';
         document.getElementById('btnPrint').textContent = t('打印', 'Print');
+        document.getElementById('btnSave').textContent = t('保存', 'Save');
+        document.getElementById('btnShare').textContent = t('分享', 'Share');
         document.getElementById('btnMp').textContent = t('复制小程序导入码', 'Copy mini-program import');
+        document.getElementById('saveTitle').textContent = t('保存到项目', 'Save to projects');
+        document.getElementById('saveCancel').textContent = t('取消', 'Cancel');
+        document.getElementById('saveConfirm').textContent = t('保存', 'Save');
+        document.getElementById('shareHint').textContent = t(
+          '可直接分享图片，无需先保存到相册',
+          'Share the image directly — no need to save first'
+        );
+        document.getElementById('shareNow').textContent = t('直接分享', 'Share now');
+        document.getElementById('shareDownload').textContent = t('另存 JPEG', 'Save JPEG');
+        document.getElementById('shareClose').textContent = t('关闭', 'Close');
+        var nameLabel = document.querySelector('label[for="saveNameInput"]');
+        if (nameLabel) nameLabel.textContent = t('项目名称', 'Project name');
         document.getElementById('bar').hidden = false;
 
-        document.querySelectorAll('[data-toggle]').forEach(function (hd) {
-          hd.addEventListener('click', function () {
-            var sec = hd.closest('.mp-section');
-            if (!sec) return;
-            sec.classList.toggle('is-open');
-            var ch = hd.querySelector('.mp-chevron');
-            if (ch) ch.textContent = sec.classList.contains('is-open') ? '▾' : '▸';
-          });
-        });
+        bindSheetActions();
       }
 
       document.getElementById('btnLang').addEventListener('click', function () {
         lang = lang === 'cn' ? 'en' : 'cn';
         render();
       });
+      function preparePrintFit() {
+        var fit = document.getElementById('printFit');
+        if (!fit) return function () {};
+        document.querySelectorAll('.mp-section').forEach(function (sec) {
+          sec.classList.add('is-open');
+          var ch = sec.querySelector('.mp-chevron');
+          if (ch) ch.textContent = '▾';
+        });
+
+        /* A4 content box: 210×297mm − margins 9×7mm → match @page */
+        var a4W = Math.round((210 - 18) * (96 / 25.4));
+        var a4H = Math.round((297 - 14) * (96 / 25.4));
+
+        document.body.classList.add('mp-a4-print');
+        fit.style.removeProperty('--mp-print-scale');
+        document.documentElement.style.setProperty('--mp-a4-w', a4W + 'px');
+        fit.style.setProperty('--mp-row-h', '24px');
+        fit.style.setProperty('--mp-thumb', '22px');
+
+        /* Measure at A4 width (3500 full list ≈ page reference), then scale to fill height */
+        void fit.offsetHeight;
+        var h = Math.max(fit.scrollHeight, 1);
+        /* Always stretch to one A4: short content scales up, long scales down */
+        var scale = a4H / h;
+        scale = Math.max(0.62, Math.min(1.35, scale));
+        fit.style.setProperty('--mp-print-scale', String(Math.round(scale * 1000) / 1000));
+
+        return function () {
+          document.body.classList.remove('mp-a4-print');
+          fit.style.removeProperty('--mp-print-scale');
+          document.documentElement.style.removeProperty('--mp-a4-w');
+          fit.style.removeProperty('--mp-row-h');
+          fit.style.removeProperty('--mp-thumb');
+        };
+      }
+
+      var lastTotalUsd = 0;
+
+      function defaultProjectName() {
+        var door = pack.doorType === 'wm' ? t('卷帘', 'Rolling') : t('翻盖', 'Top-Flip');
+        return t('户外厨房', 'Outdoor kitchen') + ' ' + door + ' ' + pack.width + 'mm';
+      }
+
+      function openSaveDialog() {
+        var mask = document.getElementById('saveMask');
+        var input = document.getElementById('saveNameInput');
+        input.value = defaultProjectName();
+        mask.hidden = false;
+        setTimeout(function () {
+          input.focus();
+          input.select();
+        }, 30);
+      }
+
+      function closeSaveDialog() {
+        document.getElementById('saveMask').hidden = true;
+      }
+
+      function confirmSaveProject() {
+        if (!window.DDProjects) {
+          alert(t('项目存储不可用', 'Project store unavailable'));
+          return;
+        }
+        var name = (document.getElementById('saveNameInput').value || '').trim();
+        if (!name) {
+          alert(t('请填写项目名称', 'Please enter a project name'));
+          return;
+        }
+        var ownerUrl = location.href;
+        try {
+          if (CP && CP.ownerUrl) ownerUrl = CP.ownerUrl(pack) || ownerUrl;
+        } catch (_) {}
+        var cover = '';
+        var thumb = document.querySelector('#sheet .mp-line-thumb');
+        if (thumb && thumb.getAttribute('src')) cover = thumb.getAttribute('src');
+        var fx = (OQ && OQ.fx && OQ.fx()) || 6.7;
+        var totalUsd = lastTotalUsd;
+        var totalCny = Math.round(totalUsd * fx);
+        var project = DDProjects.fromQuoteSnapshot({
+          name: name,
+          nameEn: name,
+          doorType: pack.doorType,
+          width: pack.width,
+          tier: pack.qtyTier || '',
+          channel: window.DD_QUOTE_CHANNEL || 'internal',
+          materials: pack.materials || null,
+          totalCny: totalCny,
+          totalUsd: totalUsd,
+          pack: pack,
+          ownerUrl: ownerUrl,
+          cover: cover
+        });
+        DDProjects.save(project);
+        closeSaveDialog();
+        alert(t('已保存到项目：「' + name + '」', 'Saved to projects: “' + name + '”'));
+      }
+
       document.getElementById('btnPrint').addEventListener('click', function () {
-        window.print();
+        var clear = preparePrintFit();
+        var cleared = false;
+        var done = function () {
+          if (cleared) return;
+          cleared = true;
+          clear();
+          window.removeEventListener('afterprint', done);
+        };
+        window.addEventListener('afterprint', done);
+        setTimeout(function () {
+          window.print();
+          setTimeout(done, 1200);
+        }, 50);
+      });
+      document.getElementById('btnSave').addEventListener('click', openSaveDialog);
+      document.getElementById('saveCancel').addEventListener('click', closeSaveDialog);
+      document.getElementById('saveConfirm').addEventListener('click', confirmSaveProject);
+      document.getElementById('saveMask').addEventListener('click', function (e) {
+        if (e.target === this) closeSaveDialog();
+      });
+      document.getElementById('saveNameInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          confirmSaveProject();
+        } else if (e.key === 'Escape') {
+          closeSaveDialog();
+        }
       });
       document.getElementById('btnMp').addEventListener('click', function () {
         var text = CP.mpImportText(pack);
@@ -256,6 +453,160 @@
           ));
         }).catch(function () {
           prompt(t('请手动复制', 'Copy manually'), text);
+        });
+      });
+
+      function loadHtml2Canvas() {
+        if (window.html2canvas) return Promise.resolve(window.html2canvas);
+        return new Promise(function (resolve, reject) {
+          var s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+          s.onload = function () { resolve(window.html2canvas); };
+          s.onerror = function () { reject(new Error('html2canvas load failed')); };
+          document.head.appendChild(s);
+        });
+      }
+
+      /* Warm up html2canvas so Share stays closer to the tap gesture */
+      loadHtml2Canvas().catch(function () {});
+
+      var lastShareFile = null;
+      var lastShareUrl = '';
+
+      function fileName() {
+        return 'outdoor-quote-' + (pack.width || '') + '.jpg';
+      }
+
+      function tryNativeShare(file) {
+        if (!navigator.share) return Promise.resolve(false);
+        var payload = {
+          files: [file],
+          title: t('户外厨房报价', 'Outdoor kitchen quote'),
+          text: t('户外厨房报价清单', 'Outdoor kitchen quotation')
+        };
+        try {
+          if (navigator.canShare && !navigator.canShare({ files: [file] })) {
+            return Promise.resolve(false);
+          }
+        } catch (_) {}
+        return navigator.share(payload).then(function () {
+          return true;
+        }).catch(function (err) {
+          /* User cancelled share sheet — treat as done, don't force save */
+          if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) {
+            return err.name === 'AbortError';
+          }
+          return false;
+        });
+      }
+
+      function openSharePreview(dataUrl, file) {
+        lastShareFile = file;
+        lastShareUrl = dataUrl;
+        var mask = document.getElementById('shareMask');
+        var img = document.getElementById('shareImg');
+        var dl = document.getElementById('shareDownload');
+        var nowBtn = document.getElementById('shareNow');
+        img.src = dataUrl;
+        dl.href = dataUrl;
+        dl.download = fileName();
+        /* Show native share button only when the browser can share files */
+        var can = !!(navigator.share && lastShareFile);
+        try {
+          if (can && navigator.canShare && !navigator.canShare({ files: [lastShareFile] })) can = false;
+        } catch (_) {}
+        nowBtn.hidden = !can;
+        dl.hidden = false;
+        mask.hidden = false;
+        if (!can) {
+          document.getElementById('shareHint').textContent = t(
+            '当前浏览器不支持直接分享，可长按图片转发，或另存 JPEG',
+            'Direct share not available here — long-press the image, or save JPEG'
+          );
+        }
+      }
+
+      document.getElementById('shareClose').addEventListener('click', function () {
+        document.getElementById('shareMask').hidden = true;
+      });
+      document.getElementById('shareMask').addEventListener('click', function (e) {
+        if (e.target === this) this.hidden = true;
+      });
+      document.getElementById('shareNow').addEventListener('click', function () {
+        if (!lastShareFile) return;
+        var btn = document.getElementById('shareNow');
+        btn.disabled = true;
+        tryNativeShare(lastShareFile).then(function (ok) {
+          if (ok) document.getElementById('shareMask').hidden = true;
+        }).finally(function () {
+          btn.disabled = false;
+        });
+      });
+
+      function buildShareJpeg() {
+        document.querySelectorAll('.mp-section').forEach(function (sec) {
+          sec.classList.add('is-open');
+          var ch = sec.querySelector('.mp-chevron');
+          if (ch) ch.textContent = '▾';
+        });
+        return loadHtml2Canvas().then(function (html2canvas) {
+          var PHONE_W = 390;
+          var sheet = document.getElementById('sheet');
+          var host = document.createElement('div');
+          host.setAttribute('aria-hidden', 'true');
+          host.style.cssText =
+            'position:fixed;left:-10000px;top:0;width:' + PHONE_W + 'px;' +
+            'padding:14px;box-sizing:border-box;background:#ececec;' +
+            'font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Helvetica Neue,sans-serif;';
+          var clone = sheet.cloneNode(true);
+          clone.classList.add('is-open');
+          clone.querySelectorAll('.mp-section').forEach(function (sec) {
+            sec.classList.add('is-open');
+          });
+          host.appendChild(clone);
+          document.body.appendChild(host);
+
+          return html2canvas(host, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ececec',
+            width: PHONE_W,
+            windowWidth: PHONE_W
+          }).then(function (canvas) {
+            if (host.parentNode) document.body.removeChild(host);
+            return new Promise(function (resolve, reject) {
+              canvas.toBlob(function (blob) {
+                if (!blob) {
+                  reject(new Error('toBlob failed'));
+                  return;
+                }
+                var file = new File([blob], fileName(), { type: 'image/jpeg' });
+                var dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+                resolve({ file: file, dataUrl: dataUrl });
+              }, 'image/jpeg', 0.92);
+            });
+          });
+        });
+      }
+
+      document.getElementById('btnShare').addEventListener('click', function () {
+        var btn = document.getElementById('btnShare');
+        btn.disabled = true;
+        var prev = btn.textContent;
+        btn.textContent = t('生成中…', 'Generating…');
+
+        buildShareJpeg().then(function (result) {
+          /* Prefer system share sheet — no save to album required */
+          return tryNativeShare(result.file).then(function (ok) {
+            if (!ok) openSharePreview(result.dataUrl, result.file);
+          });
+        }).catch(function (err) {
+          console.error(err);
+          alert(t('生成图片失败，请稍后重试', 'Could not generate image. Try again.'));
+        }).finally(function () {
+          btn.disabled = false;
+          btn.textContent = prev;
         });
       });
 

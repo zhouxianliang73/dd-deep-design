@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?t=20260728ownerSticky">
+    <link rel="stylesheet" href="assets/css/style.css?t=20260728profitFee">
     <link rel="stylesheet" href="assets/css/quote-channels.css?t=20260728cclink">
     <script>window.DD_QUOTE_CHANNEL = 'internal';</script>
 </head>
@@ -29,7 +29,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="#products" class="nav-link" data-i18n="nav.configure">Configure</a></li>
                 <li><a href="margin-console.html#costControl" class="nav-link" data-i18n="config.costControl">Cost control</a></li>
-                <li><a href="#hot-products" class="nav-link" data-i18n="nav.hot">Hot Sellers</a></li>
+                <li><a href="#packages" class="nav-link" data-i18n="nav.hot">套餐</a></li>
                 <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
                 <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
                 <li><a href="#company" class="nav-link" data-i18n="nav.company">公司介绍</a></li>
@@ -80,6 +80,10 @@
                     <div class="quote-sticky-inner">
                         <div class="quote-sticky-row quote-sticky-row-tier">
                             <strong class="quote-sticky-exw" data-i18n="config.exw">内部报价</strong>
+                            <span class="quote-sticky-margin internal-only" id="stickyMargin" title="利润取费">
+                                <span class="quote-sticky-margin-label" data-i18n="config.profitFee">利润取费</span>
+                                <strong class="quote-sticky-margin-pct" id="stickyMarginPct">30%</strong>
+                            </span>
                             <button type="button" class="quote-sticky-owner" id="btnOwnerShowSticky" data-i18n="config.openOwnerShow">Owner View</button>
                         </div>
                         <a href="#configTotal" class="quote-sticky-body" title="Details">
@@ -286,10 +290,10 @@
         </div>
     </section>
 
-    <!-- Hot-Selling Products -->
-    <section class="section hot-products" id="hot-products">
+    <!-- Packages / Quick-Ship Collections -->
+    <section class="section hot-products" id="packages">
         <div class="container">
-            <div class="section-label" data-i18n="hot.label">Hot Sellers</div>
+            <div class="section-label" data-i18n="hot.label">套餐 · 现货速发</div>
             <h2 class="section-title" data-i18n="hot.title">Quick-Ship <em>Collections</em></h2>
             <p class="section-desc" data-i18n="hot.desc">Pre-configured outdoor kitchen sets in 304 stainless steel — ready to ship. Perfect for fast-track projects.</p>
 
@@ -958,6 +962,7 @@
                     <ul>
                         <li><a href="#products" data-i18n="nav.configure">Configure</a></li>
                         <li><a href="margin-console.html#costControl" data-i18n="config.costControl">Cost control</a></li>
+                        <li><a href="#packages" data-i18n="nav.hot">套餐</a></li>
                         <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
                     </ul>
                 </div>
@@ -1005,6 +1010,10 @@
             <span class="h5-tab-icon" aria-hidden="true">▣</span>
             <span class="h5-tab-label" data-i18n="tab.pick">选品</span>
         </a>
+        <a href="#packages" class="h5-tab" data-tab-target="packages">
+            <span class="h5-tab-icon" aria-hidden="true">▦</span>
+            <span class="h5-tab-label" data-i18n="tab.packages">套餐</span>
+        </a>
         <a href="#projects" class="h5-tab" data-tab-target="projects">
             <span class="h5-tab-icon" aria-hidden="true">⌂</span>
             <span class="h5-tab-label" data-i18n="tab.projects">项目</span>
@@ -1021,7 +1030,7 @@
     <script src="assets/js/customer-pick.js?t=20260728mat"></script>
     <script src="assets/js/projects-data.js?t=20260728proj"></script>
     <script src="assets/js/dd-projects.js?t=20260728proj"></script>
-    <script src="assets/js/main.js?t=20260728ownerSticky"></script>
+    <script src="assets/js/main.js?t=20260728profitFee"></script>
 </body>
 </html>
 

@@ -8,6 +8,7 @@
 const i18n = {
     'nav.about':      { en: 'About',          cn: '关于我们' },
     'tab.pick':       { en: 'Select',         cn: '选品' },
+    'tab.packages':   { en: 'Packages',       cn: '套餐' },
     'tab.projects':   { en: 'Projects',       cn: '项目' },
     'tab.company':    { en: 'Company',        cn: '公司介绍' },
     'projects.saveCurrent': { en: 'Save as project', cn: '存为项目' },
@@ -23,7 +24,7 @@ const i18n = {
     'nav.quote':      { en: 'Quote',           cn: '业主报价' },
     'nav.margin':     { en: 'Margin',          cn: '利润阶梯' },
     'nav.specs':      { en: 'Specs',            cn: '规格' },
-    'nav.hot':        { en: 'Hot Sellers',     cn: '热卖款' },
+    'nav.hot':        { en: 'Packages',        cn: '套餐' },
     'nav.projects':   { en: 'Projects',        cn: '项目案例' },
     'nav.contact':    { en: 'Contact',         cn: '联系我们' },
     'hero.badge':     { en: 'Premium Outdoor Living', cn: '高端户外生活' },
@@ -95,6 +96,7 @@ const i18n = {
     'config.matVal':   { en: 'Zinc-Aluminum-Magnesium Alloy + Galvanized Steel', cn: '锌铝镁合金 + 镀锌钢' },
     'config.fob':      { en: 'Internal · margin sell (print only)', cn: '内部报价 · 毛利价（仅打印外发）' },
     'config.exw':      { en: 'Internal Price', cn: '内部报价' },
+    'config.profitFee':{ en: 'Margin', cn: '利润取费' },
     'config.exwMp':    { en: 'MP Price (cost × 2.5)', cn: '小程序价（成本×2.5）' },
     'config.fobMp':    { en: 'Mini-program list = cost × 2.5', cn: '小程序列表价 = 成本 × 2.5' },
     'config.tier30':   { en: '30% margin', cn: '30% 毛利' },
@@ -272,8 +274,8 @@ const i18n = {
     'config.incl.wm.3200': { en: 'Rolling body + 3-drawer + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood', cn: '卷帘箱体 + 三抽地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机' },
     'config.incl.wm.3500': { en: 'Rolling body + 3-drawer + Single door + BBQ base + Sink base + Fridge frame + 4 sockets + LED + 2 Shelves + BBQ + Fridge + Hood', cn: '卷帘箱体 + 三抽地柜 + 单门地柜 + BBQ烤炉对开地柜 + 水槽地柜 + 冰箱框架柜 + 4插座 + 灯带 + 2层板 + 烧烤炉 + 冰箱 + 烟机' },
 
-    // Hot-selling products section
-    'hot.label':        { en: 'Hot Sellers',           cn: '热卖款' },
+    // Packages / Quick-Ship collections
+    'hot.label':        { en: 'Packages · Quick-Ship', cn: '套餐 · 现货速发' },
     'hot.title':        { en: 'Quick-Ship <em>Collections</em>', cn: '现货速发 <em>套装</em>' },
     'hot.desc':         { en: 'Pre-configured outdoor kitchen sets in 304 stainless steel \u2014 ready to ship. Perfect for fast-track projects.', cn: '304不锈钢预配户外厨房套装——即期发货。适合快速项目。' },
     'hot.tab1':         { en: 'US MK Series (8 pcs)', cn: '美标MK系列 (8件)' },
@@ -334,6 +336,7 @@ const i18n = {
     const FR = {
         'nav.about': 'À propos',
         'tab.pick': 'Sélection',
+        'tab.packages': 'Packs',
         'tab.projects': 'Projets',
         'tab.company': 'Entreprise',
         'projects.saveCurrent': 'Enregistrer le projet',
@@ -349,9 +352,11 @@ const i18n = {
         'nav.quote': 'Devis',
         'nav.margin': 'Marges',
         'nav.specs': 'Specs',
-        'nav.hot': 'Best-sellers',
+        'nav.hot': 'Packs',
         'nav.projects': 'Projets',
         'nav.contact': 'Contact',
+        'hot.label': 'Packs · Expédition rapide',
+        'hot.title': 'Collections <em>prêtes à expédier</em>',
         'hero.badge': 'Extérieur haut de gamme',
         'hero.title': 'Design <em>plus profond</em>.<br>Construire <em>mieux</em>.',
         'hero.desc': 'Cuisines d’extérieur et stations BBQ en alliage zinc-aluminium-magnésium et acier inoxydable — conçues pour durer et impressionner.',
@@ -421,6 +426,7 @@ const i18n = {
         'config.matVal': 'Alliage Zn-Al-Mg + acier galvanisé',
         'config.fob': 'Interne · prix marge (impression seule)',
         'config.exw': 'Prix interne',
+        'config.profitFee': 'Marge',
         'config.exwMp': 'Prix MP (coût × 2,5)',
         'config.fobMp': 'Liste mini-programme = coût × 2,5',
         'config.tier30': 'Marge 30 %',
@@ -2032,6 +2038,11 @@ function updateTotal() {
     if (stickyUsd) stickyUsd.textContent = formatUsd(usd);
     if (stickyMaterial) stickyMaterial.textContent = t('config.matVal');
     if (stickyFob) stickyFob.textContent = t('config.fob');
+    const stickyPct = document.getElementById('stickyMarginPct');
+    if (stickyPct && !IS_MP_CHANNEL) {
+        const pct = String(state.qtyTier || '30%');
+        stickyPct.textContent = /%$/.test(pct) ? pct : pct;
+    }
 }
 
 let quoteStickyInView = false;
@@ -2146,6 +2157,8 @@ sizeBtns.forEach(btn => {
         if (IS_MP_CHANNEL) {
             state.qtyTier = 'mp';
             if (host) host.hidden = true;
+            const stickyMargin = document.getElementById('stickyMargin');
+            if (stickyMargin) stickyMargin.hidden = true;
             return;
         }
         if (!host) return;
@@ -2153,6 +2166,13 @@ sizeBtns.forEach(btn => {
         host.querySelectorAll('[data-margin]').forEach((btn) => {
             btn.classList.toggle('is-active', btn.getAttribute('data-margin') === state.qtyTier);
         });
+        const stickyMargin = document.getElementById('stickyMargin');
+        const stickyPct = document.getElementById('stickyMarginPct');
+        if (stickyMargin) stickyMargin.hidden = false;
+        if (stickyPct) {
+            const pct = String(state.qtyTier || '30%');
+            stickyPct.textContent = /%$/.test(pct) ? pct : pct;
+        }
     };
     if (host && !IS_MP_CHANNEL) {
         host.addEventListener('click', (e) => {

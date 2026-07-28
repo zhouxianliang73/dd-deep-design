@@ -183,16 +183,16 @@
 
 .mp-col-name {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   align-items: center;
   min-width: 0;
 }
 
 .mp-line-thumb,
 .mp-line-thumb-ph {
-  width: 36px;
-  height: 36px;
-  border-radius: 5px;
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
   flex-shrink: 0;
   background: #e5e7eb;
   object-fit: cover;
@@ -202,7 +202,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 28px;
   background: #f3f4f6;
 }
 

@@ -155,6 +155,16 @@ body.quote-channel-mp .section.products .section-desc {
   margin-right: 2px;
 }
 
+.margin-tier-link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: #111827;
+}
+
+.margin-tier-link:hover {
+  color: var(--clr-accent, #b8860b);
+}
+
 .margin-tier-btn {
   border: 1px solid #d1d5db;
   background: #fff;

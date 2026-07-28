@@ -168,7 +168,7 @@
   grid-template-columns: 1fr 72px 54px;
   gap: 4px;
   align-items: center;
-  padding: 6px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--mp-border-soft);
 }
 

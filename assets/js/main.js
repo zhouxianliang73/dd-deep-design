@@ -3007,6 +3007,8 @@ function initCustomerPickShare() {
     });
     const ownerBtn = document.getElementById('btnOwnerShow');
     if (ownerBtn) ownerBtn.addEventListener('click', shareOwnerShow);
+    const ownerSticky = document.getElementById('btnOwnerShowSticky');
+    if (ownerSticky) ownerSticky.addEventListener('click', shareOwnerShow);
     const mpBtn = document.getElementById('btnMpImport');
     if (mpBtn) mpBtn.addEventListener('click', shareMpImportCode);
 }

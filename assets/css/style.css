@@ -4397,9 +4397,9 @@ ul { list-style: none; }
 }
 
 .quote-sticky-row-tier {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 0;
+    gap: 8px;
 }
 
 .quote-sticky-exw {
@@ -4408,6 +4408,27 @@ ul { list-style: none; }
     color: var(--clr-dark);
     letter-spacing: 0.02em;
     white-space: nowrap;
+}
+
+.quote-sticky-owner {
+    appearance: none;
+    border: 1px solid #111827;
+    background: #111827;
+    color: #fff;
+    font-family: var(--font-main);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    padding: 5px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.quote-sticky-owner:hover {
+    background: #1f2937;
+    border-color: #1f2937;
 }
 
 .quote-qty-tiers {
@@ -4585,7 +4606,8 @@ ul { list-style: none; }
 
 @media (max-width: 480px) {
     .quote-sticky-inner { padding: 7px 10px; gap: 4px; }
-    .quote-sticky-row-tier { grid-template-columns: 1fr; gap: 6px; }
+    .quote-sticky-row-tier { grid-template-columns: 1fr auto; gap: 6px; }
+    .quote-sticky-owner { font-size: 10px; padding: 4px 8px; }
     .quote-qty-tiers { justify-content: flex-start; }
     .quote-sticky-row-meta { font-size: 11px; gap: 6px; }
     .quote-sticky-row-price strong { font-size: 14px; }

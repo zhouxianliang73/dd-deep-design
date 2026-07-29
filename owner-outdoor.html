@@ -26,6 +26,7 @@
     <div class="btns">
       <button type="button" class="mp-btn mp-btn-sec" id="btnLang">中 / EN</button>
       <button type="button" class="mp-btn mp-btn-sec" id="btnPrint">打印</button>
+      <button type="button" class="mp-btn mp-btn-sec" id="btnExcel">Excel</button>
       <button type="button" class="mp-btn mp-btn-save" id="btnSave">保存</button>
       <button type="button" class="mp-btn mp-btn-share" id="btnShare">分享</button>
       <button type="button" class="mp-btn" id="btnMp">复制小程序导入码</button>
@@ -61,7 +62,7 @@
       document.documentElement.setAttribute('data-quote-channel', ch);
     })();
   </script>
-<script src="assets/js/outdoor-quote-data.js?t=20260728ct2"></script>
+<script src="assets/js/outdoor-quote-data.js?t=20260729ownerOpt"></script>
   <script src="assets/js/outdoor-quote.js?t=20260728ct2"></script>
   <script src="assets/js/customer-pick.js?t=20260728mat"></script>
   <script src="assets/js/projects-data.js?t=20260728proj"></script>
@@ -103,7 +104,7 @@
         return Math.min(24, Math.floor(q));
       }
       function unitList(key) {
-        return OQ.listUsd(key, pack.width, pack.qtyTier || '30%');
+        return OQ.listUsd(key, pack.width, pack.qtyTier || '25%');
       }
 
       function fail(msg) {
@@ -249,10 +250,12 @@
         var optSum = optKeys.reduce(function (s, k) { return s + unitList(k) * qtyOf(k); }, 0);
         var total = stdSum + optSum;
         lastTotalUsd = total;
-        var metaLine =
-          t('网站价档', 'Tier') + ' ' + (pack.qtyTier || '30%') +
-          ' · EXW · FX ' + ((OQ.fx && OQ.fx()) || 6.7) +
-          (pack.createdAt ? (' · ' + pack.createdAt) : '');
+        var metaParts = [
+          'EXW',
+          'FX ' + ((OQ.fx && OQ.fx()) || 6.7)
+        ];
+        if (pack.createdAt) metaParts.push(pack.createdAt);
+        var metaLine = metaParts.join(' · ');
 
         document.getElementById('sheet').innerHTML =
           '<div class="mp-shell-hd">' +
@@ -290,6 +293,7 @@
         document.getElementById('barTotal').textContent = moneyUsd(total) + ' / ' + moneyCny(total);
         document.getElementById('btnLang').textContent = lang === 'cn' ? 'EN' : '中文';
         document.getElementById('btnPrint').textContent = t('打印', 'Print');
+        document.getElementById('btnExcel').textContent = t('Excel', 'Excel');
         document.getElementById('btnSave').textContent = t('保存', 'Save');
         document.getElementById('btnShare').textContent = t('分享', 'Share');
         document.getElementById('btnMp').textContent = t('复制小程序导入码', 'Copy mini-program import');
@@ -426,6 +430,290 @@
           setTimeout(done, 1200);
         }, 50);
       });
+
+      function loadExcelJS() {
+        if (window.ExcelJS) return Promise.resolve(window.ExcelJS);
+        return new Promise(function (resolve, reject) {
+          var s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';
+          s.onload = function () { resolve(window.ExcelJS); };
+          s.onerror = function () { reject(new Error('ExcelJS load failed')); };
+          document.head.appendChild(s);
+        });
+      }
+
+      function collectExcelRows() {
+        var stdKeys = pack.stdKeys || [];
+        var optKeys = (pack.selected || []).filter(function (k) {
+          return stdKeys.indexOf(k) === -1;
+        });
+        var rows = [];
+        function pushCat(cat, keys) {
+          keys.forEach(function (key) {
+            var qty = qtyOf(key);
+            var unit = unitList(key);
+            var line = unit * qty;
+            var fx = (OQ.fx && OQ.fx()) || 6.7;
+            rows.push({
+              key: key,
+              cat: cat,
+              name: nameOf(key),
+              spec: detailOf(key) || '',
+              img: imgOf(key),
+              qty: qty,
+              unitUsd: Math.round(unit),
+              usd: Math.round(line),
+              cny: Math.round(line * fx)
+            });
+          });
+        }
+        pushCat(t('标准配置', 'Standard'), stdKeys);
+        pushCat(t('选配', 'Options'), optKeys);
+        return rows;
+      }
+
+      function fetchImageAsBase64(url) {
+        if (!url) return Promise.resolve(null);
+        return fetch(url, { cache: 'force-cache' }).then(function (res) {
+          if (!res.ok) throw new Error('img ' + res.status);
+          return res.blob();
+        }).then(function (blob) {
+          return new Promise(function (resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function () {
+              var dataUrl = String(reader.result || '');
+              var ext = 'png';
+              if (/image\/jpe?g/i.test(blob.type) || /\.jpe?g(\?|$)/i.test(url)) ext = 'jpeg';
+              else if (/image\/gif/i.test(blob.type)) ext = 'gif';
+              else if (/image\/webp/i.test(blob.type)) ext = 'png';
+              resolve({ base64: dataUrl, extension: ext });
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        }).catch(function () {
+          return null;
+        });
+      }
+
+      function downloadExcel() {
+        var btn = document.getElementById('btnExcel');
+        var prev = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = t('导出中…', 'Exporting…');
+
+        var door = pack.doorType === 'wm' ? t('卷帘', 'Rolling') : t('翻盖', 'Top-Flip');
+        var title = t('户外厨房', 'Outdoor kitchen') + ' ' + door + ' ' + pack.width + 'mm';
+        var fx = (OQ.fx && OQ.fx()) || 6.7;
+        var rows = collectExcelRows();
+        var totalUsd = rows.reduce(function (s, r) { return s + r.usd; }, 0);
+        var totalCny = Math.round(totalUsd * fx);
+
+        var mat = pack.materials || {};
+        var matItems = [
+          { k: 'body', label: t('外框', 'Shell'), item: mat.body },
+          { k: 'door', label: t('门板', 'Door'), item: mat.door },
+          { k: 'countertop', label: t('台面', 'Countertop'), item: mat.countertop }
+        ].filter(function (m) { return m.item && (m.item.code || m.item.img || m.item.name); });
+
+        loadExcelJS().then(function (ExcelJS) {
+          var wb = new ExcelJS.Workbook();
+          wb.creator = 'DD Deep Design';
+          var ws = wb.addWorksheet(t('报价清单', 'Quote'), {
+            properties: { defaultRowHeight: 18 },
+            pageSetup: {
+              paperSize: 9, /* A4 */
+              orientation: 'portrait',
+              fitToPage: true,
+              fitToWidth: 1,
+              fitToHeight: 0,
+              horizontalCentered: true
+            },
+            pageMargins: {
+              left: 0.25,
+              right: 0.25,
+              top: 0.5,
+              bottom: 0.5,
+              header: 0.3,
+              footer: 0.3
+            }
+          });
+
+          /* Match desktop outdoor-quote-XT-2200 layout: Spec widest + wrap */
+          ws.getColumn(1).width = 6.5;   /* Image */
+          ws.getColumn(2).width = 9.3;   /* Category */
+          ws.getColumn(3).width = 12;    /* Product */
+          ws.getColumn(4).width = 38;    /* Spec — widest */
+          ws.getColumn(5).width = 6.5;   /* Qty */
+          ws.getColumn(6).width = 8.5;   /* Unit USD */
+          ws.getColumn(7).width = 8.5;   /* Subtotal USD */
+          ws.getColumn(8).width = 9.2;   /* Subtotal CNY */
+
+          ws.mergeCells(1, 1, 1, 8);
+          var titleCell = ws.getCell(1, 1);
+          titleCell.value = title;
+          titleCell.font = { bold: true, size: 14 };
+          titleCell.alignment = { vertical: 'middle', wrapText: true };
+          ws.getRow(1).height = 22;
+
+          ws.mergeCells(2, 1, 2, 8);
+          ws.getCell(2, 1).value = 'EXW · FX ' + fx + (pack.createdAt ? (' · ' + pack.createdAt) : '');
+          ws.getCell(2, 1).alignment = { vertical: 'middle', wrapText: true };
+
+          var matText = matItems.map(function (m) {
+            return m.label + ': ' + (m.item.code || '') + ' ' + (m.item.name || '');
+          }).join(' · ');
+          if (matText) {
+            ws.mergeCells(3, 1, 3, 8);
+            ws.getCell(3, 1).value = t('材料', 'Materials') + ' · ' + matText;
+            ws.getCell(3, 1).alignment = { vertical: 'middle', wrapText: true };
+            ws.getRow(3).height = 28;
+          }
+
+          var headerRow = 5;
+          var headers = [
+            t('图片', 'Image'),
+            t('分类', 'Category'),
+            t('产品', 'Product'),
+            t('规格尺寸', 'Spec'),
+            t('数量', 'Qty'),
+            t('单价', 'Unit') + '\nUSD',
+            t('小计', 'Subtotal') + '\nUSD',
+            t('小计', 'Subtotal') + '\nCNY'
+          ];
+          headers.forEach(function (h, idx) {
+            var cell = ws.getCell(headerRow, idx + 1);
+            cell.value = h;
+            cell.font = { bold: true };
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFF3F4F6' }
+            };
+            cell.alignment = {
+              vertical: 'middle',
+              horizontal: 'center',
+              wrapText: true
+            };
+          });
+          ws.getRow(headerRow).height = 28;
+
+          var imgJobs = rows.map(function (r) { return fetchImageAsBase64(r.img); });
+          var matJobs = matItems.map(function (m) {
+            return fetchImageAsBase64(m.item && m.item.img ? m.item.img : '');
+          });
+
+          return Promise.all([Promise.all(imgJobs), Promise.all(matJobs)]).then(function (all) {
+            var rowImgs = all[0];
+            var matImgs = all[1];
+            var SPEC_CHARS_PER_LINE = 32;
+
+            rows.forEach(function (r, i) {
+              var excelRow = headerRow + 1 + i;
+              var wrapLines = Math.max(2, Math.ceil(String(r.spec || '').length / SPEC_CHARS_PER_LINE));
+              ws.getRow(excelRow).height = Math.max(52, wrapLines * 14 + 10);
+
+              var vals = ['', r.cat, r.name, r.spec, r.qty, r.unitUsd, r.usd, r.cny];
+              vals.forEach(function (v, idx) {
+                var cell = ws.getCell(excelRow, idx + 1);
+                cell.value = v;
+                var col = idx + 1;
+                if (col === 4 || col === 3) {
+                  cell.alignment = { vertical: 'middle', wrapText: true, horizontal: 'left' };
+                } else if (col === 1) {
+                  cell.alignment = { vertical: 'middle', horizontal: 'center' };
+                } else if (col === 5) {
+                  cell.alignment = { vertical: 'middle', horizontal: 'center' };
+                } else if (col >= 6) {
+                  cell.alignment = { vertical: 'middle', horizontal: 'right' };
+                } else {
+                  cell.alignment = { vertical: 'middle', wrapText: true };
+                }
+              });
+
+              var img = rowImgs[i];
+              if (img && img.base64) {
+                try {
+                  var imageId = wb.addImage({
+                    base64: img.base64,
+                    extension: img.extension || 'png'
+                  });
+                  /* Anchor inside column A (Image), same as desktop reference */
+                  ws.addImage(imageId, {
+                    tl: { col: 0.08, row: excelRow - 1 + 0.12 },
+                    ext: { width: 40, height: 40 }
+                  });
+                } catch (_) {}
+              }
+            });
+
+            var sumRow = headerRow + 1 + rows.length + 1;
+            ws.getCell(sumRow, 2).value = t('合计', 'Total');
+            ws.getCell(sumRow, 7).value = totalUsd;
+            ws.getCell(sumRow, 8).value = totalCny;
+            [2, 7, 8].forEach(function (c) {
+              ws.getCell(sumRow, c).font = { bold: true };
+              ws.getCell(sumRow, c).alignment = { vertical: 'middle', horizontal: c === 2 ? 'left' : 'right' };
+            });
+
+            if (matItems.length) {
+              var matStart = sumRow + 2;
+              ws.getCell(matStart, 1).value = t('材料色卡', 'Material swatches');
+              ws.getCell(matStart, 1).font = { bold: true };
+              matItems.forEach(function (m, i) {
+                var r = matStart + 1 + i;
+                ws.getRow(r).height = 40;
+                ws.getCell(r, 2).value = m.label;
+                ws.getCell(r, 3).value = (m.item.code || '') + ' ' + (m.item.name || '');
+                ws.getCell(r, 3).alignment = { vertical: 'middle', wrapText: true };
+                var img = matImgs[i];
+                if (img && img.base64) {
+                  try {
+                    var imageId = wb.addImage({
+                      base64: img.base64,
+                      extension: img.extension || 'png'
+                    });
+                    ws.addImage(imageId, {
+                      tl: { col: 0.08, row: r - 1 + 0.12 },
+                      ext: { width: 40, height: 28 }
+                    });
+                  } catch (_) {}
+                }
+              });
+            }
+
+            return wb.xlsx.writeBuffer();
+          });
+        }).then(function (buffer) {
+          var blob = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          var fileDoor = pack.doorType === 'wm' ? 'WM' : 'XT';
+          var name = 'outdoor-quote-' + fileDoor + '-' + (pack.width || '') + '.xlsx';
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = name;
+          a.rel = 'noopener';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            URL.revokeObjectURL(url);
+            a.remove();
+          }, 800);
+        }).catch(function (err) {
+          console.error(err);
+          alert(t('导出 Excel 失败，请检查网络后重试', 'Excel export failed. Check network and retry.'));
+        }).finally(function () {
+          btn.disabled = false;
+          btn.textContent = prev;
+        });
+      }
+
+      /* Warm ExcelJS so first export is faster */
+      loadExcelJS().catch(function () {});
+
+      document.getElementById('btnExcel').addEventListener('click', downloadExcel);
       document.getElementById('btnSave').addEventListener('click', openSaveDialog);
       document.getElementById('saveCancel').addEventListener('click', closeSaveDialog);
       document.getElementById('saveConfirm').addEventListener('click', confirmSaveProject);

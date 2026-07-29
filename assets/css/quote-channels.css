@@ -139,6 +139,7 @@ body.quote-channel-mp .section.products .section-desc {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-start;
   gap: 6px;
   margin: 0 auto 10px;
   padding: 4px 0;
@@ -146,23 +147,6 @@ body.quote-channel-mp .section.products .section-desc {
   border: 0;
   border-radius: 0;
   max-width: 720px;
-}
-
-.margin-tier-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #6b7280;
-  margin-right: 2px;
-}
-
-.margin-tier-link {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  color: #111827;
-}
-
-.margin-tier-link:hover {
-  color: var(--clr-accent, #b8860b);
 }
 
 .margin-tier-btn {
@@ -174,12 +158,27 @@ body.quote-channel-mp .section.products .section-desc {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .margin-tier-btn.is-active {
   background: #111827;
   border-color: #111827;
   color: #fff;
+}
+
+.margin-tier-cost-btn {
+  margin-left: auto;
+  color: #111827;
+}
+
+.margin-tier-cost-btn:hover {
+  border-color: #111827;
+  color: var(--clr-accent, #b8860b);
 }
 
 .config-text-link {

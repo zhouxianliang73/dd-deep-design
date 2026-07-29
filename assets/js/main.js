@@ -532,7 +532,7 @@ const PUBLIC_COST_RATIO = 1;
 const IS_MP_CHANNEL = !!(window.OutdoorQuote && OutdoorQuote.isMpChannel && OutdoorQuote.isMpChannel());
 const DEFAULT_QTY_TIER = IS_MP_CHANNEL
   ? 'mp'
-  : (window.OUTDOOR_QUOTE && window.OUTDOOR_QUOTE.defaultTier) || '30%';
+  : (window.OUTDOOR_QUOTE && window.OUTDOOR_QUOTE.defaultTier) || '25%';
 
 const HOT_IMG = (sku) => 'assets/images/products/hot-selling/display/sku-' + sku + '.png';
 /** Thumbs from 箱体报价总表 2.0 Color/Picture column */
@@ -2040,7 +2040,7 @@ function updateTotal() {
     if (stickyFob) stickyFob.textContent = t('config.fob');
     const stickyPct = document.getElementById('stickyMarginPct');
     if (stickyPct && !IS_MP_CHANNEL) {
-        const pct = String(state.qtyTier || '30%');
+        const pct = String(state.qtyTier || '25%');
         stickyPct.textContent = /%$/.test(pct) ? pct : pct;
     }
 }
@@ -2170,7 +2170,7 @@ sizeBtns.forEach(btn => {
         const stickyPct = document.getElementById('stickyMarginPct');
         if (stickyMargin) stickyMargin.hidden = false;
         if (stickyPct) {
-            const pct = String(state.qtyTier || '30%');
+            const pct = String(state.qtyTier || '25%');
             stickyPct.textContent = /%$/.test(pct) ? pct : pct;
         }
     };
@@ -2178,7 +2178,7 @@ sizeBtns.forEach(btn => {
         host.addEventListener('click', (e) => {
             const btn = e.target.closest('[data-margin]');
             if (!btn) return;
-            state.qtyTier = btn.getAttribute('data-margin') || '30%';
+            state.qtyTier = btn.getAttribute('data-margin') || '25%';
             window.syncQtyTiersUi();
             if (typeof updateAll === 'function') updateAll();
             else {

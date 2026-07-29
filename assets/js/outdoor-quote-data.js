@@ -2,6 +2,7 @@
 window.OUTDOOR_QUOTE = {
   "source": "0000箱体报价总表 2.0.xlsx",
   "fx": 6.7,
+  "defaultTier": "25%",
   "tiers": [
     "30%",
     "25%",
@@ -24,8 +25,6 @@ window.OUTDOOR_QUOTE = {
       "fridge",
       "roundLamp",
       "led",
-      "socket",
-      "trash",
       "woodenBox"
     ],
     "2900": [
@@ -37,8 +36,6 @@ window.OUTDOOR_QUOTE = {
       "fridge",
       "roundLamp",
       "led",
-      "socket",
-      "trash",
       "woodenBox"
     ],
     "3200": [
@@ -48,11 +45,8 @@ window.OUTDOOR_QUOTE = {
       "bbq",
       "sink",
       "fridge",
-      "kegerator",
       "roundLamp",
       "led",
-      "socket",
-      "trash",
       "wallCabinets",
       "woodenBox"
     ],
@@ -63,13 +57,10 @@ window.OUTDOOR_QUOTE = {
       "bbq",
       "sink",
       "fridge",
-      "kegerator",
       "rangeHood",
       "roundLamp",
       "led",
-      "socket",
       "drawer",
-      "trash",
       "wallCabinets",
       "woodenBox"
     ]
@@ -879,7 +870,6 @@ window.OUTDOOR_QUOTE = {
       }
     }
   },
-  "defaultTier": "30%",
   "note": "MP channel: sell = usdCost * 2.5 only. Internal channel: sell = right-table margin columns; print JPEG only.",
   "mpMarkup": 2.5,
   "channels": {
